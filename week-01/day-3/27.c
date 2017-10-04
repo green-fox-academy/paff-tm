@@ -21,27 +21,27 @@ but this time use bitwise operators only
 
 int main()
 {
-    int x = 32;
+    int x = 31;
     int y = 20;
 
-    printf("original:\n", x, y);
-    printf("x = %d = "BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
-    printf("y = %d = "BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
+    printf("original:\n");
+    printf("x = %d = 0b"BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
+    printf("y = %d = 0b"BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
 
     printf("x = x ^ y\n");
     x = x ^ y;
-    printf("x = %d = "BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
-    printf("y = %d = "BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
+    printf("x = %d = 0b"BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
+    printf("y = %d = 0b"BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
 
     printf("y = x ^ y\n");
     y = x ^ y;
-    printf("x = %d = "BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
-    printf("y = %d = "BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
+    printf("x = %d = 0b"BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
+    printf("y = %d = 0b"BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
 
     printf("x = x ^ y\n");
     x = x ^ y;
-    printf("x = %d = "BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
-    printf("y = %d = "BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
+    printf("x = %d = 0b"BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
+    printf("y = %d = 0b"BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
 
     printf("Tadaaa...!\n");
 
