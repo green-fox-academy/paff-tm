@@ -21,25 +21,25 @@ but this time use bitwise operators only
 
 int main()
 {
-    int x = 31;
-    int y = 20;
+    int x = 20; //31
+    int y = 31; //20
 
     printf("original:\n");
     printf("x = %d = 0b"BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
     printf("y = %d = 0b"BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
 
     printf("x = x ^ y\n");
-    x = x ^ y;
+    x ^= y;
     printf("x = %d = 0b"BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
     printf("y = %d = 0b"BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
 
     printf("y = x ^ y\n");
-    y = x ^ y;
+    y ^= x;
     printf("x = %d = 0b"BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
     printf("y = %d = 0b"BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
 
     printf("x = x ^ y\n");
-    x = x ^ y;
+    x ^= y;
     printf("x = %d = 0b"BYTE_TO_BINARY_PATTERN"\n", x, BYTE_TO_BINARY(x));
     printf("y = %d = 0b"BYTE_TO_BINARY_PATTERN"\n\n", y,  BYTE_TO_BINARY(y));
 
