@@ -21,9 +21,10 @@ create a program which draws a diamond, like this:
         for (int j = 0; j < i * 2 - 1; j++){
             printf("* ");
         }
-        for (int j = 0; j < 5 - i; j++){
+/*        for (int j = 0; j < 5 - i; j++){
             printf("  ");
         }
+*/
         printf("\n");
     }
     for (int i = 4; i > 0; i--){
@@ -33,9 +34,10 @@ create a program which draws a diamond, like this:
         for (int j = 0; j < i * 2 - 1; j++){
             printf("* ");
         }
-        for (int j = 0; j < 5 - i; j++){
+/*        for (int j = 0; j < 5 - i; j++){
             printf("  ");
         }
+*/
         printf("\n");
     }
 
@@ -51,9 +53,10 @@ create a program which draws a diamond, like this:
         for (int j = 0; j < (s - abs(i)) * 2 - 1 ; j++){
             printf("* ");
         }
-        for (int j = 0; j < abs(i) - 1; j++){
+ /*       for (int j = 0; j < abs(i) - 1; j++){
             printf("  ");
         }
+ */
         printf("\n");
         }
     }
