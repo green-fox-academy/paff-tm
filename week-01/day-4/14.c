@@ -12,13 +12,13 @@ print out at least 10 lines
 */
 
 int main() {
-    float f = 0;
+    float c = 0;
 
-    printf("Celsius\tFarentheit\n");
+    printf("Farentheit\tCelsius\n");
 
-    for(int i = 0; i <= 15; i++){
-        f = (i * 10) * 1.8 + 32;
-        printf("%d\t%.1f\n", i * 10, f);
+    for(int i = 300; i >= 0; i = i - 20){
+        c = (i - 32) / 1.8 ;
+        printf("%d\t\t%.1f\n", i, c);
     }
 
 	return 0;
