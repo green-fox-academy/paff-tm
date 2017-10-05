@@ -7,8 +7,15 @@ write a program to check whether a given number is positive or negative
 
 int main()
 {
-    int a = 211;
+    int a = -211;
 
+    if (a < 0){
+        printf("%d is negative", a);
+    } else {
+        printf("%d is positive", a);
+    }
+
+/*
     if (a % 2 == 0) {
         printf("%d paros\n", a);
     } else {
@@ -22,6 +29,6 @@ int main()
     default:
         printf("%d paratlan\n", a);
     }
-
+*/
     return 0;
 }
