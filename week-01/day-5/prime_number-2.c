@@ -13,7 +13,7 @@ output :
 void main()
 {
     int from = -3;
-    int to = 10;
+    int to = 13;
     int divider_count = 0;
     int prime_count = 0;
     int j = 0;
@@ -34,7 +34,9 @@ void main()
             }
         }
     }
-    printf("this is %d prime numbers", prime_count);
-
+    if (prime_count > 0)
+        printf("this is %d prime numbers", prime_count);
+    else
+        printf("There is no prime number", prime_count);
     return 0;
 }

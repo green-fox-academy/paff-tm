@@ -13,30 +13,32 @@ output :
 void main()
 {
     int from = -3;
-    int to = 13;
-    int divider_count = 0;
+    int to = 10;
+    int is_prime = 1;
     int prime_count = 0;
     int j = 0;
 
     for (int i = from; i <= to; i++) {
         if (i > 1) {
-            j = 2;
-            divider_count = 1;
-            do {
-                if (i % j == 0){
-                    divider_count++;
-                }
-                j++;
-            } while ((divider_count < 3) && (j <= i));
-            if (divider_count == 2){
+            if (i == 2){
+                is_prime = 1;
+            } else if (i > 2) {
+                j = 2;
+                is_prime = 1;
+                do {
+                    if (i % j == 0){
+                        is_prime = 0;
+                    }
+                    j++;
+                } while ((is_prime == 1) && (j < i));
+            }
+            if (is_prime == 1){
                 printf("%d, ", i);
                 prime_count++;
             }
         }
     }
-    if (prime_count > 0)
-        printf("this is %d prime numbers", prime_count);
-    else
-        printf("There is no prime number", prime_count);
+    printf("this is %d prime numbers", prime_count);
+
     return 0;
 }
