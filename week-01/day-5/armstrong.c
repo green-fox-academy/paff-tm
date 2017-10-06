@@ -2,7 +2,7 @@
 
 // Armstrong
 
-void main()
+int main()
 {
     int a = 0;
     int aa = 0;
@@ -35,5 +35,6 @@ void main()
         printf("\nThe %d is an Armstrong number\n", a);
     else
         printf("\nThe %d is not an Armstrong number\n", a);
+        
     return 0;
 }

@@ -10,7 +10,7 @@ output :
 13, 17, 19, 23, 29, 31 , this is 6 prime numbers
 */
 
-void main()
+int main()
 {
     int from = -3;
     int to = 10;
