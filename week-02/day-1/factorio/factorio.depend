@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1507557690 source:c:\documents and settings\andris\greenfox\paff-tm\week-02\day-1\factorio\main.c
+	<stdio.h>
+	<stdlib.h>
+	"factorio.h"
+
+1507557702 c:\documents and settings\andris\greenfox\paff-tm\week-02\day-1\factorio\factorio.h
+
