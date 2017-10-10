@@ -2,3 +2,59 @@
 .o
 .layout
 .depend
+.cbp
+
+# Copied lines:
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# other
+.cproject
+.dep/
+.project
+.settings/
+*.layout
+*.cbp
+*.depend
+
+
+# make and build files
+*.lst
+*.eep
+*.lss
+*.map
+*.sym
+
+# I keep these, since I prefer having the reference of the final build
+# *.elf
+# *.hex
