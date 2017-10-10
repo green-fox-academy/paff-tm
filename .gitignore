@@ -1,8 +1,8 @@
-.exe
-.o
-.layout
-.depend
-.cbp
+*.exe
+*.o
+*.layout
+*.depend
+*.cbp
 
 # Copied lines:
 # Prerequisites
