@@ -3,8 +3,8 @@
 // differences between getch and getchar
 
 int main() {
-    char buffer[15] = "";   // Buffer variable for user input
-    char buffer2[15] = "";
+    char buffer[255] = "";   // Buffer variable for user input
+    char buffer2[255] = "";
     int i = 0;
 
     printf("getch\nInput your name: ");
@@ -25,6 +25,7 @@ int main() {
     printf("Input your name: ");
     do {
         buffer2[i] = getchar();
+        printf("x");
         i++;
     } while ((buffer2[i-1] != '\n') && (i < sizeof(buffer2)));
     buffer2[i - 1] = '\0';  // close the string
