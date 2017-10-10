@@ -6,9 +6,15 @@ int main()
     int arr[50];
     int nr_of_numbers;
 
-    printf("How many numbers do you want to input: ");
-    scanf("%d", &nr_of_numbers);
-
+    printf("How many numbers do you want to input (1-50): ");
+    do {
+        scanf("%d", &nr_of_numbers);
+        if ((nr_of_numbers < 1) || (nr_of_numbers > sizeof(arr) / sizeof(arr[0]))) {
+            printf("Your number is not in the range!\nGive an other value: ");
+        } else {
+            break;
+        }
+    } while (1);
     // Then load up the array with integer values
 
     for (int i = 0; i < nr_of_numbers; i++) {
