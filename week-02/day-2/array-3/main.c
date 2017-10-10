@@ -12,7 +12,7 @@ int main() {
 
     printf("\n");
 
-    for (int i = 0; i < sizeof(int_array) / sizeof(int_array[0]); i++)
+    for (int i = 0; i < sizeof(float_array) / sizeof(float_array[0]); i++)
         printf("%.3f ", float_array[i]);
 
 
