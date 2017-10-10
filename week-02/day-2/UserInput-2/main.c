@@ -24,7 +24,7 @@ int main() {
         i++;
     } while ((buffer[i-1] != '\r') && (i < 256));
     //with getchar I need to wait an \n value as enter
-    //with getchar I need to wait an \r value as enter
+    //with getch I need to wait an \r value as enter
     buffer[i - 1] = '\0';  // close the string
 
     //TODO:
