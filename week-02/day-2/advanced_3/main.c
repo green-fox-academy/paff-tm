@@ -14,10 +14,7 @@ int main()
     do {
         printf("Add the size of the array (1-20): ");
         scanf("%d", &real_size_of_array);
-        if ((real_size_of_array > 0) && (real_size_of_array <= sizeof(arr) / sizeof(arr[0]))){
-            break;
-        }
-    } while (1);
+    } while ((real_size_of_array < 1) || (real_size_of_array > sizeof(arr) / sizeof(arr[0])));
 
  // fill up integer values
     for (int i = 0; i < real_size_of_array; i++) {
