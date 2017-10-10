@@ -14,6 +14,6 @@ int main()
 }
 
 int char_to_ascii(){
-    char x = getch();
+    char x = getchar();
     printf("%c, %d", x, x);
 }
