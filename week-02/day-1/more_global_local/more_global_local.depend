@@ -1,6 +1,0 @@
-# depslib dependency file v1.0
-1507561833 source:c:\documents and settings\andris\greenfox\paff-tm\week-02\day-1\more_global_local\main.c
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
-

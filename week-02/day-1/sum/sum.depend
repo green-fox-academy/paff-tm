@@ -1,8 +1,0 @@
-# depslib dependency file v1.0
-1507555755 source:c:\documents and settings\andris\greenfox\paff-tm\week-02\day-1\sum\main.c
-	<stdio.h>
-	<stdlib.h>
-	"sum.h"
-
-1507555778 c:\documents and settings\andris\greenfox\paff-tm\week-02\day-1\sum\sum.h
-
