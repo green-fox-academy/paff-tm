@@ -14,20 +14,46 @@ int main()
     do {
         printf("Add the size of the array (1-20): ");
         scanf("%d", &real_size_of_array);
-        if ((real_size_of_array > 0) && (real_size_of_array < sizeof(arr) / sizeof(arr[0]))){
+        if ((real_size_of_array > 0) && (real_size_of_array <= sizeof(arr) / sizeof(arr[0]))){
             break;
         }
     } while (1);
 
  // fill up integer values
     for (int i = 0; i < real_size_of_array; i++) {
-        arr[i] = rand()%1000;
+        arr[i] = rand()%10;
+    }
+
+    int num_of_unique_elements = 0;
+    int unique = 1;
+    for (int i = 0; i < real_size_of_array; i++) {
+        unique = 1;
+        for (int j = 0; (j < real_size_of_array) && unique == 1; j++) {
+            if ((i != j) && (arr[i] == arr[j])) {
+                unique = 0;
+            }
+        }
+        if (unique == 1) {
+            freq[num_of_unique_elements] = arr[i];
+            num_of_unique_elements++;
+        }
     }
 
  // print all item of array
-     for (int i = 0; i < real_size_of_array; i++) {
-        printf("%d\n", arr[i]);
+    printf("All numbers in array:\n");
+    for (int i = 0; i < real_size_of_array; i++) {
+        if (i < num_of_unique_elements)
+            printf("%d\t\t\t%d\n", arr[i], freq[i]);
+        else
+            printf("%d\n", arr[i]);
     }
 
+// print all items of array
+/*
+    printf("The unique numbers are:\n");
+    for (int i = 0; i < num_of_unique_elements; i++) {
+        printf("%d\n", freq[i]);
+    }
+*/
     return 0;
 }
