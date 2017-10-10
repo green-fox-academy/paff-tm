@@ -16,7 +16,7 @@ int main() {
 
     //TODO:
     // Get the user's pet name with getch
-    printf("Input your name: ");
+    printf("Input your pet's name: ");
     int i = 0;
     do {
         buffer[i] = getch();
@@ -29,8 +29,8 @@ int main() {
 
     //TODO:
     // Print it out
-    printf("\nYour name is: %s", buffer);
-    printf("\nLength of yout name is: %d", strlen(buffer));
+    printf("\nYour pet's name is: %s", buffer);
+    printf("\nLength of your pet's name is: %d", strlen(buffer));
 
     return 0;
 }
