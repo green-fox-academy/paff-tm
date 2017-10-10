@@ -28,8 +28,8 @@ int main()
     int unique = 1;
     for (int i = 0; i < real_size_of_array; i++) {
         unique = 1;
-        for (int j = 0; (j < real_size_of_array) && unique == 1; j++) {
-            if ((i != j) && (arr[i] == arr[j])) {
+        for (int j = 0; (j < num_of_unique_elements) && unique == 1; j++) {
+            if (arr[i] == freq[j]) {
                 unique = 0;
             }
         }
@@ -40,12 +40,12 @@ int main()
     }
 
  // print all item of array
-    printf("All numbers in array:\n");
+    printf("  All numbers\t%c Uniqe numbers\n", 179);
     for (int i = 0; i < real_size_of_array; i++) {
         if (i < num_of_unique_elements)
-            printf("%d\t\t\t%d\n", arr[i], freq[i]);
+            printf("\t%d\t%c\t%d\n", arr[i], 179, freq[i]);
         else
-            printf("%d\n", arr[i]);
+            printf("\t%d\t%c\n", arr[i], 179);
     }
 
 // print all items of array
