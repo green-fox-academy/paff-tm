@@ -9,9 +9,12 @@ int main()
 	// Write a C program to find the two largest element in an array using only 1 for loop
 	// From <limits.h> use INT_MIN: this is the least integer
 
+	//WHAT TO DO WITH INT_MIN?
+
 	int largest_a = 0;
     int largest_b = 0;
 
+    printf("INT-MIN: %d\n", INT_MIN);
     printf("largest\t2nd largest\n");
 	for (int i = 0; i < sizeof(number_array) / sizeof(number_array[0]); i++) {
         if (number_array[i] > largest_b) {
