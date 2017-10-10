@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 
 int main() {
-    char buffer[255];   // Buffer variable for user input
+    char buffer[255] = "";   // Buffer variable for user input
 
     //TODO:
     // Get the user's name with gets
@@ -29,6 +30,7 @@ int main() {
     //TODO:
     // Print it out
     printf("\nYour name is: %s", buffer);
+    printf("\nLength of yout name is: %d", strlen(buffer));
 
     return 0;
 }
