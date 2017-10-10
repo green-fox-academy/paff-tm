@@ -1,8 +1,11 @@
+# CodeBlock ignore
 *.exe
 *.o
 *.layout
 *.depend
 *.cbp
+bin/
+obj/
 
 # Copied lines:
 # Prerequisites
