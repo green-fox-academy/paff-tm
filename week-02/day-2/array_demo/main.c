@@ -21,8 +21,8 @@ int main()
     printf("mas\n");
 
     int array3[2][3] = {
-        (1, 2, 3),
-        (3, 4, 5),
+        {1, 2, 3},
+        {3, 4, 5},
     };
 
     printf("%d", array3[1][1]);
