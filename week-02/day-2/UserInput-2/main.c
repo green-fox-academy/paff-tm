@@ -18,13 +18,17 @@ int main() {
     printf("Input your name: ");
     int i = 0;
     do {
-        buffer[i] = getchar();
+        buffer[i] = getch();
+        printf("%c", buffer[i]);  //getch needs this to see what is typed
         i++;
-    } while ((buffer[i-1] != '\n') && (i < 256));
-    buffer[i - 1] = '\0';
+    } while ((buffer[i-1] != '\r') && (i < 256));
+    //with getchar I need to wait an \n value as enter
+    //with getchar I need to wait an \r value as enter
+    buffer[i - 1] = '\0';  // close the string
+
     //TODO:
     // Print it out
-    printf("Your name is: %s", buffer);
+    printf("\nYour name is: %s", buffer);
 
     return 0;
 }
