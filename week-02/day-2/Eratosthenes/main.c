@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+/*
 int num_of_elements (int array[]);
 void print_array (int array[]);
+*/
 
 int main()
 {
@@ -13,13 +15,11 @@ int main()
         scanf("%d", &nr_of_items);
     } while (nr_of_items < 1);
 
-    int is_prime[nr_of_items]; // 1 if the n + 2 is prime, -1 if not prime
+    uint8_t is_prime[nr_of_items]; // 1 if the n + 2 is prime, -1 if not prime
 
     //fill is_prime with 0s
     for (int i = 0; i < nr_of_items; i++)
         is_prime[i] = 0;
-
-    //print_array(is_prime);
 
     for (int i = 0; i < nr_of_items; i++) {
         if (is_prime[i] == 0) {
@@ -31,15 +31,18 @@ int main()
     }
 
     //print the prime numbers
+    printf("done.");
+
     for (int i = 0; i < nr_of_items; i++) {
         if (is_prime[i] == 1) {
-            printf("%d ", i + 2);
+            printf("%d\t", i + 2);
         }
     }
 
     return 0;
 }
 
+/*
 int num_of_elements (int array[])
 {
     return (sizeof(array) / sizeof(array[0]));
@@ -53,3 +56,4 @@ void print_array (int array[])
     for (int i = 0; i < sizeof(array) / sizeof(array[0]); i++)
         printf("%d ", array[i]);
 }
+*/
