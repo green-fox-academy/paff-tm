@@ -26,15 +26,18 @@ void search_palind(char input[], char output[])
     int l = 0; //l as length of the polidrome counted from central of the polindrome
     int t = 0;
 
+    output[0] = '[';
+    output[1] = '\0';
+
     for (int c = 1; c < strlen(input) - 1; c++) { //c as central position of palindrome
         l = 0;
         while ((l <= c) && (l < strlen(input) - c) && (input[c - l] == input[c + l])) {
             l++;
         }
         l--;
-        if (l > 0) {
+        while (l > 0) {
             //copy the polidrome to the output sting
-            if (strlen(output) > 0)
+            if (strlen(output) > 1)
                 strcat(output, ", \"");
             else
                 strcat(output, "\"");
@@ -46,8 +49,10 @@ void search_palind(char input[], char output[])
             temp[t] = '\0';
             strcat(output, temp);
             strcat(output, "\"");
+
+            l--;
         }
     }
-
+    strcat(output, "]");
     return;
 }
