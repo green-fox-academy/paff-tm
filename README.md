@@ -4,16 +4,16 @@
 - [homepage](https://github.com/paff-tm/paff-tm.github.io.git)
 
 ## week-01
-[day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-2)
-[day-3](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-3)
-[day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-4)
-[day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-5)
+- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-2)
+- [day-3](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-3) 
+- [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-4)
+- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-5)
 
 ## week-02
-[day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-1)
-[day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-2)
-day-3 - practice day
-[day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-4)
-day-5
+- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-1)
+- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-2)
+- day-3 - practice day
+- [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-4)
+- day-5
 
 
