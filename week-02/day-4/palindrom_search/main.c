@@ -27,7 +27,6 @@ int main()
  */
 int search_palind(char input[], char output[])
 {
-    char temp[256] = "";// temp string for palindrome
     int pal_len = 0;    // length of the palidrome counted from central of the palindrome
     int pal_cen = 0;    // central position of palindrome in the input string
     char temp[256] = "";// temp string for palindrome
@@ -42,11 +41,18 @@ int search_palind(char input[], char output[])
     }
     for (pal_cen = 1; pal_cen < strlen(input) - 1; pal_cen++) {
         // check the length of the palindrome at the pal_cen position
+/*
         pal_len = 0;
         while ((pal_len <= pal_cen) && (pal_len < strlen(input) - pal_cen) && (input[pal_cen - pal_len] == input[pal_cen + pal_len])) {
             pal_len++;
         }
         pal_len--;
+*/
+
+        pal_len = 0;
+        while ((pal_len < pal_cen) && ((pal_len + 1) < (strlen(input) - pal_cen)) && (input[pal_cen - pal_len - 1] == input[pal_cen + pal_len + 1])) {
+            pal_len++;
+        }
 
         //copy the palidrome to the output sting
         while (pal_len > 0) {
