@@ -35,7 +35,7 @@ int main()
 }
 
 /*  Mathematic solution gives back the winning seat;
- *
+ *  All bits shifts left, and the highest order bit will go to the first place value
  */
 int josephus_math(int people)
 {
@@ -44,15 +44,14 @@ int josephus_math(int people)
 
     printf("\noriginal bits of the nr. of people:\t"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(people));
 
-    // find the position of the first bit which is 1
+    // find the highest order bit in people.
     x = 0;
     while (people != (people & x)) {
         x = (x << 1) + 1;
     }
-    x++;
 
-    // delete the fist bit which is 1
-    winning_seat -= x;
+    // Delete the highest order bit. winning_seat is already shifted
+    winning_seat -= ++x;
     printf("\nthe bits of the winning seat:\t\t"BYTE_TO_BINARY_PATTERN"\n", BYTE_TO_BINARY(winning_seat));
 
     return winning_seat;
