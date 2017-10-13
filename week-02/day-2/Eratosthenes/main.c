@@ -24,7 +24,7 @@ int main()
 
     for (int i = 0; i < nr_of_items; i++) {
         for (int j = i + (i + 2); j < nr_of_items; j = j + (i + 2)){
-            is_prime[j] = -1;
+            is_prime[j] = 0;
         }
     }
 
