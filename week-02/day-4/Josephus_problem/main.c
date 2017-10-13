@@ -3,8 +3,16 @@
 #include <stdint.h>
 #include <math.h>
 #include <limits.h>
-#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c"
 #define BYTE_TO_BINARY(byte)  \
+  (byte & 0x8000 ? '1' : '0'), \
+  (byte & 0x4000 ? '1' : '0'), \
+  (byte & 0x2000 ? '1' : '0'), \
+  (byte & 0x1000 ? '1' : '0'), \
+  (byte & 0x800 ? '1' : '0'), \
+  (byte & 0x400 ? '1' : '0'), \
+  (byte & 0x200 ? '1' : '0'), \
+  (byte & 0x100 ? '1' : '0'), \
   (byte & 0x80 ? '1' : '0'), \
   (byte & 0x40 ? '1' : '0'), \
   (byte & 0x20 ? '1' : '0'), \
@@ -31,6 +39,9 @@ int main()
     printf("Number of the winning seat is (bitwise method): %d\n", josephus_bit(people));
     printf("Number of the winning seat is (mathematic method): %d\n", josephus_math(people));
 
+//doesn't work, need to check
+    //printf("Number of the winning seat is (full mathematic method): %d\n", 2 * (people - pow(2, log2(people))) + 1);
+
     return 0;
 }
 
@@ -51,7 +62,7 @@ int josephus_math(int people)
     }
 
     // Delete the highest order bit. winning_seat is already shifted
-    winning_seat -= ++x;
+    winning_seat ^= ++x;
     printf("\nthe bits of the winning seat:\t\t"BYTE_TO_BINARY_PATTERN"\n", BYTE_TO_BINARY(winning_seat));
 
     return winning_seat;
