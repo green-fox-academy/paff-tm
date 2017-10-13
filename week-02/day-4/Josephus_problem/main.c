@@ -32,84 +32,103 @@ int main()
 }
 
 /*  Bitwise solution of Josephus problem
- *  Return the winner position from 1. If there are more people given that it can handle, return 0;
+ *  Return the winner position counted from 1. If there are more people given that it can handle, return 0;
+ *  This function is also play the game step-by-step but not in an array but in one variable (group)
  */
 int josephus_bit(int people)
 {
-    uint8_t group = 0;              // 1 for alive, 0 for dead person in binary
-    uint8_t counter = 0;            // counts the loop
+    uint64_t group = 0;              // 1 for alive, 0 for dead person in binary
+    uint64_t counter = 0;            // always shows the person's position who's at the last digit
 
     if (people > sizeof(group) * 8) { // if there are more people than it can be handled, return 0
         return 0;
     } else {
-        // set the init value of the group according to the number of the people
+        // set the init value of the group according to the number of the people (5 -> 0b00011111)
         group = pow(2, people) - 1;
-printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
 
-        while (group > 1) {             // (The last bit is always 1) While there are more people than 1
-            group = (group >> 1) + pow(2, people - 1); // that person remain alive, put it at the beginning bit, according to the number of people
+        // (The last bit is always 1) While there are more people than 1
+        // that person remain alive, put it at the beginning bit, according to the number of people
+        while (group > 1) {
+            group = (group >> 1) + pow(2, people - 1);
             counter++;
             counter %= people;
-//            count(counter, people, group);
-printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
+            printf("\nkiller remains alive:\t\t"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
 
-            while (group % 2 == 0) {    // find the next alive person (to kill)
+            // find the next alive person (to kill)
+            while (group % 2 == 0) {
                 group >>= 1;
                 counter++;
                 counter %= people;
-//                count(counter, people, group);
-printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
+                printf("\nlooking for the victim\t\t"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
             }
-            group--;                    // then set the last bit to 0 (kill him)
-printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
-            while (group % 2 == 0) {    // find the next alive person (who can kill somebody)
+
+            // then set the last bit to 0 (kill him)
+            group--;
+            printf("\nkill him:\t\t\t"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
+
+            // find the next alive person (who can kill somebody)
+            while (group % 2 == 0) {
                 group >>= 1;
                 counter++;
                 counter %= people;
-//                count(counter, people, group);
-printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
+                printf("\nlooking for the next killer\t"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
             }
         }
     }
-    return ((counter + 1) % 8);
+    printf("\n");
+    return counter + 1;
 }
 
-/*  Step-by-step solution, gives back the nr. of the winning seat from 1
+/*  Step-by-step solution, gives back the nr. of the winning seat counted from 1
  *
  */
 int josephus(int people)
 {
-    int group[people];  //1 is alive, 0 is dead
-    int seat = 0;
-    int n = 0;
-    int step = 0;
+    int group[people];  // 1 is alive, 0 is dead
+    int seat = 0;       // the position of a killer
+    int next = 0;       // the position of the next alive person
+    int step = 0;       // counts the steps
 
     for (int i = 0; i < people; i++)
         group[i] = 1;
 
     do {
         step++;
-        seat = n;
-        n = next_alive(group, people, seat);
-        if (n != seat) {
-            group[n] = 0;
-            n = next_alive(group, people, seat);
-            //n = next_alive(group, people, seat);
+
+        // Set the killer position to the last found alive person.
+        // At first round it will be 0;
+        seat = next;
+
+        // Looking for the next alive person to kill
+        next = next_alive(group, people, seat);
+
+        // If it is not the same than the killer (that means he's not the only one alive),
+        // than kill him, and find the next alive person who will be a killer
+        if (next != seat) {
+            group[next] = 0;
+            next = next_alive(group, people, seat);
         }
+
+        // print out the actual stage
         printf("After the %d. step:\t", step);
         for (int i = 0; i < people; i++)
             printf("%d", group[i]);
         printf("\n");
-    } while (n != seat);
+
+      // Do until the killer and the person to be killed is at the same position, so he's the only alive person
+    } while (next != seat);
 
     return seat + 1;
 }
 
-// gives back the next alive person's seat in the array (for josephus() )
+/* Gives back the next alive person's seat in the array (for josephus() )
+ * (the index of the next '1' value)
+ */
 int next_alive(int group[], int people, int starting_seat)
 {
     int i = starting_seat;
     do {
+        // if this is the last item in the group, then start from the beginning, if not, step one
         if (i == people - 1) {
             i = 0;
         } else {
