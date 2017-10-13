@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
+#include <limits.h>
 #define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
 #define BYTE_TO_BINARY(byte)  \
   (byte & 0x80 ? '1' : '0'), \
@@ -13,6 +14,7 @@
   (byte & 0x02 ? '1' : '0'), \
   (byte & 0x01 ? '1' : '0')
 
+int josephus_math(int people);
 int josephus_bit(int people);
 int josephus(int people);
 int next_alive(int group[], int people, int starting_seat);
@@ -27,8 +29,33 @@ int main()
 
     printf("Number of the winning seat is (step-by-step method): %d\n", josephus(people));
     printf("Number of the winning seat is (bitwise method): %d\n", josephus_bit(people));
+    printf("Number of the winning seat is (mathematic method): %d\n", josephus_math(people));
 
     return 0;
+}
+
+/*  Mathematic solution gives back the winning seat;
+ *
+ */
+int josephus_math(int people)
+{
+    int winning_seat = (people << 1) + 1 ;  // shifts the bit to left and set the last bit to 1
+    int x;
+
+    printf("\noriginal bits of the nr. of people:\t"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(people));
+
+    // find the position of the first bit which is 1
+    x = 0;
+    while (people != (people & x)) {
+        x = (x << 1) + 1;
+    }
+    x++;
+
+    // delete the fist bit which is 1
+    winning_seat -= x;
+    printf("\nthe bits of the winning seat:\t\t"BYTE_TO_BINARY_PATTERN"\n", BYTE_TO_BINARY(winning_seat));
+
+    return winning_seat;
 }
 
 /*  Bitwise solution of Josephus problem
