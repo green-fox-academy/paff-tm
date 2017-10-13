@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 #define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
 #define BYTE_TO_BINARY(byte)  \
   (byte & 0x80 ? '1' : '0'), \
@@ -13,8 +14,8 @@
   (byte & 0x01 ? '1' : '0')
 
 int josephus_bit(int people);
-int count(int counter, int people, uint8_t group);
 int josephus(int people);
+int next_alive(int group[], int people, int starting_seat);
 
 int main()
 {
@@ -42,25 +43,30 @@ int josephus_bit(int people)
         return 0;
     } else {
         // set the init value of the group according to the number of the people
-        for (int i = 0; i < sizeof(group) * 8 - people; i++)
-            group /= 2;
+        group = pow(2, people) - 1;
 printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
 
-        while (group > 1) {             // while there are more people than 1. The last bit is always 1
-            group = (group >> 1) + 128; // that person remain alive, put it at the beginning bit, let's follow with the next person
-            count(counter, people, group);
+        while (group > 1) {             // (The last bit is always 1) While there are more people than 1
+            group = (group >> 1) + pow(2, people - 1); // that person remain alive, put it at the beginning bit, according to the number of people
+            counter++;
+            counter %= people;
+//            count(counter, people, group);
 printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
 
             while (group % 2 == 0) {    // find the next alive person (to kill)
                 group >>= 1;
-                count(counter, people, group);
+                counter++;
+                counter %= people;
+//                count(counter, people, group);
 printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
             }
             group--;                    // then set the last bit to 0 (kill him)
 printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
             while (group % 2 == 0) {    // find the next alive person (who can kill somebody)
                 group >>= 1;
-                count(counter, people, group);
+                counter++;
+                counter %= people;
+//                count(counter, people, group);
 printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
             }
         }
@@ -68,23 +74,11 @@ printf("\n"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(group));
     return ((counter + 1) % 8);
 }
 
-
-int count(int counter, int people, uint8_t group)
-{
-    while (counter < people) {
-
-    if (counter == people)
-        counter++;
-    else
-        counter++;
-    return 0;
-}
-
-
 /*  Step-by-step solution, gives back the nr. of the winning seat from 1
  *
  */
-int josephus(int people) {
+int josephus(int people)
+{
     int group[people];  //1 is alive, 0 is dead
     int seat = 0;
     int n = 0;
@@ -109,6 +103,21 @@ int josephus(int people) {
     } while (n != seat);
 
     return seat + 1;
+}
+
+// gives back the next alive person's seat in the array (for josephus() )
+int next_alive(int group[], int people, int starting_seat)
+{
+    int i = starting_seat;
+    do {
+        if (i == people - 1) {
+            i = 0;
+        } else {
+            i++;
+        }
+    } while (group[i] == 0 && i != starting_seat);
+
+    return i;
 }
 
 
