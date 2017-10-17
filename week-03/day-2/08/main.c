@@ -13,7 +13,7 @@ int main()
     char str[32]; //= "-2147483649";
     int original_base;
     int new_base;
-
+    char base_nums[37];
 
     printf("Give me a number to transform it in an other system: ");
     scanf("%s", str);
@@ -28,18 +28,34 @@ int main()
             break;
     }
 
-    // get the new base as a number between 2 and 36
-    printf("Give me the number of the new base: ");
-    while (1) {
-        scanf("%d", &new_base);
-        if (new_base < 2 || new_base > 36)
-            printf("The value should be between 2 and 36. Give it again: ");
+    // fill up the base_nums with symbols representing numbers
+    int i = 0;
+    while (i < original_base) {
+        if (i < 10)
+            base_nums[i] = i + '0';
         else
-            break;
+            base_nums[i] = i - 10 + 'a';
+        i++;
     }
+    base_nums[i] = '\0';
 
-    transform(str, original_base, new_base);
+    // check if the given string can be a number in the given base
+    if (strspn(str, base_nums) != strlen(str)) {
+        printf("The given number can't be a number in the given base.\n");
+    } else {
+        // get the new base as a number between 2 and 36
+        printf("Give me the number of the new base: ");
+        while (1) {
+            scanf("%d", &new_base);
+            if (new_base < 2 || new_base > 36)
+                printf("The value should be between 2 and 36. Give it again: ");
+            else
+                break;
+        }
 
+        transform(str, original_base, new_base);
+
+    }
     return(0);
 }
 
