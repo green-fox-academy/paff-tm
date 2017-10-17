@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void binary_adder (char *bin_op_1, char *bin_op_2);
 
@@ -27,12 +28,23 @@ void binary_adder (char *bin_op_1, char *bin_op_2)
     int a = 0, b = 0;
     int result_int = 0;
     char result_str[] = "";
+    char bin_nums[] = "01";
 
-    a = strtol(bin_op_1, 0, 2);
-    b = strtol(bin_op_2, 0, 2);
+    if (strspn(bin_op_1, bin_nums) == strlen(bin_op_1)) {       // check if bin_op_1 is a binary number
+        if (strspn(bin_op_2, bin_nums) == strlen(bin_op_2)) {   // check if bin_op_2 is a binary number
 
-    result_int = a + b;
+            a = strtol(bin_op_1, 0, 2);
+            b = strtol(bin_op_2, 0, 2);
 
-    itoa(result_int, result_str, 2);
-    printf("%s", result_str);
+            result_int = a + b;
+
+            itoa(result_int, result_str, 2);
+            printf("%s", result_str);
+
+        } else {
+            printf("%s is not a binary number.\n", bin_op_2);
+        }
+    } else {
+        printf("%s is not a binary number.\n", bin_op_1);
+    }
 }
