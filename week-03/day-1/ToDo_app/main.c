@@ -25,8 +25,6 @@ void complete_task(int index_cmp);
 
 int main()
 {
-
-
 	char choice;
 
 	while (1) {
