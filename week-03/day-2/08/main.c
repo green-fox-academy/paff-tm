@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 void transform (char str[], int original_base, int new_base);
 
 //TODO: write a program, which transforms a number from a number system to another.
@@ -27,9 +28,12 @@ int main()
 
 void transform (char str[], int original_base, int new_base)
 {
-    char temp_str[20] = "";
-    int temp_int = 0;
-    temp_int = strtol(str, 0, new_base);
-    printf("%d", temp_int);
+    char str_new_number[20] = "";
+    long int value = 0;
 
+    value = strtol(str, 0, original_base);
+    printf("number in base %d: %d\n", original_base, value);
+
+    ltoa(value, str_new_number, new_base);
+    printf("number in base %d: %s\n", new_base, str_new_number);
 }
