@@ -59,7 +59,7 @@ int main()
         gets(input_str);
 
         // set the cursor position to the end of the input line
-        set_cursor_pos(strlen(input_str + 1), get_cursor_y() - 1);
+        set_cursor_pos(strlen(input_str) + 1, get_cursor_y() - 1);
 
         op_id = get_operator(input_str, operand_a, operand_b, operators);
         switch (op_id) {
@@ -214,19 +214,13 @@ int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
     //*b = 0.0;
 
     //check if operand_a is a decimal number
-    if (strlen(operand_a) == 0) {
-        printf("--Input error: first operand is missing.\n");
-        return -1;
-    } else if (strspn(operand_a, decimal_values) != strlen(operand_a)) {
+    if (strspn(operand_a, decimal_values) != strlen(operand_a)) {
         printf("--Input error: first operand is not a decimal number.\n");
         return -1;
     }
 
     //check if operand_b is a decimal number
-    if (strlen(operand_b) == 0) {
-        printf("--Input error: second operand is missing.\n");
-        return -1;
-    } else if (strspn(operand_b, decimal_values) != strlen(operand_b)) {
+    if (strspn(operand_b, decimal_values) != strlen(operand_b)) {
         printf("--Input error: second operand is not a decimal number.\n");
         return -1;
     }
@@ -250,20 +244,14 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
     //*base = 0;
 
     //check if operand_hex is a hexadecimal number
-    if (strlen(operand_hex) == 0) {
-        printf("--Input error: first operand is missing.\n");
-        return -1;
-    } else if (strspn(operand_hex, hexadecimal_values) != strlen(operand_hex)) {
+    if (strspn(operand_hex, hexadecimal_values) != strlen(operand_hex)) {
         printf("--Input error: first operand is not a hexadecimal number.\n");
         return -1;
     }
 
     //check if base is a number between 2 and 36
     *base = strtol(operand_base, &ptr, 10);
-    if (ptr == operand_base) {
-        printf("--Input error: base is not a number.\n");
-        return -1;
-    } else if ((*base < 2) || (*base > 36)) {
+    if ((*base < 2) || (*base > 36)) {
         printf("--Input error: base should be between 2 and 36.\n");
         return -1;
     }
@@ -278,7 +266,7 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
 //TODO: positioning the output
 void print_dec_result(double value)
 {
-    printf(" = %g\n", value);
+    printf("= %g\n", value);
 }
 
 /*  Prints out the result as a string to the end of the input line
@@ -286,7 +274,7 @@ void print_dec_result(double value)
 //TODO: positioning the output
 void print_str_result(char value[])
 {
-    printf(" = %s\n", value);
+    printf("= %s\n", value);
 }
 
 /*  Clears the screen.
