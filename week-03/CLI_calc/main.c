@@ -102,11 +102,12 @@ int main()
  */
 int get_dec_values(char operand_a[], char operand_b[],  float *a, float *b)
 {
-    int is_number = 1;  //1 if the operand is a decimal number, 0 if it contains other characters
+    int is_number;  //1 if the operand is a decimal number, 0 if it contains other characters
     *a = 0.0;
     *b = 0.0;
 
     //check if operand_a is a decimal number
+    is_number = 1;
     for (int i = 0; i < strlen(operand_a); i++){
         if ((operand_a[i] < '0' || operand_a[i] > '9') && operand_a[i] != '-' && operand_a[i] != '.' && operand_a[i] != ' ') {
             is_number = 0;
@@ -121,7 +122,7 @@ int get_dec_values(char operand_a[], char operand_b[],  float *a, float *b)
         //check if operand_b is a decimal number
         is_number = 1;
         for (int i = 0; i < strlen(operand_b); i++){
-            if ((operand_b[i] < '0' || operand_b[i] > '9') && operand_b[i] != '-' && operand_b[i] != '.' && operand_a[i] != ' ') {
+            if ((operand_b[i] < '0' || operand_b[i] > '9') && operand_b[i] != '-' && operand_b[i] != '.' && operand_b[i] != ' ') {
                 is_number = 0;
                 break;
             }
