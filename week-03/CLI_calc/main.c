@@ -6,8 +6,9 @@
 
 #define NUM_OF_OPS 14
 
-//TODO: handling negative numbers; - operator and - sign is the same...
-//
+//TODO: division by remainder
+//TODO: error handling at < and log
+//positioning of printing
 
 int get_operator(char input_str[], char operand_a[], char operand_b[], char operators[NUM_OF_OPS][6]);
 int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b);
@@ -17,7 +18,10 @@ void print_str_result(char value[]);
 
 void clear_screen();
 void print_help();
+void get_cursor_pos(int x, int y);
 void set_cursor_pos(int x, int y);
+
+int x, y;                   //cursor position
 
 int main()
 {
@@ -35,9 +39,12 @@ int main()
     char a_str[127] = "";       //string of the first operand for other base number systems
     char result_str[255] = "";  //string of the value for other base number systems
 
+
+
     print_help();
     while (op_id != 0) {
         gets(input_str);
+        get_cursor_pos(&x, &y);
         op_id = get_operator(input_str, operand_a, operand_b, operators);
         switch (op_id) {
             case -1:    // no operator
@@ -251,6 +258,7 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
 //TODO: positioning the output
 void print_dec_result(double value)
 {
+    set_cursor_pos(x, y);
     printf(" = %g\n", value);
 }
 
@@ -304,6 +312,25 @@ void print_help()
     fflush(stdin);
 }
 
+void get_cursor_pos(int x, int y)
+{
+    typedef struct _CONSOLE_SCREEN_BUFFER_INFO {
+      COORD      dwSize;
+      COORD      dwCursorPosition;
+      WORD       wAttributes;
+      SMALL_RECT srWindow;
+      COORD      dwMaximumWindowSize;
+    } CONSOLE_SCREEN_BUFFER_INFO ;
+
+    HANDLE hConsoleOutput;                                 // handle to screen buffer
+    PCONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo; // screen buffer information
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+
+    x = csbi.dwCursorPosition.X;
+    y = csbi.dwCursorPosition.X;
+}
 
 COORD coord = {0,0};
 void set_cursor_pos(int x, int y)
