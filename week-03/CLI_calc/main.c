@@ -6,8 +6,12 @@
 
 #define NUM_OF_OPS 14
 
+//TODO: handling negative numbers; - operator and - sign is the same...
+//
+
 int get_operator(char input_str[], char operand_a[], char operand_b[], char operators[NUM_OF_OPS][6]);
 int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b);
+int get_hex_values(char operand_hex[], char operand_base[], double *hex, double *base);
 void print_dec_result(double value);
 void print_str_result(char value[]);
 
@@ -29,7 +33,7 @@ int main()
     double result = 0;          //value of the result
 
     char a_str[127] = "";       //string of the first operand for other base number systems
-    char result_str[127] = "";  //string of the value for other base number systems
+    char result_str[255] = "";  //string of the value for other base number systems
 
     print_help();
     while (op_id != 0) {
@@ -95,14 +99,17 @@ int main()
                     print_dec_result(result);
                 }
                 break;
-            case 11:     //  binto
+            case 11:     // binto
 
                 break;
             case 12:     // hexto
-                printf("%d, %d, %d", a, b, op_id);
+                if (get_hex_values(operand_a, operand_b, &a, &b) == 0){
+                    ltoa((long int)a, result_str, (int)b);
+                    print_str_result(result_str);
+                }
                 break;
             case 13:     // decto
-                printf("%d, %d, %d", a, b, op_id);
+
                 break;
             default:     // ?
                 break;
@@ -140,12 +147,11 @@ int get_operator(char input_str[], char operand_a[], char operand_b[], char oper
 }
 
 /*  Get the decimal float values of operand_a and operand_b. If both are decimal float value,
- *  then returns 0, if not returns -1. Prints error message if there is an error
+ *  then returns 0, if not returns -1. Prints error message if there is an error.
  */
  //TODO: handle the spaces in the operands
 int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
 {
-    int is_number;
     *a = 0.0;
     *b = 0.0;
 
@@ -182,6 +188,43 @@ int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
 
 }
 
+/* Check if the operand_a is a hexadecimal number and operand_b is a suitable base. If so, than gives back
+ * the values in decimal. If both are correct returns 0, if not returns -1. Prints error message if there is an error.
+ */
+int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double *base)
+{
+    char *ptr = NULL;
+
+    //check if operand_hex is a hexadecimal number
+    if (strlen(operand_hex) > 0) {
+        for (int i = 0; i < strlen(operand_hex); i++){
+            if ((operand_hex[i] < '0' || operand_hex[i] > '9') && (operand_hex[i] < 'a' || operand_hex[i] > 'f') && (operand_hex[i] < 'A' || operand_hex[i] > 'F') && operand_hex[i] != ' ') {
+                printf(" Input error: first operand is not a hexadecimal number.\n");
+                return -1;
+            }
+        }
+        *hex = strtol(operand_hex, &ptr, 16);
+    } else {
+        printf(" Input error: first operand is missing.\n");
+        return -1;
+    }
+
+
+    //check if base is a number between 2 and 36
+
+    *base = strtol(operand_base, &ptr, 10);
+    if (ptr == operand_base) {
+        printf(" Input error: base is not a number.\n");
+        return -1;
+    } else {
+        if ((*base < 2) || (*base > 36)) {
+            printf(" Input error: base should be between 2 and 36.\n");
+            return -1;
+        }
+    }
+    return 0;
+}
+
 /*  Prints out the result of the decimal operate to the end of the input line
  */
 //TODO: positioning the output
@@ -195,7 +238,7 @@ void print_dec_result(double value)
 //TODO: positioning the output
 void print_str_result(char value[])
 {
-    printf(" = %s", value);
+    printf(" = %s\n", value);
 }
 
 /*  Clears the screen.
