@@ -22,7 +22,7 @@ void set_cursor_pos(int x, int y);
 int main()
 {
     char input_str[255] = "";   //the input string
-    char operators[NUM_OF_OPS][6] = {"exit", "clear", "help", "+", "-", "*", "/", "%", "^", "<", "log", "binto", "hexto", "decto"};  //list of the operators
+    char operators[NUM_OF_OPS][6] = {"exit", "clear", "help", "+", "*", "/", "%", "^", "<", "log", "binto", "hexto", "decto", "-"};  //list of the operators
     char operand_a[127] = "";   //raw input string of operand a
     char operand_b[127] = "";   //raw input string of operand b
 
@@ -57,59 +57,78 @@ int main()
                     print_dec_result(result);
                 }
                 break;
-            case 4:     // -
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = a - b;
-                    print_dec_result(result);
-                }
-                break;
-            case 5:     // *
+            case 4:     // *
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
                     result = a * b;
                     print_dec_result(result);
                 }
                 break;
-            case 6:     // /
+            case 5:     // /
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = (int)(a / b);
-                    print_dec_result(result);
+                    if (b == 0) {
+                        result = a / b;
+                        printf(" Mathematical problem: Division by zero.\n");
+                    } else {
+                        result = (int)(a / b);
+                        print_dec_result(result);
+                    }
                 }
                 break;
-            case 7:     // %
+            case 6:     // %
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = a / b;
-                    print_dec_result(result);
+                    if (b == 0) {
+                        printf(" Mathematical problem: Division by zero.\n");
+                    } else {
+                        result = a / b;
+                        print_dec_result(result);
+                    }
                 }
                 break;
-            case 8:     // ^
+            case 7:     // ^
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = pow(a, b);
-                    print_dec_result(result);
+                    if (a < 0 && b != (int)b) {
+                        printf(" Mathematical problem: base is negative and exponent is not integer.\n");
+                    } else if (a = 0 && b < 0){
+                        printf(" Mathematical problem: result is infinitive.\n");
+                    } else {
+                        result = pow(a, b);
+                        print_dec_result(result);
+                    }
                 }
                 break;
-            case 9:     // <
+            case 8:     // <
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
                     result = pow(a, 1 / b);
                     print_dec_result(result);
                 }
                 break;
-            case 10:     //  log
+            case 9:     //  log
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = log(b) / log(a);
+                    if (log(a) == 0) {
+                        printf("error.\n");
+                    } else {
+                        result = log(b) / log(a);
+                    }
                     print_dec_result(result);
                 }
                 break;
-            case 11:     // binto
+            case 10:     // binto
 
                 break;
-            case 12:     // hexto
+            case 11:     // hexto
                 if (get_hex_values(operand_a, operand_b, &a, &b) == 0){
                     ltoa((long int)a, result_str, (int)b);
                     print_str_result(result_str);
                 }
                 break;
-            case 13:     // decto
+            case 12:     // decto
 
+                break;
+            case 13:     // -
+                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+                    result = a - b;
+                    print_dec_result(result);
+                }
                 break;
             default:     // ?
                 break;
@@ -195,6 +214,9 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
 {
     char *ptr = NULL;
 
+    *hex = 0;
+    *base = 0;
+
     //check if operand_hex is a hexadecimal number
     if (strlen(operand_hex) > 0) {
         for (int i = 0; i < strlen(operand_hex); i++){
@@ -211,7 +233,6 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
 
 
     //check if base is a number between 2 and 36
-
     *base = strtol(operand_base, &ptr, 10);
     if (ptr == operand_base) {
         printf(" Input error: base is not a number.\n");
