@@ -61,8 +61,7 @@ int main()
         get_cursor_pos(&cursor_x, &cursor_y);
         op_id = get_operator(input_str, operand_a, operand_b, operators);
         switch (op_id) {
-            case -1:        // no operator
-                printf(" Input error: No operator. For help type 'help' and press enter.\n");
+            case -1:        // no operator, or operand is missing
                 break;
             case 0:         // help
                 print_help();
@@ -163,26 +162,42 @@ int main()
  */
 int get_operator(char input_str[], char operand_a[], char operand_b[], char operators[NUM_OF_OPS][6])
 {
-    int op_id = -1;         //id of the operator. If there is no operator found, then it will be -1
-    char *ptr = NULL;       //pointer to the first character of operator
+    int op_id = -1;             //id of the operator. If there is no operator found, then it will be -1
+    char *ptr = NULL;           //pointer to the first character of operator
 
-    operand_a[0] = '\0';    //reset operand_a string
-    operand_b[0] = '\0';    //reset operand_b string
+    operand_a[0] = '\0';        //reset operand_a string
+    operand_b[0] = '\0';        //reset operand_b string
 
     for (int i = 0; i < NUM_OF_OPS; i++) {
         ptr = strstr(input_str, operators[i]);
-        if (ptr != NULL) {  //if an operator was found
+        if (ptr != NULL) {      //if an operator was found
             op_id = i;
 
-            // get operand_a (characters before the operator)
-            strncpy(operand_a, input_str, ptr - input_str);
-            operand_a[ptr - input_str] = '\0';
+            if (op_id > 2) {    //if the operator is not a command
 
-            // get operand_b (characters after the operator)
-            strcpy(operand_b, ptr + strlen(operators[op_id]));
+                // get operand_a (characters before the operator)
+                strncpy(operand_a, input_str, ptr - input_str);
+                operand_a[ptr - input_str] = '\0';
+                if (strlen(operand_a) == 0) {
+                    printf(" Input error: first operand is missing.\n");
+                    op_id = -1;
+                }
+
+                // get operand_b (characters after the operator)
+                strcpy(operand_b, ptr + strlen(operators[op_id]));
+                if (strlen(operand_b) == 0) {
+                    printf(" Input error: second operand is missing.\n");
+                    op_id = -1;
+                }
+            }
             break;
         }
     }
+
+    if (ptr == NULL) {          // if no operator was found
+        printf(" Input error: No operator. For help type 'help' and press enter.\n");
+    }
+
     return op_id;
 }
 
