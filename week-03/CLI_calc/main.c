@@ -20,7 +20,7 @@ void print_str_result(char value[]);
 
 void clear_screen();
 void print_help();
-void get_cursor_pos(int *x, int *y);
+short get_cursor_y();
 void set_cursor_pos(int x, int y);
 
 int cursor_x, cursor_y;                 //cursor position
@@ -29,20 +29,20 @@ int main()
 {
     char input_str[255] = "";           //the input string
     char operators[NUM_OF_OPS][6] =     //list of the operators
-        {"help",
-         "clear",
-         "exit",
-         "+",
-         "*",
-         "/",
-         "%",
-         "^",
-         "<",
-         "log",
-         "binto",
-         "hexto",
-         "decto",
-         "-"};
+        {"help",    // 0
+         "clear",   // 1
+         "exit",    // 2
+         "+",       // 3
+         "*",       // 4
+         "/",       // 5
+         "%",       // 6
+         "^",       // 7
+         "<",       // 8
+         "log",     // 9
+         "binto",   // 10
+         "hexto",   // 11
+         "decto",   // 12
+         "-"};      // 13 - subtraction must be the last one
     char operand_a[127] = "";           //raw input string of operand a
     char operand_b[127] = "";           //raw input string of operand b
 
@@ -54,11 +54,13 @@ int main()
     char result_str[255] = "";          //string of the value for other base number systems
     //char a_str[127] = "";               //string of the first operand for other base number systems
 
-
     print_help();
     while (op_id != 2) {    // while operator is not "exit"
         gets(input_str);
-        get_cursor_pos(&cursor_x, &cursor_y);
+
+        // set the cursor position to the end of the input line
+        set_cursor_pos(strlen(input_str + 1), get_cursor_y() - 1);
+
         op_id = get_operator(input_str, operand_a, operand_b, operators);
         switch (op_id) {
             case -1:        // no operator, or operand is missing
@@ -87,7 +89,7 @@ int main()
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
                     if (b == 0) {
                         result = a / b;
-                        printf(" Mathematical problem: Division by zero.\n");
+                        printf("--Mathematical problem: Division by zero.\n");
                     } else {
                         result = (int)(a / b);
                         print_dec_result(result);
@@ -97,7 +99,7 @@ int main()
             case 6:         // %
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
                     if (b == 0) {
-                        printf(" Mathematical problem: Division by zero.\n");
+                        printf("--Mathematical problem: Division by zero.\n");
                     } else {
                         result = a / b;
                         print_dec_result(result);
@@ -107,9 +109,9 @@ int main()
             case 7:         // ^
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
                     if (a < 0 && b != (int)b) {
-                        printf(" Mathematical problem: base is negative and exponent is not integer.\n");
+                        printf("--Mathematical problem: base is negative and exponent is not integer.\n");
                     } else if ((a = 0) && (b < 0)){
-                        printf(" Mathematical problem: result is infinitive.\n");
+                        printf("--Mathematical problem: result is infinitive.\n");
                     } else {
                         result = pow(a, b);
                         print_dec_result(result);
@@ -158,7 +160,7 @@ int main()
 }
 
 /*  Gives back the id of the operator, and also separates the input string to operand_a and operand_b.
- *  If no operator was found then returns -1.
+ *  If no operator was found or operand is missing then returns -1.
  */
 int get_operator(char input_str[], char operand_a[], char operand_b[], char operators[NUM_OF_OPS][6])
 {
@@ -179,14 +181,14 @@ int get_operator(char input_str[], char operand_a[], char operand_b[], char oper
                 strncpy(operand_a, input_str, ptr - input_str);
                 operand_a[ptr - input_str] = '\0';
                 if (strlen(operand_a) == 0) {
-                    printf(" Input error: first operand is missing.\n");
+                    printf("--Input error: first operand is missing.\n");
                     op_id = -1;
                 }
 
                 // get operand_b (characters after the operator)
                 strcpy(operand_b, ptr + strlen(operators[op_id]));
                 if (strlen(operand_b) == 0) {
-                    printf(" Input error: second operand is missing.\n");
+                    printf("--Input error: second operand is missing.\n");
                     op_id = -1;
                 }
             }
@@ -195,7 +197,7 @@ int get_operator(char input_str[], char operand_a[], char operand_b[], char oper
     }
 
     if (ptr == NULL) {          // if no operator was found
-        printf(" Input error: No operator. For help type 'help' and press enter.\n");
+        printf("--Input error: No operator. For help type 'help' and press enter.\n");
     }
 
     return op_id;
@@ -213,19 +215,19 @@ int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
 
     //check if operand_a is a decimal number
     if (strlen(operand_a) == 0) {
-        printf(" Input error: first operand is missing.\n");
+        printf("--Input error: first operand is missing.\n");
         return -1;
     } else if (strspn(operand_a, decimal_values) != strlen(operand_a)) {
-        printf(" Input error: first operand is not a decimal number.\n");
+        printf("--Input error: first operand is not a decimal number.\n");
         return -1;
     }
 
     //check if operand_b is a decimal number
     if (strlen(operand_b) == 0) {
-        printf(" Input error: second operand is missing.\n");
+        printf("--Input error: second operand is missing.\n");
         return -1;
     } else if (strspn(operand_b, decimal_values) != strlen(operand_b)) {
-        printf(" Input error: second operand is not a decimal number.\n");
+        printf("--Input error: second operand is not a decimal number.\n");
         return -1;
     }
 
@@ -249,20 +251,20 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
 
     //check if operand_hex is a hexadecimal number
     if (strlen(operand_hex) == 0) {
-        printf(" Input error: first operand is missing.\n");
+        printf("--Input error: first operand is missing.\n");
         return -1;
     } else if (strspn(operand_hex, hexadecimal_values) != strlen(operand_hex)) {
-        printf(" Input error: first operand is not a hexadecimal number.\n");
+        printf("--Input error: first operand is not a hexadecimal number.\n");
         return -1;
     }
 
     //check if base is a number between 2 and 36
     *base = strtol(operand_base, &ptr, 10);
     if (ptr == operand_base) {
-        printf(" Input error: base is not a number.\n");
+        printf("--Input error: base is not a number.\n");
         return -1;
     } else if ((*base < 2) || (*base > 36)) {
-        printf(" Input error: base should be between 2 and 36.\n");
+        printf("--Input error: base should be between 2 and 36.\n");
         return -1;
     }
 
@@ -276,7 +278,6 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
 //TODO: positioning the output
 void print_dec_result(double value)
 {
-    set_cursor_pos(cursor_x, cursor_y);
     printf(" = %g\n", value);
 }
 
@@ -331,14 +332,14 @@ void print_help()
     clear_screen();
 }
 
-void get_cursor_pos(int *x, int *y)
+short get_cursor_y()
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
 
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
 
-    *x = csbi.dwCursorPosition.X;
-    *y = csbi.dwCursorPosition.Y;
+    //*x = csbi.dwCursorPosition.X;
+    return csbi.dwCursorPosition.Y;
 }
 
 COORD coord = {0,0};
