@@ -8,9 +8,9 @@
 
 //TODO: division by remainder
 //TODO: error handling at < and log
-//TODO: positioning of printing
 //TODO: error handling of high numbers
 //TODO: outsource the operatings into functions
+//TODO: handle the spaces inside the operands
 
 int get_operator(char input_str[], char operand_a[], char operand_b[], char operators[NUM_OF_OPS][6]);
 int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b);
@@ -22,8 +22,6 @@ void clear_screen();
 void print_help();
 short get_cursor_y();
 void set_cursor_pos(int x, int y);
-
-int cursor_x, cursor_y;                 //cursor position
 
 int main()
 {
@@ -52,7 +50,6 @@ int main()
     double b = 0;                       //value of the second operand
     double result = 0;                  //value of the result
     char result_str[255] = "";          //string of the value for other base number systems
-    //char a_str[127] = "";               //string of the first operand for other base number systems
 
     print_help();
     while (op_id != 2) {    // while operator is not "exit"
@@ -235,6 +232,7 @@ int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
 /* Check if the operand_a is a hexadecimal number and operand_b is a suitable base. If so, than gives back
  * the values in decimal. If both are correct returns 0, if not returns -1. Prints error message if there is an error.
  */
+ //TODO: handle the spaces in the operands
 int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double *base)
 {
     char hexadecimal_values[] = "0123456789abcdefABCDEF ";
@@ -263,7 +261,6 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
 
 /*  Prints out the result of the decimal operate to the end of the input line
  */
-//TODO: positioning the output
 void print_dec_result(double value)
 {
     printf("= %g\n", value);
@@ -271,7 +268,6 @@ void print_dec_result(double value)
 
 /*  Prints out the result as a string to the end of the input line
  */
-//TODO: positioning the output
 void print_str_result(char value[])
 {
     printf("= %s\n", value);
