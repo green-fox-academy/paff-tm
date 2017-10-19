@@ -21,6 +21,18 @@ int get_decto_values(char operand_bin[], char operand_base[], double *bin, doubl
 void print_dec_result(double value);
 void print_str_result(char value[]);
 
+void operation_addition(char operand_a[], char operand_b[]);
+void operation_subtraction(char operand_a[], char operand_b[]);
+void operation_multiplicatin(char operand_a[], char operand_b[]);
+void operation_division(char operand_a[], char operand_b[]);
+void operation_modulo(char operand_a[], char operand_b[]);
+void operation_exponentiation(char operand_a[], char operand_b[]);
+void operation_rooting(char operand_a[], char operand_b[]);
+void operation_log(char operand_a[], char operand_b[]);
+void operation_binto(char operand_a[], char operand_b[]);
+void operation_hexto(char operand_a[], char operand_b[]);
+void operation_decto(char operand_a[], char operand_b[]);
+
 void clear_screen();
 void print_help();
 void set_cursor_pos(int x, int y);
@@ -74,89 +86,37 @@ int main()
             case 2:         // exit
                 break;
             case 3:         // +
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = a + b;
-                    print_dec_result(result);
-                }
+                operation_addition(operand_a, operand_b);
                 break;
             case 4:         // *
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = a * b;
-                    print_dec_result(result);
-                }
+                operation_multiplicatin(operand_a, operand_b);
                 break;
             case 5:         // /
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    if (b == 0) {
-                        result = a / b;
-                        printf("--Mathematical problem: Division by zero.\n");
-                    } else {
-                        result = (int)(a / b);
-                        print_dec_result(result);
-                    }
-                }
+                operation_division(operand_a, operand_b);
                 break;
             case 6:         // %
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    if (b == 0) {
-                        printf("--Mathematical problem: Division by zero.\n");
-                    } else {
-                        result = a / b;
-                        print_dec_result(result);
-                    }
-                }
+                operation_modulo(operand_a, operand_b);
                 break;
             case 7:         // ^
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    if (a < 0 && b != (int)b) {
-                        printf("--Mathematical problem: base is negative and exponent is not integer.\n");
-                    } else if ((a = 0) && (b < 0)){
-                        printf("--Mathematical problem: result is infinitive.\n");
-                    } else {
-                        result = pow(a, b);
-                        print_dec_result(result);
-                    }
-                }
+                operation_exponentiation(operand_a, operand_b);
                 break;
             case 8:         // <
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = pow(a, 1 / b);
-                    print_dec_result(result);
-                }
+                operation_rooting(operand_a, operand_b);
                 break;
             case 9:         // log
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    if (log(a) == 0) {
-                        printf("error.\n");
-                    } else {
-                        result = log(b) / log(a);
-                    }
-                    print_dec_result(result);
-                }
+                operation_log(operand_a, operand_b);
                 break;
             case 10:        // binto
-                if (get_binto_values(operand_a, operand_b, &a, &b) == 0){
-                    ltoa((long int)a, result_str, (int)b);
-                    print_str_result(result_str);
-                }
+                operation_binto(operand_a, operand_b);
                 break;
             case 11:        // hexto
-                if (get_hexto_values(operand_a, operand_b, &a, &b) == 0){
-                    ltoa((long int)a, result_str, (int)b);
-                    print_str_result(result_str);
-                }
+                operation_hexto(operand_a, operand_b);
                 break;
             case 12:        // decto
-                if (get_decto_values(operand_a, operand_b, &a, &b) == 0){
-                    ltoa((long int)a, result_str, (int)b);
-                    print_str_result(result_str);
-                }
+                operation_decto(operand_a, operand_b);
                 break;
             case 13:        // -
-                if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-                    result = a - b;
-                    print_dec_result(result);
-                }
+                operation_subtraction(operand_a, operand_b);
                 break;
             default:        // ?
                 break;
@@ -328,6 +288,136 @@ int get_decto_values(char operand_dec[], char operand_base[], double *dec, doubl
     return 0;
 }
 
+void operation_addition(char operand_a[], char operand_b[])
+{
+    double a, b, result;
+
+    if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+        result = a + b;
+        print_dec_result(result);
+    }
+}
+
+void operation_subtraction(char operand_a[], char operand_b[])
+{
+    double a, b, result;
+
+    if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+        result = a - b;
+        print_dec_result(result);
+    }
+}
+
+void operation_multiplicatin(char operand_a[], char operand_b[])
+{
+    double a, b, result;
+
+    if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+        result = a * b;
+        print_dec_result(result);
+    }
+}
+
+void operation_division(char operand_a[], char operand_b[])
+{
+    double a, b, result;
+
+    if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+        if (b == 0) {
+            printf("--Mathematical problem: Division by zero.\n");
+        } else {
+            result = (int)(a / b);
+            print_dec_result(result);
+        }
+    }
+}
+
+void operation_modulo(char operand_a[], char operand_b[])
+{
+    double a, b, result;
+
+    if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+        if (b == 0) {
+            printf("--Mathematical problem: Division by zero.\n");
+        } else {
+            result = a / b;
+            print_dec_result(result);
+        }
+    }
+}
+
+void operation_exponentiation(char operand_a[], char operand_b[])
+{
+    double a, b, result;
+
+    if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+        if (a < 0 && b != (int)b) {
+            printf("--Mathematical problem: base is negative and exponent is not integer.\n");
+        } else if ((a = 0) && (b < 0)){
+            printf("--Mathematical problem: result is infinitive.\n");
+        } else {
+            result = pow(a, b);
+            print_dec_result(result);
+        }
+    }
+}
+
+void operation_rooting(char operand_a[], char operand_b[])
+{
+    double a, b, result;
+
+    if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+        result = pow(a, 1 / b);
+        print_dec_result(result);
+    }
+}
+
+void operation_log(char operand_a[], char operand_b[])
+{
+    double a, b, result;
+
+    if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
+        if (log(a) == 0) {
+            printf("error.\n");
+        } else {
+            result = log(b) / log(a);
+        }
+        print_dec_result(result);
+    }
+}
+
+void operation_binto(char operand_a[], char operand_b[])
+{
+    double a, b;
+    char result_str[255] = "";
+
+    if (get_binto_values(operand_a, operand_b, &a, &b) == 0){
+        ltoa((long int)a, result_str, (int)b);
+        print_str_result(result_str);
+    }
+}
+
+void operation_hexto(char operand_a[], char operand_b[])
+{
+    double a, b;
+    char result_str[255] = "";
+
+    if (get_hexto_values(operand_a, operand_b, &a, &b) == 0){
+        ltoa((long int)a, result_str, (int)b);
+        print_str_result(result_str);
+    }
+}
+
+void operation_decto(char operand_a[], char operand_b[])
+{
+    double a, b;
+    char result_str[255] = "";
+
+    if (get_decto_values(operand_a, operand_b, &a, &b) == 0){
+        ltoa((long int)a, result_str, (int)b);
+        print_str_result(result_str);
+    }
+}
 
 /*  Prints out the result of the decimal operate to the end of the input line
  */
@@ -351,7 +441,6 @@ void clear_screen()
 }
 
 /*  Clears the screen and prints out the help.
- *
  */
 void print_help()
 {
@@ -386,6 +475,8 @@ void print_help()
     clear_screen();
 }
 
+/*  Set the cursor position to the position x-y.
+ */
 COORD coord = {0,0};
 void set_cursor_pos(int x, int y)
 {
@@ -394,13 +485,14 @@ void set_cursor_pos(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+/*  Returns the actual x value of the cursor position.
+ */
 short get_cursor_y()
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
 
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
 
-    //*x = csbi.dwCursorPosition.X;
     return csbi.dwCursorPosition.Y;
 }
 
