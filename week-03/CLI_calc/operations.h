@@ -68,9 +68,9 @@ void operation_exponentiation(char operand_a[], char operand_b[])
     double a, b, result;
 
     if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-        if (a < 0 && b != (int)b) {
+        if ((a < 0) && (b != (int)b)) {
             printf("--Mathematical problem: base is negative and exponent is not integer.\n");
-        } else if ((a = 0) && (b < 0)){
+        } else if ((a == 0) && (b < 0)){
             printf("--Mathematical problem: result is infinitive.\n");
         } else {
             result = pow(a, b);
