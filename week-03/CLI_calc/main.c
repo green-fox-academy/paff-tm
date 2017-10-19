@@ -27,16 +27,17 @@ int main()
          "clear",   // 1
          "exit",    // 2
          "+",       // 3
-         "*",       // 4
-         "/",       // 5
-         "%",       // 6
-         "^",       // 7
-         "<",       // 8
-         "log",     // 9
-         "binto",   // 10
-         "hexto",   // 11
-         "decto",   // 12
-         "-"};      // 13 - subtraction must be the last one
+         "-",       // 4
+         "*",       // 5
+         "/",       // 6
+         "%",       // 7
+         "^",       // 8
+         "<",       // 9
+         "log",     // 10
+         "binto",   // 11
+         "hexto",   // 12
+         "decto"};  // 13
+
 
     print_help();
     while (op_id != 2) {    // while operator is not "exit"
@@ -60,35 +61,35 @@ int main()
             case 3:         // +
                 operation_addition(operand_a, operand_b);
                 break;
-            case 4:         // *
+            case 4:        // -
+                operation_subtraction(operand_a, operand_b);
+                break;
+            case 5:         // *
                 operation_multiplicatin(operand_a, operand_b);
                 break;
-            case 5:         // /
+            case 6:         // /
                 operation_division(operand_a, operand_b);
                 break;
-            case 6:         // %
+            case 7:         // %
                 operation_modulo(operand_a, operand_b);
                 break;
-            case 7:         // ^
+            case 8:         // ^
                 operation_exponentiation(operand_a, operand_b);
                 break;
-            case 8:         // <
+            case 9:         // <
                 operation_rooting(operand_a, operand_b);
                 break;
-            case 9:         // log
+            case 10:         // log
                 operation_log(operand_a, operand_b);
                 break;
-            case 10:        // binto
+            case 11:        // binto
                 operation_binto(operand_a, operand_b);
                 break;
-            case 11:        // hexto
+            case 12:        // hexto
                 operation_hexto(operand_a, operand_b);
                 break;
-            case 12:        // decto
+            case 13:        // decto
                 operation_decto(operand_a, operand_b);
-                break;
-            case 13:        // -
-                operation_subtraction(operand_a, operand_b);
                 break;
             default:        // ?
                 break;

@@ -26,13 +26,24 @@ int get_operator(char input_str[], char operand_a[], char operand_b[], char oper
         }
     }
 
+    //check if the input string contains an operator or command
     for (int i = 0; i < NUM_OF_OPS; i++) {
         ptr = strstr(input_str, operators[i]);
-        if (ptr != NULL) {      //if an operator was found
+        if (ptr != NULL) {      //if an operator or command was found
             op_id = i;
 
-            if (op_id > 2) {    //if the operator is not a command
+            //handle the problem if the first operand is a negative number
+            //it the first character is '-' then skip it and continue
+            if ((strcmp(operators[op_id], "-") == 0) && (ptr == input_str)) {
+                ptr = strstr(ptr + 1, operators[i]);    //search for an other '-' char in the input string
+                if (ptr != NULL) {                      //if there is, than it will be the operator
+                    op_id = i;
+                } else {                                //else it is not a subtraction, continue with next operator
+                    continue;
+                }
+            }
 
+            if (op_id > 2) {    //if the operator is not a command
                 // get operand_a (characters before the operator)
                 strncpy(operand_a, input_str, ptr - input_str);
                 operand_a[ptr - input_str] = '\0';
