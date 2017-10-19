@@ -84,8 +84,14 @@ void operation_rooting(char operand_a[], char operand_b[])
     double a, b, result;
 
     if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-        result = pow(a, 1 / b);
-        print_dec_result(result);
+        if (b < 0) {
+            printf("--Mathematical problem: root of a negative number.\n");
+        } else if (a == 0) {
+            printf("--Mathematical problem: root base is zero.\n");
+        } else {
+            result = pow(b, 1 / a);
+            print_dec_result(result);
+        }
     }
 }
 
