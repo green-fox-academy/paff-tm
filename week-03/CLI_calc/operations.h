@@ -94,12 +94,20 @@ void operation_log(char operand_a[], char operand_b[])
     double a, b, result;
 
     if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
-        if (log(a) == 0) {
-            printf("error.\n");
+        if (a == 0) {
+            printf("--Mathematical problem: 0 base logarithm.\n");
+        } else if (a == 1){
+            printf("--Mathematical problem: 1 base logarithm.\n");
+        } else if (a < 0){
+            printf("--Mathematical problem: negative base logarithm.\n");
+        } else if (b == 0){
+            printf("--Mathematical problem: logarithm of 0.\n");
+        } else if (b < 0){
+            printf("--Mathematical problem: logarithm of negative value.\n");
         } else {
             result = log(b) / log(a);
+            print_dec_result(result);
         }
-        print_dec_result(result);
     }
 }
 

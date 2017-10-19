@@ -6,7 +6,6 @@
 
 //TODO: error handling at < and log
 //TODO: error handling of high numbers (overflow)
-//TODO: handling subtraction from negative number
 
 #include <stdio.h>
 
@@ -19,7 +18,7 @@
 int main()
 {
     int op_id = -1;                 //the id of the operator, according to the operators string position
-    char input_str[255] = "";       //the input string
+    char input_str[256] = "";       //the input string
     char operand_a[127] = "";       //raw input string of operand a
     char operand_b[127] = "";       //raw input string of operand b
     char operators[NUM_OF_OPS][6] = //list of the operators
