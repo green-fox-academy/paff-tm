@@ -32,8 +32,8 @@ void print_help()
 {
     clear_screen();
 
-    printf("    	CLI Calculator \n"
-           "==================================== \n"
+    printf("    	      CLI Calculator \n"
+           "========================================== \n"
            "usage: [number] [operation] [number] \n"
            "Commands: \n"
            " \n"
@@ -43,18 +43,18 @@ void print_help()
            " /	division \n"
            " %	modulus \n"
            " ^	exponentiation \n"
-           " <	rooting - x < y is the x base root of y \n"
-           " log	logarithm - x log y is the x base logarithm of y \n"
-           " binto	binary to hex or dec \n"
-           " hexto	hexadecimal to bin or dec \n"
-           " decto	decimal to bin or hex \n"
-           " =================================== \n"
+           " <	x < y: x base root of y \n"
+           " log	x log y: x base logarithm of y \n"
+           " binto	binary to other number system \n"
+           " hexto	hexadecimal to other number system \n"
+           " decto	decimal to other number system \n"
+           " ========================================= \n"
            " exit	exiting from the program \n"
            " clear	clear the screen \n"
            " help	print usage \n"
-           " =================================== \n"
+           " ========================================= \n"
            " Hit enter to start! \n"
-           " =================================== \n");
+           " ========================================= \n");
 
     getchar();
     fflush(stdin);

@@ -4,6 +4,8 @@
  *               András Pásztor
  */
 
+//TODO: handling the long numbers (overflow)
+
 #include <stdio.h>
 
 #define NUM_OF_OPS 14               //the numbers of the operators
@@ -16,8 +18,8 @@ int main()
 {
     int op_id = -1;                 //the id of the operator, according to the operators string position
     char input_str[80] = "";        //the input string
-    char operand_a[33] = "";        //raw input string of operand a without spaces
-    char operand_b[33] = "";        //raw input string of operand b without spaces
+    char operand_a[50] = "";        //raw input string of operand a without spaces
+    char operand_b[50] = "";        //raw input string of operand b without spaces
     char operators[NUM_OF_OPS][6] = //list of the operators
         {"help",    // 0
          "clear",   // 1

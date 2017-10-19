@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*  Gives back the id of the operator, and also separates the input string to operand_a and operand_b.
- *  If no operator was found or operand is missing then returns -1.
+/*  Gives back the id of the operator, and also separates the input string to operand_a and operand_b after
+ *  removing all spaces. If no operator was found or operand is missing then returns -1.
  */
 int get_operator(char input_str[], char operand_a[], char operand_b[], char operators[NUM_OF_OPS][6])
 {
