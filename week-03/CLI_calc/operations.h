@@ -1,7 +1,9 @@
-/*  HEADER FILE FOR CLI_CALC
+/*  HEADER FILE FOR CLI CALCULATOR
  *  Contains the functions of operations
  *  ====================================
  */
+
+#include <math.h>
 
 void operation_addition(char operand_a[], char operand_b[])
 {
@@ -41,7 +43,7 @@ void operation_division(char operand_a[], char operand_b[])
         if (b == 0) {
             printf("--Mathematical problem: Division by zero.\n");
         } else {
-            result = (int)(a / b);
+            result = trunc(a / b);
             print_dec_result(result);
         }
     }
@@ -55,7 +57,7 @@ void operation_modulo(char operand_a[], char operand_b[])
         if (b == 0) {
             printf("--Mathematical problem: Division by zero.\n");
         } else {
-            result = a / b;
+            result = fmod(a, b);
             print_dec_result(result);
         }
     }

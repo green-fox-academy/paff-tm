@@ -1,7 +1,9 @@
-/*  HEADER FILE FOR CLI_CALC
+/*  HEADER FILE FOR CLI CALCULATOR
  *  Contains the functions of printing
  *  ==================================
  */
+
+#include <windows.h>
 
 /*  Prints out the result of the decimal operate to the end of the input line
  */

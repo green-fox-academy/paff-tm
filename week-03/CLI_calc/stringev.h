@@ -1,7 +1,10 @@
-/*  HEADER FILE FOR CLI_CALC
+/*  HEADER FILE FOR CLI CALCULATOR
  *  Contains the functions of command line evaluation
  *  =================================================
  */
+
+#include <stdlib.h>
+#include <string.h>
 
 /*  Gives back the id of the operator, and also separates the input string to operand_a and operand_b.
  *  If no operator was found or operand is missing then returns -1.
@@ -13,6 +16,15 @@ int get_operator(char input_str[], char operand_a[], char operand_b[], char oper
 
     operand_a[0] = '\0';        //reset operand_a string
     operand_b[0] = '\0';        //reset operand_b string
+
+    //remove all spaces from the input string
+    int j = 0;
+    for (int i = 0; i <= strlen(input_str); i++) {
+        if (input_str[i] != ' ') {
+            input_str[j] = input_str[i];
+            j++;
+        }
+    }
 
     for (int i = 0; i < NUM_OF_OPS; i++) {
         ptr = strstr(input_str, operators[i]);
@@ -53,7 +65,7 @@ int get_operator(char input_str[], char operand_a[], char operand_b[], char oper
  //TODO: handle the spaces in the operands
 int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
 {
-    char decimal_values[] = "0123456789-. ";
+    char decimal_values[] = "0123456789-.";
     //*a = 0.0;
     //*b = 0.0;
 
@@ -82,7 +94,7 @@ int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
  //TODO: handle the spaces in the operands
 int get_hexto_values(char operand_hex[], char operand_base[],  double *hex, double *base)
 {
-    char hexadecimal_values[] = "0123456789abcdefABCDEF ";
+    char hexadecimal_values[] = "0123456789abcdefABCDEF";
     char *ptr = NULL;
 
     //*hex = 0;
@@ -112,7 +124,7 @@ int get_hexto_values(char operand_hex[], char operand_base[],  double *hex, doub
  //TODO: handle the spaces in the operands
 int get_binto_values(char operand_bin[], char operand_base[], double *bin, double *base)
 {
-    char binary_values[] = "01 ";
+    char binary_values[] = "01";
     char *ptr = NULL;
 
     //*bin = 0;
@@ -142,7 +154,7 @@ int get_binto_values(char operand_bin[], char operand_base[], double *bin, doubl
  //TODO: handle the spaces in the operands
 int get_decto_values(char operand_dec[], char operand_base[], double *dec, double *base)
 {
-    char decimal_values[] = "0123456789 ";
+    char decimal_values[] = "0123456789";
     char *ptr = NULL;
 
     //*dec = 0;
