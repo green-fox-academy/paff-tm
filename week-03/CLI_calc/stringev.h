@@ -73,12 +73,9 @@ int get_operator(char input_str[], char operand_a[], char operand_b[], char oper
 /*  Get the decimal float values of operand_a and operand_b. If both are decimal float value,
  *  then returns 0, if not returns -1. Prints error message if there is an error.
  */
- //TODO: handle the spaces in the operands
 int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
 {
     char decimal_values[] = "0123456789-.";
-    //*a = 0.0;
-    //*b = 0.0;
 
     //check if operand_a is a decimal number
     if (strspn(operand_a, decimal_values) != strlen(operand_a)) {
@@ -102,14 +99,10 @@ int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
 /* Check if the operand_a is a hexadecimal number and operand_b is a suitable base. If so, than gives back
  * the values in decimal. If both are correct returns 0, if not returns -1. Prints error message if there is an error.
  */
- //TODO: handle the spaces in the operands
 int get_hexto_values(char operand_hex[], char operand_base[],  double *hex, double *base)
 {
     char hexadecimal_values[] = "0123456789abcdefABCDEF";
     char *ptr = NULL;
-
-    //*hex = 0;
-    //*base = 0;
 
     //check if operand_hex is a hexadecimal number
     if (strspn(operand_hex, hexadecimal_values) != strlen(operand_hex)) {
@@ -132,14 +125,10 @@ int get_hexto_values(char operand_hex[], char operand_base[],  double *hex, doub
 /* Check if the operand_a is a binary number and operand_b is a suitable base. If so, than gives back
  * the values in decimal. If both are correct returns 0, if not returns -1. Prints error message if there is an error.
  */
- //TODO: handle the spaces in the operands
 int get_binto_values(char operand_bin[], char operand_base[], double *bin, double *base)
 {
     char binary_values[] = "01";
     char *ptr = NULL;
-
-    //*bin = 0;
-    //*base = 0;
 
     //check if operand_bin is a binary number
     if (strspn(operand_bin, binary_values) != strlen(operand_bin)) {
@@ -162,14 +151,10 @@ int get_binto_values(char operand_bin[], char operand_base[], double *bin, doubl
 /* Check if the operand_a is an unsigned integer number and operand_b is a suitable base. If so, than gives back
  * the values in decimal. If both are correct returns 0, if not returns -1. Prints error message if there is an error.
  */
- //TODO: handle the spaces in the operands
 int get_decto_values(char operand_dec[], char operand_base[], double *dec, double *base)
 {
     char decimal_values[] = "0123456789";
     char *ptr = NULL;
-
-    //*dec = 0;
-    //*base = 0;
 
     //check if operand_bin is a binary number
     if (strspn(operand_dec, decimal_values) != strlen(operand_dec)) {

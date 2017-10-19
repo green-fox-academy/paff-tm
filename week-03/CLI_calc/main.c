@@ -2,10 +2,7 @@
  * ============================================
  * Greenfox Academy Pallida Cohort Static Class
  *               András Pásztor
-*/
-
-//TODO: error handling at <
-//TODO: error handling of high numbers (overflow)
+ */
 
 #include <stdio.h>
 
@@ -18,9 +15,9 @@
 int main()
 {
     int op_id = -1;                 //the id of the operator, according to the operators string position
-    char input_str[256] = "";       //the input string
-    char operand_a[127] = "";       //raw input string of operand a
-    char operand_b[127] = "";       //raw input string of operand b
+    char input_str[80] = "";        //the input string
+    char operand_a[33] = "";        //raw input string of operand a without spaces
+    char operand_b[33] = "";        //raw input string of operand b without spaces
     char operators[NUM_OF_OPS][6] = //list of the operators
         {"help",    // 0
          "clear",   // 1
