@@ -8,25 +8,28 @@
 
 //TODO: division by remainder
 //TODO: error handling at < and log
-//TODO: error handling of high numbers
+//TODO: error handling of high numbers (overflow)
 //TODO: outsource the operatings into functions
 //TODO: handle the spaces inside the operands
+//TODO: handling subtraction from negative number
 
 int get_operator(char input_str[], char operand_a[], char operand_b[], char operators[NUM_OF_OPS][6]);
 int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b);
-int get_hex_values(char operand_hex[], char operand_base[], double *hex, double *base);
+int get_hexto_values(char operand_hex[], char operand_base[], double *hex, double *base);
+int get_binto_values(char operand_bin[], char operand_base[], double *bin, double *base);
+int get_decto_values(char operand_bin[], char operand_base[], double *bin, double *base);
 void print_dec_result(double value);
 void print_str_result(char value[]);
 
 void clear_screen();
 void print_help();
-short get_cursor_y();
 void set_cursor_pos(int x, int y);
+short get_cursor_y();
 
 int main()
 {
-    char input_str[255] = "";           //the input string
-    char operators[NUM_OF_OPS][6] =     //list of the operators
+    char input_str[255] = "";       //the input string
+    char operators[NUM_OF_OPS][6] = //list of the operators
         {"help",    // 0
          "clear",   // 1
          "exit",    // 2
@@ -41,15 +44,15 @@ int main()
          "hexto",   // 11
          "decto",   // 12
          "-"};      // 13 - subtraction must be the last one
-    char operand_a[127] = "";           //raw input string of operand a
-    char operand_b[127] = "";           //raw input string of operand b
+    char operand_a[127] = "";       //raw input string of operand a
+    char operand_b[127] = "";       //raw input string of operand b
 
-    int op_id = -1;                     //the id of the operator, according to the operators string position
+    int op_id = -1;                 //the id of the operator, according to the operators string position
 
-    double a = 0;                       //value of the first operand
-    double b = 0;                       //value of the second operand
-    double result = 0;                  //value of the result
-    char result_str[255] = "";          //string of the value for other base number systems
+    double a = 0;                   //value of the first operand
+    double b = 0;                   //value of the second operand
+    double result = 0;              //value of the result
+    char result_str[255] = "";      //string of the value for other base number systems
 
     print_help();
     while (op_id != 2) {    // while operator is not "exit"
@@ -121,7 +124,7 @@ int main()
                     print_dec_result(result);
                 }
                 break;
-            case 9:         //  log
+            case 9:         // log
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
                     if (log(a) == 0) {
                         printf("error.\n");
@@ -132,16 +135,22 @@ int main()
                 }
                 break;
             case 10:        // binto
-
+                if (get_binto_values(operand_a, operand_b, &a, &b) == 0){
+                    ltoa((long int)a, result_str, (int)b);
+                    print_str_result(result_str);
+                }
                 break;
             case 11:        // hexto
-                if (get_hex_values(operand_a, operand_b, &a, &b) == 0){
+                if (get_hexto_values(operand_a, operand_b, &a, &b) == 0){
                     ltoa((long int)a, result_str, (int)b);
                     print_str_result(result_str);
                 }
                 break;
             case 12:        // decto
-
+                if (get_decto_values(operand_a, operand_b, &a, &b) == 0){
+                    ltoa((long int)a, result_str, (int)b);
+                    print_str_result(result_str);
+                }
                 break;
             case 13:        // -
                 if (get_dec_values(operand_a, operand_b, &a, &b) == 0){
@@ -233,7 +242,7 @@ int get_dec_values(char operand_a[], char operand_b[],  double *a, double *b)
  * the values in decimal. If both are correct returns 0, if not returns -1. Prints error message if there is an error.
  */
  //TODO: handle the spaces in the operands
-int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double *base)
+int get_hexto_values(char operand_hex[], char operand_base[],  double *hex, double *base)
 {
     char hexadecimal_values[] = "0123456789abcdefABCDEF ";
     char *ptr = NULL;
@@ -258,6 +267,67 @@ int get_hex_values(char operand_hex[], char operand_base[],  double *hex, double
 
     return 0;
 }
+
+/* Check if the operand_a is a binary number and operand_b is a suitable base. If so, than gives back
+ * the values in decimal. If both are correct returns 0, if not returns -1. Prints error message if there is an error.
+ */
+ //TODO: handle the spaces in the operands
+int get_binto_values(char operand_bin[], char operand_base[], double *bin, double *base)
+{
+    char binary_values[] = "01 ";
+    char *ptr = NULL;
+
+    //*bin = 0;
+    //*base = 0;
+
+    //check if operand_bin is a binary number
+    if (strspn(operand_bin, binary_values) != strlen(operand_bin)) {
+        printf("--Input error: first operand is not a binary number.\n");
+        return -1;
+    }
+
+    //check if base is a number between 2 and 36
+    *base = strtol(operand_base, &ptr, 10);
+    if ((*base < 2) || (*base > 36)) {
+        printf("--Input error: base should be between 2 and 36.\n");
+        return -1;
+    }
+
+    *bin = strtol(operand_bin, &ptr, 2);
+
+    return 0;
+}
+
+/* Check if the operand_a is an unsigned integer number and operand_b is a suitable base. If so, than gives back
+ * the values in decimal. If both are correct returns 0, if not returns -1. Prints error message if there is an error.
+ */
+ //TODO: handle the spaces in the operands
+int get_decto_values(char operand_dec[], char operand_base[], double *dec, double *base)
+{
+    char decimal_values[] = "0123456789 ";
+    char *ptr = NULL;
+
+    //*dec = 0;
+    //*base = 0;
+
+    //check if operand_bin is a binary number
+    if (strspn(operand_dec, decimal_values) != strlen(operand_dec)) {
+        printf("--Input error: first operand is not an unsigned integer number.\n");
+        return -1;
+    }
+
+    //check if base is a number between 2 and 36
+    *base = strtol(operand_base, &ptr, 10);
+    if ((*base < 2) || (*base > 36)) {
+        printf("--Input error: base should be between 2 and 36.\n");
+        return -1;
+    }
+
+    *dec = strtol(operand_dec, &ptr, 10);
+
+    return 0;
+}
+
 
 /*  Prints out the result of the decimal operate to the end of the input line
  */
@@ -316,6 +386,14 @@ void print_help()
     clear_screen();
 }
 
+COORD coord = {0,0};
+void set_cursor_pos(int x, int y)
+{
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
 short get_cursor_y()
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -324,13 +402,5 @@ short get_cursor_y()
 
     //*x = csbi.dwCursorPosition.X;
     return csbi.dwCursorPosition.Y;
-}
-
-COORD coord = {0,0};
-void set_cursor_pos(int x, int y)
-{
-	coord.X = x;
-	coord.Y = y;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
