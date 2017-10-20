@@ -3,6 +3,9 @@
  *  ====================================
  */
 
+#ifndef OPERATIONS_H_INCLUDED
+#define OPERATIONS_H_INCLUDED
+
 void operation_addition(char operand_a[], char operand_b[]);
 void operation_subtraction(char operand_a[], char operand_b[]);
 void operation_multiplicatin(char operand_a[], char operand_b[]);
@@ -14,3 +17,5 @@ void operation_log(char operand_a[], char operand_b[]);
 void operation_binto(char operand_a[], char operand_b[]);
 void operation_hexto(char operand_a[], char operand_b[]);
 void operation_decto(char operand_a[], char operand_b[]);
+
+#endif // OPERATIONS_H_INCLUDED
