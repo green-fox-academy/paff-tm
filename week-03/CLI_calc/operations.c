@@ -3,7 +3,12 @@
  *  ====================================
  */
 
+#include <stdio.h>
+#include <string.h>
 #include <math.h>
+
+#include "stringev.h"
+#include "screen.h"
 
 void operation_addition(char operand_a[], char operand_b[])
 {

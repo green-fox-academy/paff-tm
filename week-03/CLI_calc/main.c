@@ -4,12 +4,10 @@
  *               András Pásztor
  */
 
-//TODO: define of NUM_OF_OPS duplicated in stringev.c
 //TODO: handling the long numbers (overflow)
 
 #include <stdio.h>
-
-#define NUM_OF_OPS 14               //the numbers of the operators
+#include <string.h>
 
 #include "stringev.h"
 #include "operations.h"
@@ -21,21 +19,6 @@ int main()
     char input_str[80] = "";        //the input string
     char operand_a[50] = "";        //raw input string of operand a without spaces
     char operand_b[50] = "";        //raw input string of operand b without spaces
-    char operators[NUM_OF_OPS][6] = //list of the operators
-        {"help",    // 0
-         "clear",   // 1
-         "exit",    // 2
-         "+",       // 3
-         "*",       // 4
-         "/",       // 5
-         "%",       // 6
-         "^",       // 7
-         "<",       // 8
-         "log",     // 9
-         "binto",   // 10
-         "hexto",   // 11
-         "decto",   // 12
-         "-"};      // 13 - subtraction has to be the last operator!
 
     print_help();
     while (op_id != 2) {    // while operator is not "exit"
@@ -44,7 +27,7 @@ int main()
         // set the cursor position to the end of the input line
         set_cursor_pos(strlen(input_str) + 1, get_cursor_y() - 1);
 
-        op_id = get_operator(input_str, operand_a, operand_b, operators);
+        op_id = get_operator(input_str, operand_a, operand_b);
         switch (op_id) {
             case -1:        // no operator, or operand is missing
                 break;

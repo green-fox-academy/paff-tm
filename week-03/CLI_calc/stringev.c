@@ -3,7 +3,7 @@
  *  =================================================
  */
 
-#define NUM_OF_OPS 14
+#define NUM_OF_OPS 14   //the numbers of the operators
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,13 +12,28 @@
 /*  Gives back the id of the operator, and also separates the input string to operand_a and operand_b after
  *  removing all spaces. If no operator was found or operand is missing then returns -1.
  */
-int get_operator(char input_str[], char operand_a[], char operand_b[], char operators[NUM_OF_OPS][6])
+int get_operator(char input_str[], char operand_a[], char operand_b[])
 {
-    int op_id = -1;             //id of the operator. If there is no operator found, then it will be -1
-    char *ptr = NULL;           //pointer to the first character of operator
+    int op_id = -1;                 //id of the operator. If there is no operator found, then it will be -1
+    char *ptr = NULL;               //pointer to the first character of operator
+    char operators[NUM_OF_OPS][6] = //list of the operators
+        {"help",    // 0
+         "clear",   // 1
+         "exit",    // 2
+         "+",       // 3
+         "*",       // 4
+         "/",       // 5
+         "%",       // 6
+         "^",       // 7
+         "<",       // 8
+         "log",     // 9
+         "binto",   // 10
+         "hexto",   // 11
+         "decto",   // 12
+         "-"};      // 13 - subtraction has to be the last operator!
 
-    operand_a[0] = '\0';        //reset operand_a string
-    operand_b[0] = '\0';        //reset operand_b string
+    operand_a[0] = '\0';            //reset operand_a string
+    operand_b[0] = '\0';            //reset operand_b string
 
     //remove all spaces from the input string
     int j = 0;
