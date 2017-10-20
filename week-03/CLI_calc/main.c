@@ -4,6 +4,7 @@
  *               András Pásztor
  */
 
+//TODO: define of NUM_OF_OPS duplicated in stringev.c
 //TODO: handling the long numbers (overflow)
 
 #include <stdio.h>
