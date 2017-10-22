@@ -20,4 +20,5 @@
 - [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/day-1)
 - [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/day-2)
 - [CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/CLI_calc)
+- [Multi-Operator CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/Multi-Operator_CLI_calc)
 
