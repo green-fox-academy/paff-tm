@@ -23,10 +23,11 @@ int main()
     print_help();
     while (1) {
         gets(input_str);
-        remove_spaces(input_str);
 
         // set the cursor position to the end of the input line
         set_cursor_pos(strlen(input_str) + 1, get_cursor_y() - 1);
+
+        remove_spaces(input_str);
 
         if (strcmp(input_str, "exit") == 0){
             break;

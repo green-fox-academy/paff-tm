@@ -12,16 +12,16 @@
  */
 int get_operator(char input_str[], char operand_a[], char operand_b[])
 {
-    int op_id = -1;                 //id of the operator. If there is no operator found, then it will be -1
-    char *ptr = NULL;               //pointer to the first character of operator
+    int op_id = -1;        //id of the operator. If there is no operator found, then it will be -1
+    char *ptr = NULL;      //pointer to the first character of operator
     char operators[8][6] = //list of the operators
         {"+",       // 0
          "*",       // 1
          "/",       // 2
-         "%",       // 3
-         "^",       // 4
-         "<",       // 5
-         "log",     // 6
+//         "%",       // 3
+//         "^",       // 4
+//         "<",       // 5
+//         "log",     // 6
          "-"};      // 7 - subtraction has to be the last operator!
 
     //check if the input string contains an operator or command

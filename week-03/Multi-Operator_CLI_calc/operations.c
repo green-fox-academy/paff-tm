@@ -46,12 +46,14 @@ int calculate(char input_str[], double *result)
             } else {
                 return -1;
             }
+/*
         case 3:         // %
             if (operation_modulo(operand_a, operand_b, result) == 0) {
                 return 0;
             } else {
                 return -1;
             }
+
         case 4:         // ^
             if (operation_exponentiation(operand_a, operand_b, result) == 0) {
                 return 0;
@@ -70,7 +72,8 @@ int calculate(char input_str[], double *result)
             } else {
                 return -1;
             }
-        case 7:        // -
+*/
+        case 3:        // -
             if (operation_subtraction(operand_a, operand_b, result) == 0) {
                 return 0;
             } else {
