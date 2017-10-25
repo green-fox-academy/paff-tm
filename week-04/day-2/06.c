@@ -65,5 +65,9 @@ char* richest_pirate_with_wooden_leg(t_pirate *pirates, int number_of_pirates)
         }
     }
 
-    return pirates[id_of_richest_pirate].name;
+    if (id_of_richest_pirate == -1) {
+        return "";
+    } else {
+        return pirates[id_of_richest_pirate].name;
+    }
 }
