@@ -7,6 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define OP_SUM "+"
+#define OP_SUB "-"
+#define OP_MUL "*"
+#define OP_DIV "/"
+
+
 /*  Gives back the id of the operator, and also separates the input string to operand_a and operand_b
  *  If no operator was found then returns -1.
  */
