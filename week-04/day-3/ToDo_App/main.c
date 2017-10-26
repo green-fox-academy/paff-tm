@@ -8,6 +8,7 @@
 #include "file_op.h"
 
 void print_usage();
+void clear_screen();
 
 int main()
 {
@@ -55,6 +56,10 @@ int main()
             break;
         case OP_OPEN_FILE:
             open_tasks(todos, &num_of_todos);
+            break;
+        case OP_EMPTY:
+            num_of_todos = 0;
+            printf("No todos for today! :)");
             break;
         default:
 

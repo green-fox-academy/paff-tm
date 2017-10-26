@@ -32,6 +32,8 @@ int input_ev(char input_str[80], t_operator *op, char **attr_str)
             *op = OP_SAVE_FILE;
         } else if (strcmp(p_operator, OPSTR_OPEN_FILE) == 0) {
             *op = OP_OPEN_FILE;
+        } else if (strcmp(p_operator, OPSTR_EMPTY) == 0) {
+            *op = OP_EMPTY;
         } else {
             *op = OP_NOP;
             return -1;

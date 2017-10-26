@@ -16,6 +16,7 @@
 #define OPSTR_LIST_TASKS "-l"
 #define OPSTR_SAVE_FILE "-wr"
 #define OPSTR_OPEN_FILE "-rd"
+#define OPSTR_EMPTY "-e"
 
 typedef struct {
     char name[80];
@@ -29,7 +30,8 @@ typedef enum {
     OP_ADD_TASK,
     OP_LIST_TASKS,
     OP_SAVE_FILE,
-    OP_OPEN_FILE
+    OP_OPEN_FILE,
+    OP_EMPTY
 } t_operator;
 
 #endif // DEFINE_H_INCLUDED
