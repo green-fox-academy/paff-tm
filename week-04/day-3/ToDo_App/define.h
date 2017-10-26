@@ -6,7 +6,7 @@
 #ifndef DEFINE_H_INCLUDED
 #define DEFINE_H_INCLUDED
 
-#define MAX_NUM_OF_TODOS 1
+#define MAX_NUM_OF_TODOS 10
 
 #define OPSTR_EXIT "exit"
 #define OPSTR_PRINT_USAGE "help"

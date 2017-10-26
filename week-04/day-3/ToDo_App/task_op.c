@@ -13,8 +13,13 @@ int task_add(t_todo *p_todo, char *new_todo)
 
 int task_list(t_todo todos[], int num_of_todos)
 {
+    printf(""
+        "List by number\n"
+        "====================\n"
+        "Num \t| Tasks\n");
+
     for (int i = 0; i < num_of_todos; i++) {
-        printf("%s\n", todos[i].name);
+        printf("%d \t- %s\n", i + 1, todos[i].name);
     }
     return 0;
 }
