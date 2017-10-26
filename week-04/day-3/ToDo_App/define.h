@@ -7,7 +7,6 @@
 #define DEFINE_H_INCLUDED
 
 #define MAX_NUM_OF_TODOS 10
-#define FILE_NAME "todos.td"
 
 #define OPSTR_EXIT "exit"
 #define OPSTR_PRINT_USAGE "help"

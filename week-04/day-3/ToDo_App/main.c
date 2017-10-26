@@ -56,14 +56,14 @@ int main()
             break;
 
         case OP_SAVE_FILE:
-            if (save_tasks(todos, num_of_todos) == -1) {
-                printf("Error: Can't open file \"%s\"\n", FILE_NAME);
+            if (save_tasks(todos, num_of_todos, attr) == -1) {
+                printf("Error: Can't open file \"%s\"\n", attr);
             }
             break;
 
         case OP_OPEN_FILE:
-            if (open_tasks(todos, &num_of_todos) == -1) {
-                 printf("Error: Can't open file \"%s\"\n", FILE_NAME);
+            if (open_tasks(todos, &num_of_todos, attr) == -1) {
+                 printf("Error: Can't open file \"%s\"\n", attr);
             }
             break;
 

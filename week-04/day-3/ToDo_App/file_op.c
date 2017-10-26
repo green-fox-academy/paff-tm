@@ -10,9 +10,9 @@
 /*  Saves todos into FILE_NAME file
  *  If no error occurs, return 0. If the file can't be opened return -1.
  */
- int save_tasks(t_todo todos[], int num_of_todos)
+ int save_tasks(t_todo todos[], int num_of_todos, char *filename)
 {
-    FILE *fp = fopen(FILE_NAME, "wb");
+    FILE *fp = fopen(filename, "wb");
 
     if (fp == NULL) {
         return -1;
@@ -30,9 +30,9 @@
 /*  Loads todos from FILE_NAME file.
  *  If no error occurs, return 0. If the file can't be opened return -1.
  */
-int open_tasks(t_todo todos[], int *num_of_todos)
+int open_tasks(t_todo todos[], int *num_of_todos, char *filename)
 {
-    FILE *fp = fopen(FILE_NAME, "rb");
+    FILE *fp = fopen(filename, "rb");
 
     if (fp == NULL) {
         return -1;
