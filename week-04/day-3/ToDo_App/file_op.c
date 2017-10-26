@@ -27,6 +27,9 @@
     return 0;
 }
 
+/*  Loads todos from FILE_NAME file.
+ *  If no error occurs, return 0. If the file can't be opened return -1.
+ */
 int open_tasks(t_todo todos[], int *num_of_todos)
 {
     FILE *fp = fopen(FILE_NAME, "rb");

@@ -10,7 +10,7 @@
 #include "define.h"
 
 /*  Divide input_str to an operator as int, and to the attribute as string.
- *  If no error occurs, return 0. If the operator is not correct or missing return -1.
+ *  If no error occurs, return 0. If the operator is not correct or missing returns -1.
  */
 int input_ev(char input_str[], t_operator *op, char attr_str[])
 {

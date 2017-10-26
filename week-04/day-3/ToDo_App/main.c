@@ -73,9 +73,8 @@ int main()
             break;
 
         case OP_REMOVE_TASK:
-            switch (task_remove(todos, num_of_todos, attr)) {
+            switch (task_remove(todos, &num_of_todos, attr)) {
             case 0:
-                num_of_todos--;
                 break;
             case -1:
                 printf("Unable to remove: No index is provided\n");

@@ -10,7 +10,7 @@
 #include "define.h"
 
 
-/*  Checks is the string contains only digits, so it is an unsigned int.
+/*  Checks if the string contains only digits, so it is an unsigned int.
  *  If it is, returns 1; if it is not, returns 0;
  */
 int is_uint(char *num_str)
@@ -24,6 +24,9 @@ int is_uint(char *num_str)
     }
 }
 
+/*  Add a task to todos.
+ *
+ */
 int task_add(t_todo *p_todo, char *new_todo)
 {
     strcpy(p_todo->name, new_todo);
@@ -31,9 +34,10 @@ int task_add(t_todo *p_todo, char *new_todo)
 }
 
 /*  Remove a task from todos.
- *  Returns 0 if OK, -1 if the attribute is out of scope, -2 if attribute is not correct.
+ *  Returns 0 if OK, -1 if the attribute is missing, -2 if attribute is not a number,
+ *  -3 if the attribute is out of bound.
  */
-int task_remove(t_todo todos[], int num_of_todos, char *rem_str)
+int task_remove(t_todo todos[], int *num_of_todos, char *rem_str)
 {
     int rem;
 
@@ -44,18 +48,22 @@ int task_remove(t_todo todos[], int num_of_todos, char *rem_str)
     } else {
         rem = atoi(rem_str);
 
-        if (rem < 1 || rem > num_of_todos) {
+        if (rem < 1 || rem > *num_of_todos) {
             return -3;
         }
 
-        for (int i = rem - 1; i < num_of_todos; i++) {
+        for (int i = rem - 1; i < *num_of_todos; i++) {
             todos[i] = todos[i + 1];
         }
+        (*num_of_todos)--;
 
         return 0;
     }
 }
 
+/*  Prints out the tasks.
+ *
+ */
 int task_list(t_todo todos[], int num_of_todos)
 {
     printf(""
