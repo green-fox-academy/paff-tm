@@ -26,18 +26,22 @@ int main()
         input_ev(input_str, &op, attr);
 
         switch (op) {
+
         case OP_NOP:
             printf("Error: Unknown operator\n");
             break;
-        case OP_EXIT:
 
+        case OP_EXIT:
             break;
+
         case OP_PRINT_USAGE:
             print_usage();
             break;
+
         case OP_CLEAR_SCREEN:
             clear_screen();
             break;
+
         case OP_ADD_TASK:
             if (num_of_todos == MAX_NUM_OF_TODOS) {
                 printf("Error: Too many todos\n");
@@ -46,31 +50,41 @@ int main()
                 num_of_todos++;
             }
             break;
+
         case OP_LIST_TASKS:
             task_list(todos, num_of_todos);
             break;
+
         case OP_SAVE_FILE:
             if (save_tasks(todos, num_of_todos) == -1) {
-                printf("Error: Can't open file \"%s\"", FILE_NAME);
+                printf("Error: Can't open file \"%s\"\n", FILE_NAME);
             }
             break;
+
         case OP_OPEN_FILE:
-            open_tasks(todos, &num_of_todos);
+            if (open_tasks(todos, &num_of_todos) == -1) {
+                 printf("Error: Can't open file \"%s\"\n", FILE_NAME);
+            }
             break;
+
         case OP_EMPTY:
             num_of_todos = 0;
             printf("No todos for today! :)\n");
             break;
+
         case OP_REMOVE_TASK:
             switch (task_remove(todos, num_of_todos, attr)) {
             case 0:
                 num_of_todos--;
                 break;
             case -1:
-                printf("Error: There is no such task\n");
+                printf("Unable to remove: No index is provided\n");
                 break;
             case -2:
-                printf("Error: Attribute is not correct\n");
+                printf("Unable to remove: Index is not a number\n");
+                break;
+            case -3:
+                printf("Unable to remove: Index is out of bound\n");
                 break;
             }
             break;

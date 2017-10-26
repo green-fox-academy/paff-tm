@@ -37,18 +37,22 @@ int task_remove(t_todo todos[], int num_of_todos, char *rem_str)
 {
     int rem;
 
-    if (is_uint(rem_str)) {
+    if (strlen(rem_str) == 0) {
+        return -1;
+    } else if (is_uint(rem_str) == 0) {
+        return -2;
+    } else {
         rem = atoi(rem_str);
+
         if (rem < 1 || rem > num_of_todos) {
-            return -1;
+            return -3;
         }
 
         for (int i = rem - 1; i < num_of_todos; i++) {
             todos[i] = todos[i + 1];
         }
+
         return 0;
-    } else {
-        return -2;
     }
 }
 
