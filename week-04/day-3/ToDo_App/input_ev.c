@@ -3,6 +3,8 @@
  *  Input string evaluation
  */
 
+// TODO: value adding to attribute is not working properly
+
 #include <string.h>
 
 #include "define.h"
@@ -10,14 +12,15 @@
 /*  Divide input_str to an operator as int, and to the attribute as string.
  *  If no error occurs, return 0. If the operator is not correct or missing return -1.
  */
-int input_ev(char input_str[80], t_operator *op, char **attr_str)
+int input_ev(char input_str[], t_operator *op, char attr_str[])
 {
-    char *p_operator = NULL;
-    char *p_attribute = NULL;
+    //set the operator pointer to the first element of input_str
+    char *p_operator = strtok(input_str, " ");
+    char *p_attribute = strtok(NULL, "\"");
 
-    p_operator = strtok(input_str, " ");
-    if (p_operator != NULL) {                   //if we have at least one element in input
-                                                //then check which operator is it
+    //if we have at least one element in input
+    //then check which operator it is
+    if (p_operator != NULL) {
         if (strcmp(p_operator, OPSTR_EXIT) == 0) {
             *op = OP_EXIT;
         } else if (strcmp(p_operator, OPSTR_PRINT_USAGE) == 0) {
@@ -38,11 +41,29 @@ int input_ev(char input_str[80], t_operator *op, char **attr_str)
             *op = OP_NOP;
             return -1;
         }
-        p_attribute = strtok(NULL, " ");        //set the attr_str
-        *attr_str = p_attribute;
-        return 0;                               //return no error
-    } else {                                    //so there is no operator
+
+        //if the operator was identified,
+        //than add value to attr_str
+        strcpy(attr_str, p_attribute);
+        /*
+        if (p_attribute ==) {
+            for (int i = 0, j = 0; p_attribute[i] != '\0'; i++){
+                if (p_attribute[i] != '"') {
+                    attr_str[j] = p_attribute[i];
+                    j++;
+                }
+            }
+        }
+        */
+
+        //return no error
+        return 0;
+
+    //if  there is no operator
+    } else {
         *op = OP_NOP;
         return -1;
     }
+
+
 }

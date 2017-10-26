@@ -16,14 +16,14 @@ int main()
     int num_of_todos = 0;               //number of the todos
 
     char input_str[80] = "";            //input string from user
-    char *attr;                         //the attribute from the input_str
+    char attr[80] = "";                 //the attribute from the input_str
     t_operator op = OP_NOP;             //the operator from the input_str
 
     print_usage();
 
     do {
         gets(input_str);
-        input_ev(input_str, &op, &attr);
+        input_ev(input_str, &op, attr);
 
         switch (op) {
         case OP_NOP:
