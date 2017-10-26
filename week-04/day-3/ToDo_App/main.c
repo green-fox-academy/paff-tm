@@ -51,7 +51,7 @@ int main()
             break;
         case OP_SAVE_FILE:
             if (save_tasks(todos, num_of_todos) == -1) {
-                printf("Error: can't open file \"%s\"", FILE_NAME);
+                printf("Error: Can't open file \"%s\"", FILE_NAME);
             }
             break;
         case OP_OPEN_FILE:
@@ -59,7 +59,20 @@ int main()
             break;
         case OP_EMPTY:
             num_of_todos = 0;
-            printf("No todos for today! :)");
+            printf("No todos for today! :)\n");
+            break;
+        case OP_REMOVE_TASK:
+            switch (task_remove(todos, num_of_todos, attr)) {
+            case 0:
+                num_of_todos--;
+                break;
+            case -1:
+                printf("Error: There is no such task\n");
+                break;
+            case -2:
+                printf("Error: Attribute is not correct\n");
+                break;
+            }
             break;
         default:
 

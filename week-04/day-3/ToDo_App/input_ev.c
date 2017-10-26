@@ -37,6 +37,8 @@ int input_ev(char input_str[], t_operator *op, char attr_str[])
             *op = OP_OPEN_FILE;
         } else if (strcmp(p_operator, OPSTR_EMPTY) == 0) {
             *op = OP_EMPTY;
+        } else if (strcmp(p_operator, OPSTR_REMOVE_TASK) == 0) {
+            *op = OP_REMOVE_TASK;
         } else {
             *op = OP_NOP;
             return -1;
@@ -44,9 +46,13 @@ int input_ev(char input_str[], t_operator *op, char attr_str[])
 
         //if the operator was identified,
         //than add value to attr_str
-        strcpy(attr_str, p_attribute);
+        if (p_attribute != NULL){
+            strcpy(attr_str, p_attribute);
+        } else {
+            strcpy(attr_str, "");
+        }
         /*
-        if (p_attribute ==) {
+        if (p_attribute == NULL) {
             for (int i = 0, j = 0; p_attribute[i] != '\0'; i++){
                 if (p_attribute[i] != '"') {
                     attr_str[j] = p_attribute[i];
