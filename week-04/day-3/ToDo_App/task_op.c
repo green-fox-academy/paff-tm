@@ -3,6 +3,9 @@
  *  functions to handle tasks
  */
 
+#include <stdio.h>
+#include <string.h>
+
 #include "define.h"
 
 int task_add(t_todo *p_todo, char *new_todo)

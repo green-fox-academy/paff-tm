@@ -4,6 +4,7 @@
 #include "define.h"
 #include "input_ev.h"
 #include "task_op.h"
+#include "file_op.h"
 
 void print_usage();
 
@@ -42,6 +43,14 @@ int main()
             break;
         case OP_LIST_TASKS:
             task_list(todos, num_of_todos);
+            break;
+        case OP_SAVE_FILE:
+            if (save_tasks(todos, num_of_todos) == -1) {
+                printf("Error: can't open file \"%s\"", FILE_NAME);
+            }
+            break;
+        case OP_OPEN_FILE:
+            open_tasks(todos, &num_of_todos);
             break;
         default:
 
