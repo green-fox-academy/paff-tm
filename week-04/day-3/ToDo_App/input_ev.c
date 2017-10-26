@@ -13,7 +13,6 @@
 int input_ev(char input_str[80], t_operator *op, char attr_str[80])
 {
     char *p_operator = NULL;
-    char *p_attribute = NULL;
 
     p_operator = strtok(input_str, " ");
     if (p_operator != NULL) {                       //if we have at least one element in input

@@ -3,13 +3,14 @@
 
 #include "define.h"
 #include "input_ev.h"
+#include "task_op.h"
 
 void print_usage();
 
 int main()
 {
-    t_todo todo[10];            //array of the todos
-    int numbers_of_todos = 0;   //number of the todos
+    t_todo todos[10];           //array of the todos
+    int num_of_todos = 0;       //number of the todos
 
     char input_str[80] = "";    //input string from user
     char attr[80] = "";         //the attribute from the input_str
@@ -32,7 +33,7 @@ int main()
             print_usage();
             break;
         case OP_ADD_TASK:
-
+            task_add(todos, &num_of_todos, attr);
             break;
         case OP_LIST_TASKS:
 
