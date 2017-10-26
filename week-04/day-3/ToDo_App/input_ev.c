@@ -22,6 +22,8 @@ int input_ev(char input_str[80], t_operator *op, char **attr_str)
             *op = OP_EXIT;
         } else if (strcmp(p_operator, OPSTR_PRINT_USAGE) == 0) {
             *op = OP_PRINT_USAGE;
+        } else if (strcmp(p_operator, OPSTR_CLEAR_SCREEN) == 0) {
+            *op = OP_CLEAR_SCREEN;
         } else if (strcmp(p_operator, OPSTR_ADD_TASK) == 0) {
             *op = OP_ADD_TASK;
         } else if (strcmp(p_operator, OPSTR_LIST_TASKS) == 0) {

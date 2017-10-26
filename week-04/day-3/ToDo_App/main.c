@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
 #include "define.h"
 #include "input_ev.h"
@@ -32,6 +33,9 @@ int main()
             break;
         case OP_PRINT_USAGE:
             print_usage();
+            break;
+        case OP_CLEAR_SCREEN:
+            clear_screen();
             break;
         case OP_ADD_TASK:
             if (num_of_todos == MAX_NUM_OF_TODOS) {
@@ -78,5 +82,11 @@ void print_usage()
         " -lp  Lists all the tasks by priority\n"
         " -------------------------------------\n"
         " exit Exit the program without saving\n"
-        " help Prints out this help\n\n");
+        " help Prints out this help\n"
+        " cls  Clear the screen\n\n");
+}
+
+void clear_screen()
+{
+    system("cls");
 }
