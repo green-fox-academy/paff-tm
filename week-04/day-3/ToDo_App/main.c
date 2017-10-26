@@ -8,7 +8,7 @@ void print_usage();
 
 int main()
 {
-    t_todo todo[10] = {0};      //array of the todos
+    t_todo todo[10];            //array of the todos
     int numbers_of_todos = 0;   //number of the todos
 
     char input_str[80] = "";    //input string from user
@@ -19,11 +19,11 @@ int main()
 
     do {
         gets(input_str);
-        input_ev(input_str, &op, &attr);
+        input_ev(input_str, &op, attr);
 
         switch (op) {
         case OP_NOP:
-            printf("Error: No operator\n");
+            printf("Error: Unknown operator\n");
             break;
         case OP_EXIT:
 
@@ -50,7 +50,7 @@ void print_usage()
 {
     printf(""
         "Todo application\n"
-        "====================\n"
+        "======================================\n"
         "Commands:\n"
         " -a   Adds a new task\n"
         " -wr  Write current todos to file\n"
