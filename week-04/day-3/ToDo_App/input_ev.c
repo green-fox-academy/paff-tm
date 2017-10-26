@@ -10,9 +10,10 @@
  *  If no error occurs, return 0. Is the operator is not correct or missing return -1.
  *
  */
-int input_ev(char input_str[80], t_operator *op, char attr_str[80])
+int input_ev(char input_str[80], t_operator *op, char **attr_str)
 {
     char *p_operator = NULL;
+    char *p_attribute = NULL;
 
     p_operator = strtok(input_str, " ");
     if (p_operator != NULL) {                       //if we have at least one element in input
@@ -29,7 +30,8 @@ int input_ev(char input_str[80], t_operator *op, char attr_str[80])
             *op = OP_NOP;
             return -1;
         }
-        attr_str = strtok(NULL, " ");           //set the attr_str
+        p_attribute = strtok(NULL, " ");        //set the attr_str
+        *attr_str = p_attribute;
         return 0;                               //return no error
     } else {                                    //so there is no operator
         *op = OP_NOP;

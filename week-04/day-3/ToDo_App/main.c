@@ -9,18 +9,18 @@ void print_usage();
 
 int main()
 {
-    t_todo todos[10];           //array of the todos
-    int num_of_todos = 0;       //number of the todos
+    t_todo todos[MAX_NUM_OF_TODOS];     //array of the todos
+    int num_of_todos = 0;               //number of the todos
 
-    char input_str[80] = "";    //input string from user
-    char attr[80] = "";         //the attribute from the input_str
-    t_operator op = OP_NOP;     //the operator from the input_str
+    char input_str[80] = "";            //input string from user
+    char *attr;                         //the attribute from the input_str
+    t_operator op = OP_NOP;             //the operator from the input_str
 
     print_usage();
 
     do {
         gets(input_str);
-        input_ev(input_str, &op, attr);
+        input_ev(input_str, &op, &attr);
 
         switch (op) {
         case OP_NOP:
@@ -33,10 +33,15 @@ int main()
             print_usage();
             break;
         case OP_ADD_TASK:
-            task_add(todos, &num_of_todos, attr);
+            if (num_of_todos == MAX_NUM_OF_TODOS) {
+                printf("Error: Too many todos\n");
+            } else {
+                task_add(&todos[num_of_todos], attr);
+                num_of_todos++;
+            }
             break;
         case OP_LIST_TASKS:
-
+            task_list(todos, num_of_todos);
             break;
         default:
 
