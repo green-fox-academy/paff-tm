@@ -3,9 +3,13 @@
  *  define variable types
  */
 
-
 #ifndef DEFINE_H_INCLUDED
 #define DEFINE_H_INCLUDED
+
+#define OPSTR_EXIT "exit"
+#define OPSTR_PRINT_USAGE "help"
+#define OPSTR_ADD_TASK "-a"
+#define OPSTR_LIST_TASKS "-l"
 
 typedef struct {
     char name[80];
