@@ -41,6 +41,8 @@ int input_ev(char input_str[], t_operator *op, char attr_str[])
             *op = OP_REMOVE_TASK;
         } else if (strcmp(p_operator, OPSTR_CHECK_TAKS) == 0) {
             *op = OP_CHECK_TASK;
+        } else if (strcmp(p_operator, OPSTR_PRIORITY_ADD) == 0) {
+            *op = OP_PRIORITY_ADD;
         } else {
             *op = OP_NOP;
             return -1;

@@ -41,6 +41,11 @@ int task_add(t_todo todos[], int *num_of_todos, char *new_todo)
     }
 }
 
+int task_priority_add(t_todo todos[], char *num_of_todos, char *new_todo_with_prio)
+{
+    return 0;
+}
+
 /*  Remove a task from todos.
  *  Returns 0 if OK, -1 if the attribute is missing, -2 if attribute is not a number,
  *  -3 if the attribute is out of bound.

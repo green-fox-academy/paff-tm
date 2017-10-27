@@ -18,10 +18,12 @@
 #define OPSTR_EMPTY "-e"
 #define OPSTR_REMOVE_TASK "-r"
 #define OPSTR_CHECK_TAKS "-c"
+#define OPSTR_PRIORITY_ADD "-p"
 
 typedef struct {
     char name[80];
-    char checked;
+    int checked :8;
+    int priority :8;
 } t_todo;
 
 typedef enum {
@@ -35,7 +37,8 @@ typedef enum {
     OP_OPEN_FILE,
     OP_EMPTY,
     OP_REMOVE_TASK,
-    OP_CHECK_TASK
+    OP_CHECK_TASK,
+    OP_PRIORITY_ADD
 } t_operator;
 
 #endif // DEFINE_H_INCLUDED
