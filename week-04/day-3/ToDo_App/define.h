@@ -24,7 +24,7 @@
 typedef struct {
     char name[80];
     int checked :8;
-    int priority :8;
+    char priority ;
 } t_todo;
 
 typedef enum {
