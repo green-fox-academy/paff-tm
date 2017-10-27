@@ -35,6 +35,7 @@ int task_add(t_todo todos[], int *num_of_todos, char *new_todo)
         return -2;
     } else {
         strcpy(todos[*num_of_todos].name, new_todo);
+        todos[*num_of_todos].checked = 0;
         (*num_of_todos)++;
         return 0;
     }
@@ -76,10 +77,10 @@ int task_list(t_todo todos[], int num_of_todos)
     printf(""
         "List by number\n"
         "====================\n"
-        "Num \t| Tasks\n");
+        "Num  | Tasks\n");
 
     for (int i = 0; i < num_of_todos; i++) {
-        printf("%d \t- %s\n", i + 1, todos[i].name);
+        printf("%2d - [%c] %s\n", i + 1, todos[i].checked?'x':' ', todos[i].name);
     }
     return 0;
 }

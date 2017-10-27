@@ -20,6 +20,7 @@
 
 typedef struct {
     char name[80];
+    char checked;
 } t_todo;
 
 typedef enum {
