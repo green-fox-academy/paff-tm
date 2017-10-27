@@ -100,22 +100,46 @@ int task_check(t_todo todos[], int num_of_todos, char *chk_str)
     }
 }
 
-/*  Prints out the tasks.
- *
+/*  Prints out one todo item.
+ *  Function for task_list function
  */
-int task_list(t_todo todos[], int num_of_todos)
+void print_todo_item(t_todo *p_todo, int item_num)
+{
+    printf("%2d - [%c] %s %d", item_num + 1, p_todo->checked?'x':' ', p_todo->name);
+    if (p_todo->priority)
+        printf(" - %d\n", p_todo->priority);
+    else
+        printf("\n");
+
+}
+
+/*  Prints out the tasks.
+ *  if is_priolist is true (1) then prints in priority order, else in order of the array
+ */
+int task_list(t_todo todos[], int num_of_todos, int is_priolist)
 {
     printf(""
         "List by number\n"
         "====================\n"
-        "Num  | Tasks\n");
+        "Num  | Tasks | Prio\n");
 
-    for (int i = 0; i < num_of_todos; i++) {
-        printf("%2d - [%c] %s %d", i + 1, todos[i].checked?'x':' ', todos[i].name);
-        if (todos[i].priority)
-            printf(" - %d\n", todos[i].priority);
-        else
-            printf("\n");
+    // if wants to print in order of priority
+    if (is_priolist) {
+        int count = 0;
+
+        while (count < num_of_todos) {
+            for (int i = 0; i < num_of_todos; i++) {
+                print_todo_item(&todos[i], i);
+            }
+        }
+
+    // else print in order of array
+    } else {
+        for (int i = 0; i < num_of_todos; i++) {
+            print_todo_item(&todos[i], i);
+        }
     }
+
     return 0;
 }
+

@@ -61,7 +61,11 @@ int main()
             break;
 
         case OP_LIST_TASKS:
-            task_list(todos, num_of_todos);
+            task_list(todos, num_of_todos, 0);
+            break;
+
+        case OP_PRIO_LIST:
+            task_list(todos, num_of_todos, 1);
             break;
 
         case OP_SAVE_FILE:
