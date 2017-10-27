@@ -9,6 +9,7 @@
 int is_uint(char *num_str);
 int task_add(t_todo todos[], int *num_of_todos, char *new_todo);
 int task_remove(t_todo todos[], int *num_of_todos, char *rem_str);
+int task_check(t_todo todos[], int num_of_todos, char *rem_str);
 int task_list(t_todo todos[], int num_of_todos);
 
 #endif // TASK_OP_H_INCLUDED

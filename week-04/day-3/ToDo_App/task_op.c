@@ -69,6 +69,32 @@ int task_remove(t_todo todos[], int *num_of_todos, char *rem_str)
     }
 }
 
+/*  Checks out a task from todos.
+ *  Returns 0 if OK, -1 if the attribute is missing, -2 if attribute is not a number,
+ *  -3 if the attribute is out of bound, -4 if the task is already checked
+ */
+int task_check(t_todo todos[], int num_of_todos, char *chk_str)
+{
+    int chk;
+
+    if (strlen(chk_str) == 0) {
+        return -1;
+    } else if (is_uint(chk_str) == 0) {
+        return -2;
+    } else {
+        chk = atoi(chk_str);
+
+        if (chk < 1 || chk > num_of_todos) {
+            return -3;
+        } else if (todos[chk].checked == 1) {
+            return -4;
+        } else {
+            todos[chk - 1].checked = 1;
+            return 0;
+        }
+    }
+}
+
 /*  Prints out the tasks.
  *
  */

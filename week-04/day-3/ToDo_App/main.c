@@ -97,6 +97,28 @@ int main()
                 printf("Unable to remove: Unknown error\n");
             }
             break;
+
+         case OP_CHECK_TASK:
+            switch (task_check(todos, num_of_todos, attr)) {
+            case 0:
+                break;
+            case -1:
+                printf("Unable to check: No index is provided\n");
+                break;
+            case -2:
+                printf("Unable to check: Index is not a number\n");
+                break;
+            case -3:
+                printf("Unable to check: Index is out of bound\n");
+                break;
+            case -4:
+                printf("Unable to check: Already checked\n");
+                break;
+            default:
+                printf("Unable to check: Unknown error\n");
+            }
+            break;
+
         default:
 
             break;
