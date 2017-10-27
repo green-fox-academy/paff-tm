@@ -7,7 +7,7 @@
 #define TASK_OP_H_INCLUDED
 
 int is_uint(char *num_str);
-int task_add(t_todo *todo, char *new_todo);
+int task_add(t_todo todos[], int *num_of_todos, char *new_todo);
 int task_remove(t_todo todos[], int *num_of_todos, char *rem_str);
 int task_list(t_todo todos[], int num_of_todos);
 

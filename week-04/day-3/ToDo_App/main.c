@@ -12,6 +12,8 @@ void clear_screen();
 
 int main()
 {
+    printf("%d", sizeof(t_todo));
+
     t_todo todos[MAX_NUM_OF_TODOS];     //array of the todos
     int num_of_todos = 0;               //number of the todos
 
@@ -43,11 +45,17 @@ int main()
             break;
 
         case OP_ADD_TASK:
-            if (num_of_todos == MAX_NUM_OF_TODOS) {
-                printf("Error: Too many todos\n");
-            } else {
-                task_add(&todos[num_of_todos], attr);
-                num_of_todos++;
+            switch (task_add(todos, &num_of_todos, attr)) {
+            case 0:
+                break;
+            case -1:
+                printf("Unable to add: Too many todos\n");
+                break;
+            case -2:
+                printf("Unable to add: No task is provided\n");
+                break;
+            default:
+                printf("Unable to add: Unknown error\n");
             }
             break;
 
@@ -85,6 +93,8 @@ int main()
             case -3:
                 printf("Unable to remove: Index is out of bound\n");
                 break;
+            default:
+                printf("Unable to remove: Unknown error\n");
             }
             break;
         default:

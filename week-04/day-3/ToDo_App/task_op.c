@@ -25,12 +25,19 @@ int is_uint(char *num_str)
 }
 
 /*  Add a task to todos.
- *
+ *  Returns 0 if OK, -1 if reached the number of maximum tasks, -2 if todo is empty
  */
-int task_add(t_todo *p_todo, char *new_todo)
+int task_add(t_todo todos[], int *num_of_todos, char *new_todo)
 {
-    strcpy(p_todo->name, new_todo);
-    return 0;
+    if (*num_of_todos == MAX_NUM_OF_TODOS) {
+        return -1;
+    } else if (strlen(new_todo) == 0) {
+        return -2;
+    } else {
+        strcpy(todos[*num_of_todos].name, new_todo);
+        (*num_of_todos)++;
+        return 0;
+    }
 }
 
 /*  Remove a task from todos.
