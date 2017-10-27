@@ -25,14 +25,16 @@ int is_uint(char *num_str)
 }
 
 /*  Add a task to todos.
- *  Returns 0 if OK, -1 if reached the number of maximum tasks, -2 if todo is empty
+ *  Returns 0 if OK, -1 if reached the number of maximum tasks, -2 if description is empty
  */
 int task_add(t_todo todos[], int *num_of_todos, char *new_todo)
 {
     if (*num_of_todos == MAX_NUM_OF_TODOS) {
         return -1;
+
     } else if (strlen(new_todo) == 0) {
         return -2;
+
     } else {
         strcpy(todos[*num_of_todos].name, new_todo);
         todos[*num_of_todos].checked = 0;
@@ -42,9 +44,36 @@ int task_add(t_todo todos[], int *num_of_todos, char *new_todo)
     }
 }
 
-int task_priority_add(t_todo todos[], char *num_of_todos, char *new_todo_with_prio)
+/*  Add a task to todos with priority.
+ *  Returns 0 if OK, -1 if reached the number of maximum tasks, -2 if description is empty
+ *  -3 if priority is not a number, -4 if priority is less than 0
+ *  If no priority was identified in input string, then the priority will be 0;
+ */
+int task_priority_add(t_todo todos[], int *num_of_todos, char *new_todo, char *prio_str)
 {
-    return 0;
+    int prio = 0;
+
+        if (*num_of_todos == MAX_NUM_OF_TODOS) {
+            return -1;
+
+        } else if (strlen(new_todo) == 0) {
+            return -2;
+
+        } else if (is_uint(prio_str) == 0) {
+            return -3;
+
+        } else {
+            prio = atoi(prio_str);
+            if (prio < 0) {
+                return -4;
+            }
+
+            strcpy(todos[*num_of_todos].name, new_todo);
+            todos[*num_of_todos].checked = 0;
+            todos[*num_of_todos].priority = prio;
+            (*num_of_todos)++;
+            return 0;
+        }
 }
 
 /*  Remove a task from todos.
@@ -57,8 +86,10 @@ int task_remove(t_todo todos[], int *num_of_todos, char *rem_str)
 
     if (strlen(rem_str) == 0) {
         return -1;
+
     } else if (is_uint(rem_str) == 0) {
         return -2;
+
     } else {
         rem = atoi(rem_str);
 
@@ -85,8 +116,10 @@ int task_check(t_todo todos[], int num_of_todos, char *chk_str)
 
     if (strlen(chk_str) == 0) {
         return -1;
+
     } else if (is_uint(chk_str) == 0) {
         return -2;
+
     } else {
         chk = atoi(chk_str);
 

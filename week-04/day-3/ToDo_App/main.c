@@ -1,3 +1,11 @@
+/*              TODO APPLICATION
+ * ============================================
+ * Greenfox Academy Pallida Cohort Static Class
+ *               András Pásztor
+ */
+
+// TODO: update input_ev to return with 2 attributes
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -13,25 +21,24 @@ void clear_screen();
 
 int main()
 {
-   // printf("%d", sizeof(t_todo));
-
     t_todo todos[MAX_NUM_OF_TODOS];     //array of the todos
     int num_of_todos = 0;               //number of the todos
 
     char input_str[80] = "";            //input string from user
-    char attr[80] = "";                 //the attribute from the input_str
+    char attr[80] = "";                 //the 1st attribute from the input_str
+    char attr2[80] = "";                 //the 2nd attribute from the input_str
     t_operator op = OP_NOP;             //the operator from the input_str
 
     print_usage();
 
     do {
         gets(input_str);
-        input_ev(input_str, &op, attr);
+        input_ev(input_str, &op, attr, attr2);
 
         switch (op) {
 
         case OP_NOP:
-            printf("Error: Unknown operator\n");
+            printf("Error: Unknown operator. Type 'help' for help.\n");
             break;
 
         case OP_EXIT:
@@ -47,6 +54,21 @@ int main()
 
         case OP_ADD_TASK:
             switch (task_add(todos, &num_of_todos, attr)) {
+            case 0:
+                break;
+            case -1:
+                printf("Unable to add: Too many todos\n");
+                break;
+            case -2:
+                printf("Unable to add: No task is provided\n");
+                break;
+            default:
+                printf("Unable to add: Unknown error\n");
+            }
+            break;
+
+        case OP_PRIORITY_ADD:
+            switch (task_priority_add(todos, &num_of_todos, attr, attr2)) {
             case 0:
                 break;
             case -1:
@@ -128,21 +150,6 @@ int main()
                 break;
             default:
                 printf("Unable to check: Unknown error\n");
-            }
-            break;
-
-        case OP_PRIORITY_ADD:
-            switch (task_priority_add(todos, &num_of_todos, attr)) {
-            case 0:
-                break;
-            case -1:
-                printf("Unable to add: Too many todos\n");
-                break;
-            case -2:
-                printf("Unable to add: No task is provided\n");
-                break;
-            default:
-                printf("Unable to add: Unknown error\n");
             }
             break;
 
