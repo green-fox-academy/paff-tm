@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+//#include <conio.h> for getch() or _getch()
 
 #include "define.h"
 #include "input_ev.h"
@@ -76,8 +77,15 @@ int main()
             break;
 
         case OP_EMPTY:
-            num_of_todos = 0;
-            printf("No todos for today! :)\n");
+            fflush(stdin);
+            printf("Area you sure to empty all todos? (y/n)\n");
+            if (getchar() == 'y') {
+                num_of_todos = 0;
+                printf("No todos for today! :)\n");
+            } else {
+                printf("No todos were deleted\n");
+            }
+            fflush(stdin);
             break;
 
         case OP_REMOVE_TASK:

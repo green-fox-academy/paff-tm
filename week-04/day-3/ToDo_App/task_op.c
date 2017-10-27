@@ -111,7 +111,11 @@ int task_list(t_todo todos[], int num_of_todos)
         "Num  | Tasks\n");
 
     for (int i = 0; i < num_of_todos; i++) {
-        printf("%2d - [%c] %s\n", i + 1, todos[i].checked?'x':' ', todos[i].name);
+        printf("%2d - [%c] %s %d", i + 1, todos[i].checked?'x':' ', todos[i].name);
+        if (todos[i].priority)
+            printf(" - %d\n", todos[i].priority);
+        else
+            printf("\n");
     }
     return 0;
 }
