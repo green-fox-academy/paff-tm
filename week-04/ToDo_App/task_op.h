@@ -6,8 +6,6 @@
 #ifndef TASK_OP_H_INCLUDED
 #define TASK_OP_H_INCLUDED
 
-
-
 /* this function is not neccessarry since task_priority_add can handle task without priority
 int task_add(t_todo todos[], int *num_of_todos, char *new_todo);
 */

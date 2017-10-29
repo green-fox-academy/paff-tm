@@ -7,19 +7,23 @@
 
 #include "define.h"
 
-/*  Divide input_str to an operator as int, and to the attribute as string.
+/*  Divide input_str to an operator as int, and to the attributes as strings.
  *  If no error occurs, return 0. If the operator is not correct or missing returns -1.
  */
 int input_ev(char input_str[], t_operator *op, char attr_str[], char attr2_str[])
 {
     //set the operator pointer to the first element of input_str
     char *p_operator = strtok(input_str, " ");
+
     char *p_attr = NULL;
     char *p_attr2 = NULL;
 
     //if we have at least one element in input
     //then check which operator it is
-    if (p_operator != NULL) {
+    if (p_operator == NULL) {   //if  there is no operator
+        *op = OP_NOP;
+        return -1;
+    } else {
         if (strcmp(p_operator, OPSTR_EXIT) == 0) {
             *op = OP_EXIT;
         } else if (strcmp(p_operator, OPSTR_PRINT_USAGE) == 0) {
@@ -88,12 +92,5 @@ int input_ev(char input_str[], t_operator *op, char attr_str[], char attr2_str[]
 
         //return no error
         return 0;
-
-    //if  there is no operator
-    } else {
-        *op = OP_NOP;
-        return -1;
     }
-
-
 }

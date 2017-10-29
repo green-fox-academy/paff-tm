@@ -9,7 +9,6 @@
 
 #include "define.h"
 
-
 /*  Checks if the string contains only digits, so it is an unsigned int.
  *  If it is, returns 1; if it is not, returns 0;
  *  If length of num_str is 0 then also returns 1;
@@ -129,8 +128,10 @@ int task_check(t_todo todos[], int num_of_todos, char *chk_str)
 
         if (chk < 1 || chk > num_of_todos) {
             return -3;
+
         } else if (todos[chk].checked == 1) {
             return -4;
+
         } else {
             todos[chk - 1].checked = 1;
             return 0;
@@ -139,7 +140,7 @@ int task_check(t_todo todos[], int num_of_todos, char *chk_str)
 }
 
 /*  Prints out one todo item.
- *  Function for task_list function
+ *  Function for task_list()
  */
 void print_todo_item(t_todo *p_todo, int item_num)
 {
@@ -172,6 +173,7 @@ int task_list(t_todo todos[], int num_of_todos, int is_priolist)
             }
         }
 
+        //prints todos starting with highest priority
         while (actual_prio >= 0) {
             for (int i = 0; i < num_of_todos; i++) {
                 if (todos[i].priority == actual_prio) {
