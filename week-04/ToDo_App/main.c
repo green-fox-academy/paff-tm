@@ -26,7 +26,7 @@ int main()
 
     char input_str[80] = "";            //input string from user
     char attr[80] = "";                 //the 1st attribute from the input_str
-    char attr2[80] = "";                 //the 2nd attribute from the input_str
+    char attr2[80] = "";                //the 2nd attribute from the input_str
     t_operator op = OP_NOP;             //the operator from the input_str
 
     print_usage();
