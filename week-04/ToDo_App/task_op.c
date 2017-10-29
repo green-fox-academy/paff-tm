@@ -12,6 +12,7 @@
 
 /*  Checks if the string contains only digits, so it is an unsigned int.
  *  If it is, returns 1; if it is not, returns 0;
+ *  If length of num_str is 0 then also returns 1;
  */
 int is_uint(char *num_str)
 {
@@ -26,7 +27,7 @@ int is_uint(char *num_str)
 
 /*  Add a task to todos.
  *  Returns 0 if OK, -1 if reached the number of maximum tasks, -2 if description is empty
- */
+    REMOVED, beacause it is not neccesssary since task_priority_add can handle task without priority
 int task_add(t_todo todos[], int *num_of_todos, char *new_todo)
 {
     if (*num_of_todos == MAX_NUM_OF_TODOS) {
@@ -43,37 +44,40 @@ int task_add(t_todo todos[], int *num_of_todos, char *new_todo)
         return 0;
     }
 }
+*/
 
 /*  Add a task to todos with priority.
  *  Returns 0 if OK, -1 if reached the number of maximum tasks, -2 if description is empty
  *  -3 if priority is not a number, -4 if priority is less than 0
- *  If no priority was identified in input string, then the priority will be 0;
+ *  If no priority was identified -prio_str is zero length or NULL-, then the priority will be 0;
  */
 int task_priority_add(t_todo todos[], int *num_of_todos, char *new_todo, char *prio_str)
 {
     int prio = 0;
 
-        if (*num_of_todos == MAX_NUM_OF_TODOS) {
-            return -1;
+    if (*num_of_todos == MAX_NUM_OF_TODOS) {
+        return -1;
 
-        } else if (strlen(new_todo) == 0) {
-            return -2;
+    } else if (strlen(new_todo) == 0) {
+        return -2;
 
-        } else if (is_uint(prio_str) == 0) {
+    } else if (prio_str != NULL) {
+        if (is_uint(prio_str) == 0) {
             return -3;
 
         } else {
-            prio = atoi(prio_str);
+            prio = atoi(prio_str);  //if prio_str is zero length then atoi() will return 0;
             if (prio < 0) {
                 return -4;
             }
-
-            strcpy(todos[*num_of_todos].name, new_todo);
-            todos[*num_of_todos].checked = 0;
-            todos[*num_of_todos].priority = prio;
-            (*num_of_todos)++;
-            return 0;
         }
+    }
+
+    strcpy(todos[*num_of_todos].name, new_todo);
+    todos[*num_of_todos].checked = 0;
+    todos[*num_of_todos].priority = prio;
+    (*num_of_todos)++;
+    return 0;
 }
 
 /*  Remove a task from todos.

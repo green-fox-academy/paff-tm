@@ -65,6 +65,9 @@ int input_ev(char input_str[], t_operator *op, char attr_str[], char attr2_str[]
             p_attr = strtok(NULL, "\"");
             p_attr2 = strtok(NULL, " ");
             break;
+
+        default:
+            break;
         }
 
         //if an operator was identified,
@@ -82,16 +85,6 @@ int input_ev(char input_str[], t_operator *op, char attr_str[], char attr2_str[]
         } else {
             strcpy(attr2_str, "");
         }
-        /*
-        if (p_attribute == NULL) {
-            for (int i = 0, j = 0; p_attribute[i] != '\0'; i++){
-                if (p_attribute[i] != '"') {
-                    attr_str[j] = p_attribute[i];
-                    j++;
-                }
-            }
-        }
-        */
 
         //return no error
         return 0;

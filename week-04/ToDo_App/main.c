@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-//#include <conio.h> for getch() or _getch()
 
 #include "define.h"
 #include "input_ev.h"
@@ -51,7 +50,7 @@ int main()
             break;
 
         case OP_ADD_TASK:
-            switch (task_add(todos, &num_of_todos, attr)) {
+            switch (task_priority_add(todos, &num_of_todos, attr, NULL)) {
             case 0:
                 break;
             case -1:
@@ -105,7 +104,7 @@ int main()
 
         case OP_EMPTY:
             fflush(stdin);
-            printf("Area you sure to empty all todos? (y/n)\n");
+            printf("Are you sure to empty all todos? (y/n)\n");
             if (getchar() == 'y') {
                 num_of_todos = 0;
                 printf("No todos for today! :)\n");
