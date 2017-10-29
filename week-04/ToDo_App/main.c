@@ -4,8 +4,6 @@
  *               András Pásztor
  */
 
-// TODO: update input_ev to return with 2 attributes
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>

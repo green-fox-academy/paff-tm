@@ -3,8 +3,6 @@
  *  Input string evaluation
  */
 
-// TODO: value adding to attribute is not working properly
-
 #include <string.h>
 
 #include "define.h"
