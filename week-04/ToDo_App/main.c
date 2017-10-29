@@ -77,6 +77,9 @@ int main()
             case -2:
                 printf("Unable to add: No task is provided\n");
                 break;
+            case -3:
+                printf("Unable to add: Priority is not a number\n");
+                break;
             default:
                 printf("Unable to add: Unknown error\n");
             }
@@ -109,7 +112,7 @@ int main()
                 num_of_todos = 0;
                 printf("No todos for today! :)\n");
             } else {
-                printf("No todos were deleted\n");
+                printf("Nothing was deleted\n");
             }
             fflush(stdin);
             break;

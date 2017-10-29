@@ -16,7 +16,8 @@ int input_ev(char input_str[], t_operator *op, char attr_str[], char attr2_str[]
 {
     //set the operator pointer to the first element of input_str
     char *p_operator = strtok(input_str, " ");
-    char *p_attribute = strtok(NULL, "\"");
+    char *p_attr = NULL;
+    char *p_attr2 = NULL;
 
     //if we have at least one element in input
     //then check which operator it is
@@ -50,12 +51,38 @@ int input_ev(char input_str[], t_operator *op, char attr_str[], char attr2_str[]
             return -1;
         }
 
-        //if the operator was identified,
+        switch (*op) {
+        case OP_ADD_TASK:
+        case OP_SAVE_FILE:
+        case OP_OPEN_FILE:
+            p_attr = strtok(NULL, "\"");
+            break;
+
+        case OP_REMOVE_TASK:
+        case OP_CHECK_TASK:
+            p_attr = strtok(NULL, " ");
+            break;
+
+        case OP_PRIORITY_ADD:
+            p_attr = strtok(NULL, "\"");
+            p_attr2 = strtok(NULL, " ");
+            break;
+        }
+
+        //if an operator was identified,
         //than add value to attr_str
-        if (p_attribute != NULL){
-            strcpy(attr_str, p_attribute);
+        if (p_attr != NULL){
+            strcpy(attr_str, p_attr);
         } else {
             strcpy(attr_str, "");
+        }
+
+        //if a second operator was identified,
+        //than add value to attr2_str
+        if (p_attr2 != NULL){
+            strcpy(attr2_str, p_attr2);
+        } else {
+            strcpy(attr2_str, "");
         }
         /*
         if (p_attribute == NULL) {
