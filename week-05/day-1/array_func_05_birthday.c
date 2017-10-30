@@ -12,44 +12,44 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-int find_birthday(char *input_str, int dates[], int *num_of_dates);
+int *find_birthday(char *input_str);
 
 int main()
 {
     char str[] = "2319834571976548721b1992456t831977451963782";
-    int dates[50];
-    int num_of_dates =0;
+    int *dates;
 
-    find_birthday(str, dates, &num_of_dates);
+    dates = find_birthday(str);
 
-    for (int i = 0; i < num_of_dates; i++) {
+    for (int i = 1; i < dates[0] + 1; i++) {
         printf("%d \n", dates[i]);
     }
 
     return 0;
 }
 
-int find_birthday(char input_str[], int dates[], int *num_of_dates)
+int *find_birthday(char *input_str)
 {
     int i = 0;
     char s[5];
-    int d = 0;
+    int year = 0;
     char *p = NULL;
+    static int dates[50];
 
-    *num_of_dates = 0;
+    dates[0] = 0;
 
     while (input_str[i] != '\0') {
-        if (isdigit((int)input_str[i]) != 0) {
+        if (isdigit(input_str[i]) != 0) {
             p = input_str + i;
             strncpy(s, p, 4);
-            d = atoi(s);
-            if (d > 1918 && d < 2018) {
-                dates[*num_of_dates] = d;
-                (*num_of_dates)++;
+            year = atoi(s);
+            if (year > 1918 && year < 2018) {
+                dates[dates[0] + 1] = year;
+                dates[0]++;
             }
         }
         i++;
     }
 
-    return 0;
+    return dates;
 }
