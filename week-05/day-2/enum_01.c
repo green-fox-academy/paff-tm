@@ -30,7 +30,7 @@ void setup_figures(t_figure chessfigures[8][8]);
 void print_board(char chessboard[8][8], t_pos actual_pos);
 int move_is_ok(t_figure chessfigures[8][8], t_pos pos_from, t_pos pos_to);
 int move(t_figure chessfigures[8][8], t_pos pos_from, t_pos pos_to);
-void clear_screen();
+void set_cursor_pos(int x, int y);
 
 int main ()
 {
@@ -45,7 +45,7 @@ int main ()
     pos_actual.y = 2;
 
     do {
-        clear_screen();
+        set_cursor_pos(0,0);
         print_board(chessboard, pos_actual);
         printf("Use a, w, d, s to move on chessboard\n");
         printf("Actual position: %c%d\n", pos_actual.x + 97, pos_actual.y + 1);
@@ -54,8 +54,10 @@ int main ()
 
         switch (c) {
         case LEFT:
-            if (pos_actual.x > 0)
+            if (pos_actual.x > 0) {
+                //aprintf("%c", chessboard[pos_actual.x][pos_actual.y])
                 pos_actual.x--;
+            }
             break;
         case RIGHT:
             if (pos_actual.x < 7)
@@ -181,7 +183,10 @@ int move(t_figure chessfigures[8][8], t_pos pos_from, t_pos pos_to)
     }
 }
 
-void clear_screen()
+COORD coord = {0,0};
+void set_cursor_pos(int x, int y)
 {
-    system("cls");
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
