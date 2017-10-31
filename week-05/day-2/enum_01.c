@@ -19,7 +19,7 @@
 #include <conio.h>
 
 typedef enum {LEFT = 'a', RIGHT = 'd', UP = 'w', DOWN = 's'} t_direction;
-typedef enum {KING = 'K', QUEEN = 'Q', BISHOP = 'B', PEASANT = 'P', HORSE = 'H', ROOK = 'R'} t_figure;
+typedef enum {KING = 'K', QUEEN = 'Q', BISHOP = 'B', PAWN = 'P', HORSE = 'H', ROOK = 'R', NOFIGURE = ' '} t_figure;
 typedef struct {
     int x;
     int y;
@@ -42,13 +42,14 @@ int main ()
     setup_board(chessboard);
     setup_figures(chessfigures);
     pos_actual.x = 3;
-    pos_actual.y = 6;
+    pos_actual.y = 2;
 
     do {
         clear_screen();
         print_board(chessboard, pos_actual);
         printf("Use a, w, d, s to move on chessboard\n");
-        printf("Actual position: %d-%d\n", pos_actual.x + 1, pos_actual.y + 1);
+        printf("Actual position: %c%d\n", pos_actual.x + 97, pos_actual.y + 1);
+        printf("Figure on actual position: %c\n", chessfigures[pos_actual.x][pos_actual.y]);
         c = _getch();
 
         switch (c) {
@@ -60,17 +61,17 @@ int main ()
             if (pos_actual.x < 7)
                 pos_actual.x++;
             break;
-        case UP:
+        case DOWN:
             if (pos_actual.y > 0)
                 pos_actual.y--;
             break;
-        case DOWN:
+        case UP:
             if (pos_actual.y < 7)
                 pos_actual.y++;
             break;
+        default:
+            break;
         }
-
-
     } while (c != 27);
 
     return 0;
@@ -78,14 +79,14 @@ int main ()
 
 void setup_board(char chessboard[8][8])
 {
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j += 2) {
-            if (i % 2 == 0) {
-                chessboard[i][j] = 219;
-                chessboard[i][j + 1] = ' ';
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 7; x += 2) {
+            if (y % 2 == 0) {
+                chessboard[x][y] = ' ';
+                chessboard[x + 1][y] = 219;
             } else {
-                chessboard[i][j] = ' ';
-                chessboard[i][j + 1] = 219;
+                chessboard[x][y] = 219;
+                chessboard[x + 1][y] = ' ';
             }
         }
     }
@@ -93,6 +94,16 @@ void setup_board(char chessboard[8][8])
 
 void setup_figures(t_figure chessfigures[8][8])
 {
+    for (int y = 2; y < 6; y++)
+        for (int x = 0; x < 8; x++) {
+            chessfigures[x][y] = NOFIGURE;
+    }
+
+    for (int x = 0; x < 8; x++) {
+        chessfigures[x][1] = PAWN;
+        chessfigures[x][6] = PAWN;
+    }
+
     chessfigures[0][0] = ROOK;
     chessfigures[7][0] = ROOK;
     chessfigures[0][7] = ROOK;
@@ -108,27 +119,26 @@ void setup_figures(t_figure chessfigures[8][8])
     chessfigures[2][7] = BISHOP;
     chessfigures[5][7] = BISHOP;
 
-    chessfigures[3][0] = KING;
-    chessfigures[4][0] = QUEEN;
-    chessfigures[3][7] = KING;
-    chessfigures[4][7] = QUEEN;
+    chessfigures[4][0] = KING;
+    chessfigures[3][0] = QUEEN;
+    chessfigures[4][7] = KING;
+    chessfigures[3][7] = QUEEN;
 }
 
 void print_board(char chessboard[8][8], t_pos actual_pos)
 {
-    printf("  12345678\n");
-    for (int i = 0; i < 8; i++) {
-        printf("%d ", i + 1);
-        for (int j = 0; j < 8; j++) {
-            if (j == actual_pos.x && i == actual_pos.y) {
+    for (int y = 7; y >= 0; y--) {
+        printf("%d ", y + 1);
+        for (int x = 0; x < 8; x++) {
+            if (x == actual_pos.x && y == actual_pos.y) {
                 printf("%c", 'X');
             } else {
-                printf("%c", chessboard[j][i]);
+                printf("%c", chessboard[x][y]);
             }
         }
         printf("\n");
     }
-    printf("\n");
+    printf("  abcdefgh\n\n");
 }
 
 int move_is_ok(t_figure chessfigures[8][8], t_pos pos_from, t_pos pos_to)
