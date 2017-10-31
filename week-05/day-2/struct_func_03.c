@@ -1,14 +1,7 @@
 /*
- * Create a structure to represent a list of numbers. The structure should know how many number it has stored.
- * Store the numbers in an array.
- * Create functions to:
- *    * Add a new number at the end.
- *    * Get a number at a given index.
- *    * Replace a number at a given index if it exists.
+ * Take the previous exercise and add a function which sorts the elements in an ascending order.
  *
- * If the array is too small, create a new one, copy everything into it, add the new element and delete the old array.
- *
- * Test in the main function whether everything works.
+ * Test it in the main function and print the results.
  */
 
 #include <stdio.h>
@@ -21,6 +14,7 @@ typedef struct {
 int add(my_struct *numbers, int new_number);
 int get(my_struct *numbers, int *number, int position);
 int replace(my_struct *numbers, int new_number, int position);
+int sort_asc(my_struct *numbers);
 
 int main()
 {
@@ -29,7 +23,7 @@ int main()
     numbers.array = NULL;
 
     //add numbers to the array
-    for (int i = 1; i < 35000; i++) {
+    for (int i = 1; i < 1000; i++) {
         if (add(&numbers, i) != 0) {
             printf("Error: problem with adding new number");
             break;
@@ -97,4 +91,19 @@ int replace(my_struct *numbers, int new_number, int position)
     } else {
         return -1;
     }
+}
+
+int sort_asc(my_struct *numbers)
+{
+   CIKLUS i = n TÕL 2 IG {
+       CIKLUS j = 1 TÕL i-1 IG {
+           HA TOMB[j] > TOMB[j+1] AKKOR {
+               CSERÉLD FEL ÕKET: TOMB[j], TOMB[j+1]
+           }
+       }
+   }
+
+    for (i = numbers->num_of_
+
+    return 0;
 }
