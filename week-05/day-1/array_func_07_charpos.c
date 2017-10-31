@@ -21,7 +21,7 @@ int main()
 
     char_indexes = find_char_indexes(str, c);
 
-    printf("The appearance of %c is %d\n", c, char_indexes[0]);
+    printf("%s\nThe appearance of %c is %d\n", str, c, char_indexes[0]);
     for (int i = 0; i < char_indexes[0]; i++) {
         printf("%d\n", char_indexes[i + 1]);
     }
