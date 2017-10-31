@@ -5,12 +5,15 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 typedef struct {
     int num_of_items;
     int *array;
 } my_struct;
 
+void print_array(my_struct *numbers);
 int add(my_struct *numbers, int new_number);
 int get(my_struct *numbers, int *number, int position);
 int replace(my_struct *numbers, int new_number, int position);
@@ -21,10 +24,14 @@ int main()
     my_struct numbers;
     numbers.num_of_items = 0;
     numbers.array = NULL;
+    int random = 0;
+    time_t t;
+
+    srand((unsigned) time(&t));
 
     //add numbers to the array
-    for (int i = 1; i < 1000; i++) {
-        if (add(&numbers, i) != 0) {
+    for (int i = 1; i < 100; i++) {
+        if (add(&numbers, random = rand() % 1000) != 0) {
             printf("Error: problem with adding new number");
             break;
         }
@@ -34,18 +41,25 @@ int main()
         printf("Error: index is out of bound\n");
     }
 
-    //print the array
-    int number;
-    for (int i = 0; i < numbers.num_of_items; i++) {
-        if (get(&numbers, &number, i) != 0){
-            printf("Error: index is out of bound\n");
-            break;
-        } else {
-             printf("%d ", number);
-        }
-    }
+    printf("Original numbers:\n");
+    print_array(&numbers);
+
+    sort_asc(&numbers);
+
+    printf("\n\nSorted numbers:\n");
+    print_array(&numbers);
+
 
     return 0;
+}
+
+void print_array(my_struct *numbers)
+{
+    int number;
+    for (int i = 0; i < numbers->num_of_items; i++) {
+        get(numbers, &number, i);
+        printf("%d ", number);
+    }
 }
 
 int add(my_struct *numbers, int new_number)
@@ -95,15 +109,13 @@ int replace(my_struct *numbers, int new_number, int position)
 
 int sort_asc(my_struct *numbers)
 {
-   CIKLUS i = n TÕL 2 IG {
-       CIKLUS j = 1 TÕL i-1 IG {
-           HA TOMB[j] > TOMB[j+1] AKKOR {
-               CSERÉLD FEL ÕKET: TOMB[j], TOMB[j+1]
-           }
-       }
-   }
-
-    for (i = numbers->num_of_
-
+    int temp = 0;
+    for (int i = numbers->num_of_items; i > 1; i--)
+        for (int j = 0; j < i - 1; j++)
+            if (numbers->array[j] > numbers->array[j + 1]) {
+                temp = numbers->array[j];
+                numbers->array[j] = numbers->array[j + 1];
+                numbers->array[j + 1] = temp;
+            }
     return 0;
 }
