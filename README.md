@@ -1,7 +1,4 @@
-# paff-tm other repositories
-- [static-demo](https://github.com/paff-tm/static-demo)
-- [git-lesson-repository](https://github.com/paff-tm/git-lesson-repository)
-- [homepage](https://github.com/paff-tm/paff-tm.github.io.git)
+# paff-tm's repository
 
 ## week-01
 - [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-2)
