@@ -23,7 +23,7 @@ int main(){
 
     printf("asChar\n");
     for (p_nums.asChar = nums; (p_nums.asChar - (char*)nums) < sizeof(nums); p_nums.asChar++) {
-        printf("%c", p_nums.asChar);
+        printf("%c", *p_nums.asChar);
     }
 
     return 0;
