@@ -22,19 +22,38 @@ int main()
         printf("Error with opening file.");
     } else {
 
-        //line will be the offset to the end of file fp
+        //f_pos will be the offset to the end of file fp
         fseek(fp, 0, SEEK_END);
         f_pos = ftell(fp);
 
-        while (f_pos > 0) {
+        while (f_pos >= 0) {
+
+            //skip the next \n value if there is (backwards)
+            fseek(fp, f_pos, SEEK_SET);
+            c = fgetc(fp);
+            int i = 1;
+            if (c == '\n') {
+                fseek(fp, f_pos - i, SEEK_SET);
+                c = fgetc(fp);
+                i++;
+            }
+            f_pos = f_pos - i;
+
+            //look for the next \n value
             do {
-                do {
-                    f_pos--;
-                    fseek(fp, f_pos, SEEK_SET);
-                    c = fgetc(fp);
-                } while (c == '\n');
-            } while (c != '\n' && f_pos > 0);
+                f_pos--;
+                fseek(fp, f_pos, SEEK_SET);
+                c = fgetc(fp);
+            } while (c != '\n' && f_pos >= 0);
+
+            fseek(fp, f_pos + 1, SEEK_SET);
+
+            //if there is no \n at the end of the line (last line in the file),
+            //then add it
             fgets(buffer, 255, fp);
+            if (buffer[strlen(buffer) - 1] != '\n') {
+                strcat(buffer, "\n");
+            }
             printf("%s", buffer);
             fputs(buffer, new_fp);
         }
