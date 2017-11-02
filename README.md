@@ -25,6 +25,12 @@
 ## week-04
 - [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/day-1)
 - [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/day-2)
-- day-3 - holiday
 - [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/day-4)
+- [ToDo app](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/ToDo_app)
+
+## week-05
+- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-05/day-1)
+- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-05/day-2)
+- day-3 - holiday
+- [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-05/day-4)
 
