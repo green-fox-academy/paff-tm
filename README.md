@@ -31,5 +31,5 @@
 - day-3 - holiday
 - [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-05/day-4)
 
-## week-06
+## week-06 - C++
 - [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-1)
