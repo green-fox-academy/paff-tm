@@ -28,7 +28,7 @@ int main() {
         int_temp += int_vector.at(i);
     }
 
-    cout << "The average is: " << int_temp / int_vector.size() << endl;
+    cout << "The average is: " << (float)int_temp / int_vector.size() << endl;
 
     int_vector.clear();
 
