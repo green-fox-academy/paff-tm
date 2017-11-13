@@ -14,8 +14,17 @@ int main()
     int age = 33;
     double height = 1.8;
     bool married = true;
-    
-    
+
+    cout << name << endl;
+    cout << age << endl;
+    cout << height << endl;
+
+    cout << "married: ";
+    if (married) {
+        cout << "true";
+    } else {
+        cout << "false";
+    }
 
     return 0;
 }
