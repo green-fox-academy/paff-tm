@@ -21,7 +21,7 @@ int main()
 
     cout << int_vector.at(2);
 
-    int_vector.empty();
+    int_vector.clear();
 
     return 0;
 }
