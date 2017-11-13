@@ -9,13 +9,13 @@ using namespace std;
 // free the allocated memory
 
 int main() {
-    string *name;
+    string *name = NULL;
     name = new string("Andris");
 
-    int *age;
+    int *age = NULL;
     age = new int(33);
 
-    int *slice_of_pizza_you_can_eat;
+    int *slice_of_pizza_you_can_eat = NULL;
     slice_of_pizza_you_can_eat = new int(4);
 
     cout <<  *name << " is " << *age << " years old and can eat " << *slice_of_pizza_you_can_eat << " pizza slices." << endl;
