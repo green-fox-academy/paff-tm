@@ -16,7 +16,7 @@ int main()
     int_vector.reserve(20);
 
     for (unsigned int i = 0; i < int_vector.capacity(); ++i) {
-        int_vector.push_back(rand() % 10 + 1);
+        int_vector.push_back(rand() % 11);
 	}
 
 	for (unsigned int i = 0; i < int_vector.size(); ++i) {
@@ -24,10 +24,13 @@ int main()
 	}
 
 	for (unsigned int i = 0; i < int_vector.size(); ++i) {
-        if (int_vector.at(i) % 2 == 0)
+        if (int_vector.at(i) % 2 == 0) {
             int_vector.erase(int_vector.begin() + i);
+            --i;
+        }
     }
 
+    cout << "-------" << endl;
 	for (unsigned int i = 0; i < int_vector.size(); ++i) {
         cout << int_vector.at(i) << endl;
 	}
