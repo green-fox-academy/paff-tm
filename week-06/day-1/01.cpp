@@ -13,6 +13,13 @@ using namespace std;
 
 int main()
 {
+    string name1 = "Laci";
+    string name2 = "Tamas";
+    string name3 = "Annamari";
+
+    cout << "Hello, " << name1 << endl;
+    cout << "Hello, " << name2 << endl;
+    cout << "Hello, " << name3 << endl;
 
     return 0;
 }
