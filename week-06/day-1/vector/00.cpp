@@ -11,6 +11,7 @@ int main()
 {
     vector <int> int_vector;
     int vector_len = 5;
+    int_vector.reserve(vector_len);
 
     srand(time(0));
 
