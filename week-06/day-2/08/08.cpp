@@ -27,13 +27,11 @@ public:
     }
 
     float get_average() {
-        int sum;
         if (grades->size() == 0) {
             return 0;
-        } else {
-            sum = accumulate(grades->begin(), grades->begin() + grades->size(), 0);
         }
-        return (float)sum / grades->size();
+
+        return (float)accumulate(grades->begin(), grades->begin() + grades->size(), 0) / grades->size();
     }
 
 };
