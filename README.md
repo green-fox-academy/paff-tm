@@ -33,3 +33,4 @@
 
 ## week-06 - C++
 - [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-1)
+- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-2) - OOP basics
