@@ -17,7 +17,7 @@ int main() {
         cout << pointer[i] << endl;
     }
 
-    delete pointer;
+    delete[] pointer;
 
     return 0;
 }
