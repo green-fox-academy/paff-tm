@@ -13,7 +13,7 @@ class Pirate{
         }
 
         ~Pirate() {
-            if (drinked_rum > 5) {
+            if (drinked_rum > 4) {
                 cout << "I died drunk, yeah...! " << endl;;
             } else {
                 cout << "Hey, I was still thirsty... Arrr..." << endl;
@@ -25,7 +25,7 @@ class Pirate{
         }
 
         void hows_goin_mate() {
-            if (drinked_rum > 5) {
+            if (drinked_rum > 4) {
                 cout << "Arrrr!" << endl;
             } else {
                 cout << "Nothin\'" << endl;
@@ -46,6 +46,11 @@ int main()
 
     Pirate pirate;
 
+    for (int i = 0; i < 6; ++i) {
+        pirate.drink_rum();
+        cout << i + 1 << ". shot: ";
+        pirate.hows_goin_mate();
+    }
 
     return 0;
 }
