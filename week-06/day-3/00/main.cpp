@@ -9,15 +9,21 @@ using namespace std;
 // For example: Human is walking. SuperHuman is flying. AquaHuman is riding with dolphins.
 
 class Human {
-
+    virtual void travelling(){
+        cout << "I'm walkin' in the rain..." << endl;
+    };
 };
 
 class SuperHuman: private Human {
-
+    virtual void travelling(){
+        cout << "I believe I can fly...!" << endl;
+    };
 };
 
 class AquaHuman: private Human {
-
+    virtual void travelling(){
+        cout << "I can swim!" << endl;
+    };
 };
 
 
