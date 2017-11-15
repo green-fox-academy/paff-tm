@@ -17,16 +17,7 @@ int main()
 
     cout << "number of items: " << l.size() << endl;
 
-    cout << l.getFirstData() << endl;
-    l.delFirstItem();
-    cout << l.getFirstData() << endl;
-    l.delFirstItem();
-    cout << l.getFirstData() << endl;
-    l.delFirstItem();
-    cout << l.getFirstData() << endl;
-    l.delFirstItem();
-    cout << l.getFirstData() << endl;
-
+    cout << l.getData(2) << endl;
 
     return 0;
 }

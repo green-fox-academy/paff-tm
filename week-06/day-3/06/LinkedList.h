@@ -11,6 +11,7 @@ class LinkedList
         void addItem(int data);
         int getFirstData();
         void delFirstItem();
+        int getData(unsigned int pos);
         void clear();
         unsigned int size();
 

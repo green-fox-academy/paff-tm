@@ -41,6 +41,22 @@ void LinkedList::delFirstItem()
     }
 }
 
+int LinkedList::getData(unsigned int pos)
+{
+    Node *p = first;
+    unsigned int i = 0;
+    while (i < pos && p != NULL) {
+        p = p->getNext();
+        ++i;
+    }
+
+    if (p == NULL) {
+        return 0;
+    }
+
+    return p->getData();
+}
+
 void LinkedList::clear()
 {
     while (first != NULL) {
