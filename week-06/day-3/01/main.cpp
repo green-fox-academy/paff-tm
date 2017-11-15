@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -14,6 +13,7 @@ class Shape {
         float getArea() {
             return area;
         };
+
     protected:
         float area;
         virtual void calc_area() = 0;
@@ -25,6 +25,7 @@ class Circle: public Shape {
             this->r = r;
             calc_area();
         };
+
     private:
         float r;
         virtual void calc_area() {
@@ -39,6 +40,7 @@ class Triangle: public Shape {
             this->m = m;
             calc_area();
         };
+
     private:
         float a;
         float m;
