@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -13,6 +13,15 @@ using namespace std;
 
 class Car {
     public:
+        Car(unsigned int age, unsigned int kms_runed, string manufacturer)
+        {
+            this->age = age;
+            this->kms_runed = kms_runed;
+            this->manufacturer = manufacturer;
+            persons = 0;
+            number_of_seats = 0;
+        };
+
         void increase_kms(unsigned int km)
         {
             kms_runed += km;
@@ -42,9 +51,8 @@ class Car {
 
 class SUV: public Car {
     public:
-        SUV()
+        SUV(unsigned int age, unsigned int kms_runed, string manufacturer) : Car(age, kms_runed, manufacturer)
         {
-            persons = 0;
             number_of_seats = 5;
         };
 
@@ -52,17 +60,16 @@ class SUV: public Car {
 
 class Minibus: public Car {
     public:
-        Minibus()
+        Minibus(unsigned int age, unsigned int kms_runed, string manufacturer) : Car(age, kms_runed, manufacturer)
         {
-            persons = 0;
             number_of_seats = 9;
         };
 };
 
 int main()
 {
-    Minibus mb;
-    SUV s;
+    Minibus mb(10, 120131, "VolksWagen");
+    SUV s(12, 235000, "Ford");
 
     for (unsigned int i = 0; i < mb.getNumberOfSeats() + 2; ++i) {
         mb.add_person();
