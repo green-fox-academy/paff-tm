@@ -11,6 +11,9 @@ int main()
 {
     LinkedList l;
 
+    l.addItem(3);
+    cout << l.getFirstData();
+
 
     return 0;
 }

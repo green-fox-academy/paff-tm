@@ -8,10 +8,11 @@ class LinkedList
     public:
         LinkedList();
         ~LinkedList();
-        void addItem(IntNode n);
+        void addItem(int data);
+        int getFirstData();
 
     protected:
-        IntNode *first = NULL;
+        Node *first = NULL;
 
     private:
 

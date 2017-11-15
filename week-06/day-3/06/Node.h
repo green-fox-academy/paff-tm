@@ -6,18 +6,16 @@ class Node
     public:
         Node();
         ~Node();
+        Node* getNext();
+        void setNext(Node *n);
+        int getData();
+        void setData(int data);
 
     protected:
+        int data;
         Node *next;
 
     private:
-};
-
-class IntNode: public Node {
-    public:
-
-    private:
-        int data;
 };
 
 #endif // NODE_H
