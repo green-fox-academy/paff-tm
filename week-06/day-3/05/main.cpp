@@ -13,18 +13,26 @@ using namespace std;
 
 class Car {
     public:
-        void increase_kms(unsigned int km) {
+        void increase_kms(unsigned int km)
+        {
             kms_runed += km;
         };
-        void add_person() {
+
+        void add_person()
+        {
             if (persons < number_of_seats) {
                 ++persons;
             } else {
-                cout << "No more free seats!" endl;
+                cout << "No more free seats!" << endl;
             }
         };
 
-    private:
+        unsigned int getNumberOfSeats()
+        {
+            return number_of_seats;
+        };
+
+    protected:
         unsigned int age;
         unsigned int kms_runed;
         string manufacturer;
@@ -32,8 +40,37 @@ class Car {
         unsigned int persons;
 };
 
+class SUV: public Car {
+    public:
+        SUV()
+        {
+            persons = 0;
+            number_of_seats = 5;
+        };
+
+};
+
+class Minibus: public Car {
+    public:
+        Minibus()
+        {
+            persons = 0;
+            number_of_seats = 9;
+        };
+};
+
 int main()
 {
+    Minibus mb;
+    SUV s;
+
+    for (unsigned int i = 0; i < mb.getNumberOfSeats() + 2; ++i) {
+        mb.add_person();
+    }
+
+    for (unsigned int i = 0; i < s.getNumberOfSeats() + 2; ++i) {
+        s.add_person();
+    }
 
     return 0;
 }
