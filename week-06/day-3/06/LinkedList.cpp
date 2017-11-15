@@ -20,7 +20,24 @@ void LinkedList::addItem(int data)
     p->setData(data);
     p->setNext(first);
     first = p;
-    cout << "add an item" << endl;
+    //cout << "add an item" << endl;
+}
+
+void LinkedList::addItemBack(int data)
+{
+    Node *p = new Node;
+    p->setData(data);
+    p->setNext(NULL);
+
+    if (first == NULL) {
+        first = p;
+    } else {
+        Node *t = first;
+        while (t->getNext() != NULL) {
+            t = t->getNext();
+        }
+        t->setNext(p);
+    }
 }
 
 int LinkedList::getFirstData()
@@ -61,7 +78,7 @@ void LinkedList::clear()
 {
     while (first != NULL) {
         delFirstItem();
-        cout << "del an item" << endl;
+        //cout << "del an item" << endl;
     }
 }
 

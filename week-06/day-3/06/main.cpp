@@ -11,13 +11,13 @@ int main()
 {
     LinkedList l;
 
-    l.addItem(3);
-    l.addItem(5);
-    l.addItem(6);
+    l.addItemBack(3);
+    l.addItemBack(5);
+    l.addItemBack(6);
 
     cout << "number of items: " << l.size() << endl;
 
-    cout << l.getData(2) << endl;
+    cout << l.getData(0) << endl;
 
     return 0;
 }

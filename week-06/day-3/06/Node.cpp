@@ -5,12 +5,7 @@ using namespace std;
 
 Node::Node()
 {
-    //ctor
-}
-
-Node::~Node()
-{
-    //dtor
+    next = NULL;
 }
 
 Node* Node::getNext()

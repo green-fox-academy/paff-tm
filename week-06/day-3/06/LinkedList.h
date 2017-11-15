@@ -9,6 +9,7 @@ class LinkedList
         LinkedList();
         ~LinkedList();
         void addItem(int data);
+        void addItemBack(int data);
         int getFirstData();
         void delFirstItem();
         int getData(unsigned int pos);

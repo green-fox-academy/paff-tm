@@ -5,7 +5,6 @@ class Node
 {
     public:
         Node();
-        ~Node();
         Node* getNext();
         void setNext(Node *n);
         int getData();
