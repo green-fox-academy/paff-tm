@@ -8,7 +8,7 @@ class LinkedList
     public:
         LinkedList();
         ~LinkedList();
-        void addItem(int data);
+        void addItemFront(int data);
         void addItemBack(int data);
         int getFirstData();
         void delFirstItem();

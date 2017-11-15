@@ -17,7 +17,9 @@ int main()
 
     cout << "number of items: " << l.size() << endl;
 
-    cout << l.getData(0) << endl;
+    for (int i = 0; i < l.size(); ++i) {
+        cout << l.getData(i) << endl;
+    }
 
     return 0;
 }

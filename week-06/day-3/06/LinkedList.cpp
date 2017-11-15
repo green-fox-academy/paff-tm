@@ -14,7 +14,7 @@ LinkedList::~LinkedList()
     clear();
 }
 
-void LinkedList::addItem(int data)
+void LinkedList::addItemFront(int data)
 {
     Node *p = new Node;
     p->setData(data);
