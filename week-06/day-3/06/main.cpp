@@ -12,7 +12,20 @@ int main()
     LinkedList l;
 
     l.addItem(3);
-    cout << l.getFirstData();
+    l.addItem(5);
+    l.addItem(6);
+
+    cout << "number of items: " << l.size() << endl;
+
+    cout << l.getFirstData() << endl;
+    l.delFirstItem();
+    cout << l.getFirstData() << endl;
+    l.delFirstItem();
+    cout << l.getFirstData() << endl;
+    l.delFirstItem();
+    cout << l.getFirstData() << endl;
+    l.delFirstItem();
+    cout << l.getFirstData() << endl;
 
 
     return 0;

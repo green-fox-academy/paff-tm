@@ -10,9 +10,12 @@ class LinkedList
         ~LinkedList();
         void addItem(int data);
         int getFirstData();
+        void delFirstItem();
+        void clear();
+        unsigned int size();
 
     protected:
-        Node *first = NULL;
+        Node *first;
 
     private:
 
