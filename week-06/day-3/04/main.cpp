@@ -17,11 +17,11 @@ using namespace std;
 class ParentClass {
     public:
         string doSomething() {
-            string s;
+            string s = "Do something in ParentClass";
             return s;
         };
-        string doSomethingVirtual() {
-            string s;
+        virtual string doSomethingVirtual() {
+            string s = "Do something virtual in ParentClass";
             return s;
         };
 };
@@ -29,16 +29,23 @@ class ParentClass {
 class ChildClass: public ParentClass {
     public:
         string doSomething() {
-            string s;
+            string s = "Do something in ChildClass";
             return s;
         };
         string doSomethingVirtual() {
-            string s;
+            string s = "Do something virtual in ChildClass";
             return s;
         };
 };
 
 int main() {
+    ParentClass *a = new ChildClass;
+
+    cout << a->doSomething() << endl;
+    cout << a->doSomethingVirtual() << endl;
+
+    cout << ((ChildClass*)a)->doSomething() << endl;
+    cout << ((ChildClass*)a)->doSomethingVirtual() << endl;
 
     return 0;
 };
