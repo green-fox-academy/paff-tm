@@ -24,7 +24,7 @@ void ToDoList::commandInput()
     Task *temp_task;
 
     getline(cin, input_str);
-    input_evaluation(input_str, &op, &attr1, &attr2);
+    inputEvaluation(input_str, &op, &attr1, &attr2);
 
     switch (op) {
 
@@ -97,7 +97,7 @@ void ToDoList::addTask(Task *_task)
     tasks.push_back(*_task);
 }
 
-void ToDoList::input_evaluation(string input_str, t_operator *op, string *attr1, string *attr2)
+void ToDoList::inputEvaluation(string input_str, t_operator *op, string *attr1, string *attr2)
 {
     string op_str;
 
