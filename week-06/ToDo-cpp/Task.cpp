@@ -1,3 +1,9 @@
+/*
+ *  CPP FILE FOR TODO APPLICATION in C++
+ *  ====================================
+ *  Class Task
+ */
+
 #include <iostream>
 #include "Task.h"
 

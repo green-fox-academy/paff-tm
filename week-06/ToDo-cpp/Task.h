@@ -1,3 +1,9 @@
+/*
+ *  H FILE FOR TODO APPLICATION in C++
+ *  ==================================
+ *  Class Task
+ */
+
 #ifndef TASK_H
 #define TASK_H
 

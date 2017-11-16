@@ -1,3 +1,9 @@
+/*
+ *  H FILE FOR TODO APPLICATION in C++
+ *  ==================================
+ *  Define data types and constants
+ */
+
 #ifndef DEFINE_H_INCLUDED
 #define DEFINE_H_INCLUDED
 

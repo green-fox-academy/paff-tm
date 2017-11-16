@@ -1,3 +1,9 @@
+/*
+ *  CPP FILE FOR TODO APPLICATION in C++
+ *  ====================================
+ *  Class FileIO
+ */
+
 #include <iostream>
 #include "FileIO.h"
 
@@ -11,4 +17,16 @@ FileIO::FileIO()
 FileIO::~FileIO()
 {
     //dtor
+}
+
+void FileIO::saveListToFile(string _filename)
+{
+
+
+}
+
+ToDoList* FileIO::openListFromFile(string _filename)
+{
+
+
 }

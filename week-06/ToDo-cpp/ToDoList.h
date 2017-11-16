@@ -1,3 +1,9 @@
+/*
+ *  H FILE FOR TODO APPLICATION in C++
+ *  ==================================
+ *  Class ToDoList
+ */
+
 #ifndef TODOLIST_H
 #define TODOLIST_H
 
@@ -12,13 +18,9 @@ class ToDoList
     public:
         ToDoList();
         ~ToDoList();
-
-        void commandInput();
+        void takeInput();
         bool getExit();
-        void addTask(Task *_task);
-        void listTasks();
         void printUsage();
-        void clear_screen();
 
     protected:
 
@@ -27,6 +29,11 @@ class ToDoList
         bool exit;
 
         void inputEvaluation(string input_str, t_operator *op, string *attr, string *attr2);
+        void addTask(Task *_task);
+        void listTasks();
+        void saveFile(string _filename);
+        void openFile(string _filename);
+        void clear_screen();
 
 };
 
