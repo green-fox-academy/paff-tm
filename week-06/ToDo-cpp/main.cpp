@@ -8,14 +8,17 @@ using namespace std;
 
 int main()
 {
-    string input_string;
+    string input_str;
     char op;
     FileIO *f = new FileIO;
     ToDoList *l = new ToDoList;
 
+    l->printUsage();
+
+/*
     do {
 
-        //gets(input_str);
+        cin >> input_str;
         //input_ev(input_str, &op, attr, attr2);
 
         switch (op) {
@@ -75,6 +78,8 @@ int main()
             break;
         }
     } while (op != OP_EXIT);
+
+*/
 
     delete f;
     delete l;

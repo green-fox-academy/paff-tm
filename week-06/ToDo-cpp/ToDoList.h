@@ -11,6 +11,7 @@ class ToDoList
     public:
         ToDoList();
         ~ToDoList();
+        void printUsage();
 
     protected:
 
