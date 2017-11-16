@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string.h>
+#include <windows.h>
 #include "ToDoList.h"
 
 using namespace std;
@@ -14,32 +15,16 @@ ToDoList::~ToDoList()
     //dtor
 }
 
-void ToDoList::printUsage()
-{
-    cout << "Todo application                    " << endl;
-    cout << "====================                " << endl;
-    cout << "Commands:                           " << endl;
-    cout << "-a   Adds a new task                " << endl;
-    cout << "-wr  Write current todos to file    " << endl;
-    cout << "-rd  Read todos from a file         " << endl;
-    cout << "-l   Lists all the tasks            " << endl;
-    cout << "-e   Empty the list                 " << endl;
-    cout << "-rm   Removes a task                " << endl;
-    cout << "-c   Completes a task               " << endl;
-    cout << "-p   Add priority to a task         " << endl;
-    cout << "-lp  Lists all the tasks by priority" << endl;
-}
-
 void ToDoList::commandInput()
 {
     string input_str;
     t_operator op;          //the operator from the input_str
-    string attr;            //the 1st attribute from the input_str
+    string attr1;           //the 1st attribute from the input_str
     string attr2;           //the 2nd attribute from the input_str
 
     getline(cin, input_str);
 
-    input_evaluation(input_str, &op, attr, attr2);
+    input_evaluation(input_str, &op, attr1, attr2);
 
     switch (op) {
 
@@ -52,11 +37,11 @@ void ToDoList::commandInput()
         break;
 
     case OP_PRINT_USAGE:
-
+        printUsage();
         break;
 
     case OP_CLEAR_SCREEN:
-
+        clear_screen();
         break;
 
     case OP_ADD_TASK:
@@ -180,4 +165,29 @@ void ToDoList::input_evaluation(string input_str, t_operator *op, string attr1, 
         break;
     }
 
+}
+
+void ToDoList::printUsage()
+{
+    cout << "Todo application                      " << endl;
+    cout << "====================                  " << endl;
+    cout << "Commands:                             " << endl;
+    cout << "-a   Adds a new task                  " << endl;
+    cout << "-wr  Write current todos to file      " << endl;
+    cout << "-rd  Read todos from a file           " << endl;
+    cout << "-l   Lists all the tasks              " << endl;
+    cout << "-e   Empty the list                   " << endl;
+    cout << "-rm   Removes a task                  " << endl;
+    cout << "-c   Completes a task                 " << endl;
+    cout << "-p   Add priority to a task           " << endl;
+    cout << "-lp  Lists all the tasks by priority  " << endl;
+    cout << " -------------------------------------" << endl;
+    cout << " exit Exit the program without saving " << endl;
+    cout << " help Prints out this help            " << endl;
+    cout << " cls  Clear the screen                " << endl << endl;
+}
+
+void ToDoList::clear_screen()
+{
+    system("CLS");
 }

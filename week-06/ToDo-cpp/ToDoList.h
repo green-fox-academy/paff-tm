@@ -13,10 +13,11 @@ class ToDoList
         ToDoList();
         ~ToDoList();
 
-        void printUsage();
         void commandInput();
         bool getExit();
         void addTask(Task *_task);
+        void printUsage();
+        void clear_screen();
 
     protected:
 
