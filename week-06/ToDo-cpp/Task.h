@@ -10,8 +10,8 @@ class Task
     public:
         Task();
         ~Task();
-        //void setDescription(string _desc);
-        //string getDescription();
+        void setDescription(string _desc);
+        string getDescription();
 
     private:
         string description;

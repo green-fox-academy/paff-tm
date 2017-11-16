@@ -21,10 +21,10 @@ void ToDoList::commandInput()
     t_operator op;          //the operator from the input_str
     string attr1;           //the 1st attribute from the input_str
     string attr2;           //the 2nd attribute from the input_str
+    Task *temp_task;
 
     getline(cin, input_str);
-
-    input_evaluation(input_str, &op, attr1, attr2);
+    input_evaluation(input_str, &op, &attr1, &attr2);
 
     switch (op) {
 
@@ -45,7 +45,9 @@ void ToDoList::commandInput()
         break;
 
     case OP_ADD_TASK:
-
+        temp_task = new Task;
+        temp_task->setDescription(attr1);
+        addTask(temp_task);
         break;
 
     case OP_PRIORITY_ADD:
@@ -53,7 +55,7 @@ void ToDoList::commandInput()
         break;
 
     case OP_LIST_TASKS:
-
+        listTasks();
         break;
 
     case OP_PRIO_LIST:
@@ -95,9 +97,8 @@ void ToDoList::addTask(Task *_task)
     tasks.push_back(*_task);
 }
 
-void ToDoList::input_evaluation(string input_str, t_operator *op, string attr1, string attr2)
+void ToDoList::input_evaluation(string input_str, t_operator *op, string *attr1, string *attr2)
 {
-    //set the operator pointer to the first element of input_str
     string op_str;
 
     size_t buffer_end;
@@ -143,28 +144,35 @@ void ToDoList::input_evaluation(string input_str, t_operator *op, string attr1, 
     case OP_SAVE_FILE:
     case OP_OPEN_FILE:
         buffer_end = input_str.find('"', buffer_start);
-        attr1 = input_str.substr(buffer_start, buffer_end - buffer_start);
+        *attr1 = input_str.substr(buffer_start, buffer_end - buffer_start);
         break;
 
     case OP_REMOVE_TASK:
     case OP_CHECK_TASK:
         buffer_end = input_str.find(' ', buffer_start);
-        attr1 = input_str.substr(buffer_start, buffer_end - buffer_start);
+        *attr1 = input_str.substr(buffer_start, buffer_end - buffer_start);
         break;
 
     case OP_PRIORITY_ADD:
         buffer_end = input_str.find('"', buffer_start);
-        attr1 = input_str.substr(buffer_start, buffer_end - buffer_start);
+        *attr1 = input_str.substr(buffer_start, buffer_end - buffer_start);
 
         buffer_start = buffer_end + 1;
         buffer_end = input_str.find(' ', buffer_start);
-        attr2 = input_str.substr(buffer_start, buffer_end - buffer_start);
+        *attr2 = input_str.substr(buffer_start, buffer_end - buffer_start);
         break;
 
     default:
         break;
     }
 
+}
+
+void ToDoList::listTasks()
+{
+    for (unsigned int i = 0; i < tasks.size(); ++i) {
+        cout << tasks.at(i).getDescription() << endl;
+    }
 }
 
 void ToDoList::printUsage()

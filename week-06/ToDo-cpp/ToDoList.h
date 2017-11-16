@@ -16,6 +16,7 @@ class ToDoList
         void commandInput();
         bool getExit();
         void addTask(Task *_task);
+        void listTasks();
         void printUsage();
         void clear_screen();
 
@@ -25,7 +26,7 @@ class ToDoList
         vector <Task> tasks;
         bool exit;
 
-        void input_evaluation(string input_str, t_operator *op, string attr, string attr2);
+        void input_evaluation(string input_str, t_operator *op, string *attr, string *attr2);
 
 };
 
