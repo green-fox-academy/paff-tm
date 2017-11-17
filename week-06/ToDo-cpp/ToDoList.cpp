@@ -70,7 +70,7 @@ void ToDoList::takeInput()
         break;
 
     case OP_SAVE_FILE:
-
+        saveFile(attr1);
         break;
 
     case OP_OPEN_FILE:
@@ -191,7 +191,7 @@ void ToDoList::listTasks()
 void ToDoList::saveFile(string _filename)
 {
     FileIO *f = new FileIO;
-
+    f->saveListToFile(_filename, &tasks);
     delete f;
 }
 
@@ -208,7 +208,7 @@ void ToDoList::printUsage()
     cout << "====================                  " << endl;
     cout << "Commands:                             " << endl;
     cout << "-a   Adds a new task                  " << endl;
-  //cout << "-wr  Write current todos to file      " << endl;
+    cout << "-wr  Write current todos to file      " << endl;
   //cout << "-rd  Read todos from a file           " << endl;
     cout << "-l   Lists all the tasks              " << endl;
   //cout << "-e   Empty the list                   " << endl;

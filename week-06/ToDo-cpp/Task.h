@@ -18,6 +18,8 @@ class Task
         ~Task();
         void setDescription(string _desc);
         string getDescription();
+        void setAllData(string _desc);
+        string getAllData();
 
     private:
         string description;

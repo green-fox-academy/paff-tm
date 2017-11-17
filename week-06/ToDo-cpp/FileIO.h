@@ -8,7 +8,8 @@
 #define FILEIO_H
 
 #include <iostream>
-#include "ToDoList.h"
+#include <vector>
+#include "Task.h"
 
 using namespace std;
 
@@ -17,8 +18,8 @@ class FileIO
     public:
         FileIO();
         ~FileIO();
-        void saveListToFile(string _filename);
-        ToDoList* openListFromFile(string _filename);
+        void saveListToFile(string _filename, vector <Task> *_tasks);
+        vector <Task>*  openListFromFile(string _filename);
 
     protected:
 

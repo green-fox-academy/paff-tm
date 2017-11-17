@@ -20,14 +20,24 @@ FileIO::~FileIO()
     //dtor
 }
 
-void FileIO::saveListToFile(string _filename)
+void FileIO::saveListToFile(string _filename, vector <Task> *_tasks)
 {
+    char buffer[_filename.length() + 1];
+    copy(_filename.begin(), _filename.end(), buffer);
+    buffer[_filename.size()] = '\0';
 
+    ofstream outfile;
+    outfile.open(buffer, ios::out);
 
+    for (unsigned int i = 0; i < _tasks->size(); ++i) {
+        outfile << _tasks->at(i).getAllData() << endl;
+    }
+
+    outfile.close();
 }
 
-ToDoList* FileIO::openListFromFile(string _filename)
+vector <Task>* FileIO::openListFromFile(string _filename)
 {
 
-
+    return 0;
 }

@@ -28,3 +28,13 @@ string Task::getDescription()
 {
     return description;
 }
+
+void Task::setAllData(string _alldatastring)
+{
+    description = _alldatastring;
+}
+
+string Task::getAllData()
+{
+    return description;
+}
