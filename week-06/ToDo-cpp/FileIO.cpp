@@ -22,12 +22,8 @@ FileIO::~FileIO()
 
 void FileIO::saveListToFile(string _filename, vector <Task> *_tasks)
 {
-    char buffer[_filename.length() + 1];
-    copy(_filename.begin(), _filename.end(), buffer);
-    buffer[_filename.size()] = '\0';
-
     ofstream outfile;
-    outfile.open(buffer, ios::out);
+    outfile.open(_filename.c_str(), ios::out);
 
     for (unsigned int i = 0; i < _tasks->size(); ++i) {
         outfile << _tasks->at(i).getAllData() << endl;
@@ -38,6 +34,15 @@ void FileIO::saveListToFile(string _filename, vector <Task> *_tasks)
 
 vector <Task>* FileIO::openListFromFile(string _filename)
 {
+    ifstream infile;
+    infile.open(_filename.c_str(), ios::in);
 
+//    unsigned int i = 0;
+//    while (!infile.eof()) {
+//        infile >> tasks->at(i).setAllData();
+//        ++i;
+//    }
+
+    infile.close();
     return 0;
 }

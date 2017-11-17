@@ -198,7 +198,7 @@ void ToDoList::saveFile(string _filename)
 void ToDoList::openFile(string _filename)
 {
     FileIO *f = new FileIO;
-
+    tasks = *f->openListFromFile(_filename);
     delete f;
 }
 
