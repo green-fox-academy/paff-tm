@@ -28,7 +28,7 @@ class ToDoList
         vector <Task> tasks;
         bool exit;
 
-        void inputEvaluation(string input_str, t_operator *op, string *attr, string *attr2);
+        void inputEvaluation(string input_str, t_operator *op, string *attr1, string *attr2);
         void addTask(Task *_task);
         void listTasks();
         void saveFile(string _filename);

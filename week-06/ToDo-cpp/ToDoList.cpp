@@ -150,7 +150,8 @@ void ToDoList::inputEvaluation(string input_str, t_operator *op, string *attr1, 
     case OP_ADD_TASK:
     case OP_SAVE_FILE:
     case OP_OPEN_FILE:
-        buffer_end = input_str.find('"', buffer_start);
+        buffer_start = input_str.find_first_of('"') + 1;
+        buffer_end = input_str.find_last_of('"');
         *attr1 = input_str.substr(buffer_start, buffer_end - buffer_start);
         break;
 
@@ -161,7 +162,8 @@ void ToDoList::inputEvaluation(string input_str, t_operator *op, string *attr1, 
         break;
 
     case OP_PRIORITY_ADD:
-        buffer_end = input_str.find('"', buffer_start);
+        buffer_start = input_str.find_first_of('"') + 1;
+        buffer_end = input_str.find_last_of('"');
         *attr1 = input_str.substr(buffer_start, buffer_end - buffer_start);
 
         buffer_start = buffer_end + 1;
@@ -188,16 +190,16 @@ void ToDoList::listTasks()
 
 void ToDoList::saveFile(string _filename)
 {
-    FileIO *file = new FileIO;
+    FileIO *f = new FileIO;
 
-    delete file;
+    delete f;
 }
 
 void ToDoList::openFile(string _filename)
 {
-    FileIO *file = new FileIO;
+    FileIO *f = new FileIO;
 
-    delete file;
+    delete f;
 }
 
 void ToDoList::printUsage()

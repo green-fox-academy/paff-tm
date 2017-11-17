@@ -5,6 +5,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include "FileIO.h"
 
 using namespace std;
