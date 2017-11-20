@@ -23,7 +23,6 @@ string myFunc(int x) throw(int, const char*)
     } else {
         return sentence[x];
     }
-
 }
 
 int main ()
@@ -40,8 +39,6 @@ int main ()
     catch (const char *c) {
         cout << c << endl;
     }
-
-
 
     return 0;
 }
