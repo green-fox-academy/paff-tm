@@ -15,46 +15,37 @@ class Timer {
     public:
         Timer()
         {
-            start = clock();
+            //start = clock();
         }
         clock_t getTime()
         {
-            return clock() - start / CLOCKS_PER_SEC;
+            return clock() - start_time / CLOCKS_PER_SEC;
+        }
+        void start()
+        {
+            start_time = clock();
         }
     private:
-        clock_t start;
+        clock_t start_time;
 };
 
 int main()
 {
-    int x;
+    string x;
     Timer t;
 
-    try {
-        while (1) {
-           if (t.getTime() > 2000) {
-                throw 2;
-           } else if (feof(stdin)) {
-                throw 3;
-           }
-        }
-    }
-    catch (int x) {
-        switch (x) {
-        case 2:
-            cout << "Out of Time" << endl;
-            break;
-        case 3:
-            cin >> x;
-            cout << "Your number is: " << x << endl;
-            break;
-        default:
-            break;
-        }
+    t.start();
+
+    cout << "Add your input: ";
+    getline(cin, x);
+
+    if (t.getTime() >= 2000) {
+        cout << "Out of Time";
+    } else {
+        cout << "Great! Your input is: " << x << endl;
     }
 
-    cout << x << " | " << t.getTime();
-    cin >> x;
+    cout << "Elapsed time is: " << (float)t.getTime() / 1000 << " sec" << endl;
 
     return 0;
 }
