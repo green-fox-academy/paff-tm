@@ -29,10 +29,8 @@ int nummul(int a, int b)
 
 int main()
 {
-
     cout << nummul(2, 3) << endl;
     cout << nummul(2.2f, 3.7f) << endl;
-
 
 	return 0;
 }
