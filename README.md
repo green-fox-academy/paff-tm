@@ -34,3 +34,11 @@
 ## week-06 - C++
 - [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-1)
 - [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-2) - OOP basics
+- [day-3](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-3)
+- [ToDo App C++](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/ToDo-cpp)
+- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-5)
+
+## week-07 - C++
+- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-1) - try-catch
+- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-2) - Function Override
+
