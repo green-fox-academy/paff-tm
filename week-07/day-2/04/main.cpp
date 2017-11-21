@@ -17,10 +17,12 @@ class Integer {
         {
             mNum = 0;
         }
+
         Integer(int x)
         {
             mNum = x;
         }
+
         int get()
         {
             return mNum;
@@ -62,12 +64,16 @@ int main()
 {
     Integer i(1);
     Integer j(2);
+    Integer k(3);
+    Integer l(4);
+    Integer m(5);
+    Integer n(6);
 
     cout << i.add(j) << endl;
-    cout << i.add(j, j) << endl;
-    cout << i.add(j, j, j) << endl;
-    cout << i.add(j, j, j, j) << endl;
-    cout << i.add(j, j, j, j, j) << endl;
+    cout << i.add(j, k) << endl;
+    cout << i.add(j, k, l) << endl;
+    cout << i.add(j, k, l, m) << endl;
+    cout << i.add(j, k, l, m, n) << endl;
 
 	return 0;
 }
