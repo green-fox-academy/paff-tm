@@ -15,15 +15,16 @@ int main()
     a.addUser("Jani", "3333", 1000);
     a.addUser("Tibor", "4444", 200);
     a.addUser("Mustafa", "5555", 200500);
-    a.fillup(1,1,1,1,1);
 
     do {
+        a.printMenu();
         try {
-            a.printMenu();
             getline(cin, input);
             if (input == "1") {
                 a.withdraw();
             } else if (input == "2") {
+                a.fillup(1,1,1,1,1);
+            } else {
 
             }
         } catch(const char *err) {

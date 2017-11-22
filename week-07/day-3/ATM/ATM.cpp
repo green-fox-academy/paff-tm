@@ -14,7 +14,7 @@ ATM::ATM()
     m2000 = 0;
     m5000 = 0;
     m10000 = 0;
-    m20000 = 0;
+    m20000 = 1;
     user = 0;
 }
 
@@ -39,6 +39,7 @@ void ATM::withdraw() throw (const char*)
         takePIN();
         cout << "The amount you want to withdraw: ";
         cin >> amount;
+        cin.ignore();
         if (amount % 1000 == 0) {
             if (checkATMMoney(amount)) {
                 user->withdraw(pin, amount);
