@@ -15,9 +15,9 @@ class User
         User(string _name, string _pin, int _money, tUser _user_type);
         ~User();
         string getName();
-        bool checkPIN(string _pin);
+
         int getBalance(string _pin);
-        void withdraw(string _pin, unsigned int _amount);
+        void withdraw(string _pin, unsigned int _amount) throw (const char*);
 
     protected:
         string name;
@@ -25,6 +25,7 @@ class User
         int money;
         tUser user_type;
 
+        bool checkPIN(string _pin);
     private:
 };
 

@@ -48,14 +48,20 @@ int User::getBalance(string _pin)
 {
     if (checkPIN(_pin)) {
         return money;
+    } else {
+        return 0;
     }
 }
 
-void User::withdraw(string _pin, unsigned int _amount)
+void User::withdraw(string _pin, unsigned int _amount) throw (char const*)
 {
     if (checkPIN(_pin)) {
-        money -= _amount;
-        cout << "You've got " << _amount << "Ft." << endl;
-        cout << "Reamain " << money << "Ft on your balance." << endl;
+        if (money >= _amount) {
+            money -= _amount;
+            cout << "You've got " << _amount << "Ft." << endl;
+            cout << "Reamain " << money << "Ft on your balance." << endl;
+        } else {
+            throw "There is not enough money on your account";
+        }
     }
 }

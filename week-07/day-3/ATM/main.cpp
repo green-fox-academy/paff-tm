@@ -15,7 +15,11 @@ int main()
     a.addUser("Tibor", "4444", 200);
     a.addUser("Mustafa", "5555", 200500);
 
-    a.withdraw();
+    try {
+        a.withdraw();
+    } catch(const char *err) {
+        cout << "Error: " << err << endl;
+    }
 
     return 0;
 }

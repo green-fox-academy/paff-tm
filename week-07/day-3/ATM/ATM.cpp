@@ -23,7 +23,7 @@ void ATM::addUser(string _name, string _pin, int _money)
     users.push_back(*newUser);
 }
 
-void ATM::withdraw()
+void ATM::withdraw() throw (const char*)
 {
     unsigned int amount;
 
@@ -31,33 +31,31 @@ void ATM::withdraw()
     if (u != 0) {
         cout << "The amount you want to withdraw: ";
         cin >> amount;
-        u->withdraw(pin, amount);
+        if (amount % 1000 == 0) {
+            u->withdraw(pin, amount);
+        } else {
+            throw "The amount must be dividable with 1000.";
+        }
     }
 }
 
-User* ATM::pickUser()
+User* ATM::pickUser() throw (const char*)
 {
     bool userIsFound = false;
 
     getUserData();
 
-    unsigned int i = 0;
-    while (userIsFound == false && i < users.size()) {
+    int i = 0;
+    while (userIsFound == false && (unsigned int)i < users.size()) {
         userIsFound = (users.at(i).getName() == name);
         ++i;
     }
     --i;
 
     if (userIsFound) {
-        if (users.at(i).checkPIN(pin) == true) {
-            return &(users.at(i));
-        } else {
-            cout << "PIN is incorrect." << endl;
-            return 0;
-        }
+        return &(users.at(i));
     } else {
-        cout << "No user was found." << endl;
-        return 0;
+        throw "No user was found.";
     }
 }
 

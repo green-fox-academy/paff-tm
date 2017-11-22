@@ -11,14 +11,13 @@ class ATM
         ATM();
         ~ATM();
         void addUser(string _name, string _pin, int _money);
-        void withdraw();
+        void withdraw() throw (const char*);
 
 
     protected:
 
     private:
         vector<User> users;
-        User* pickUser();
         string name;
         string pin;
         unsigned int m1000;
@@ -27,6 +26,7 @@ class ATM
         unsigned int m10000;
         unsigned int m20000;
 
+        User* pickUser() throw (const char*);
         void getUserData();
 };
 
