@@ -9,7 +9,7 @@ int main()
 {
     ATM a;
 
-    a.addUser("Joe", "1111", 20500);
+    a.addUser("Joe", "1111", 20500, ADMIN);
     a.addUser("Jack", "2222", 1500);
     a.addUser("Jani", "3333", 1000);
     a.addUser("Tibor", "4444", 200);

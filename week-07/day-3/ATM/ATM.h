@@ -10,8 +10,9 @@ class ATM
     public:
         ATM();
         ~ATM();
-        void addUser(string _name, string _pin, int _money);
+        void addUser(string _name, string _pin, int _money = 0, tUser _user_type = CLIENT);
         void withdraw() throw (const char*);
+        void fillup(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, unsigned int _m10000, unsigned int _m20000);
 
 
     protected:

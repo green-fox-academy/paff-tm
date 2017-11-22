@@ -7,17 +7,7 @@ User::User()
     //ctor
 }
 
-
-User::User(string _name, string _pin, int _money)
-{
-    name = _name;
-    pin = _pin;
-    money = _money;
-    user_type = CLIENT;
-}
-
-
-User::User(string _name, string _pin, int _money, tUser _user_type = CLIENT)
+User::User(string _name, string _pin, int _money, tUser _user_type)
 {
     name = _name;
     pin = _pin;
@@ -39,9 +29,16 @@ bool User::checkPIN(string _pin)
 {
     if (_pin == pin) {
         return true;
-    } else {
-        return false;
     }
+    throw "Incorrect PIN.";
+}
+
+tUser User::getUserType(string _pin)
+{
+    if (checkPIN(_pin)) {
+        return user_type;
+    }
+    return NA;
 }
 
 int User::getBalance(string _pin)
@@ -56,7 +53,7 @@ int User::getBalance(string _pin)
 void User::withdraw(string _pin, unsigned int _amount) throw (char const*)
 {
     if (checkPIN(_pin)) {
-        if (money >= _amount) {
+        if (money >= (int)_amount) {
             money -= _amount;
             cout << "You've got " << _amount << "Ft." << endl;
             cout << "Reamain " << money << "Ft on your balance." << endl;

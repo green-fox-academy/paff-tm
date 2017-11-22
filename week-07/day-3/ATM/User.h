@@ -1,21 +1,21 @@
 #ifndef USER_H
 #define USER_H
-
 #include <string>
+#include "User.h"
 
 using namespace std;
 
-enum tUser {ADMIN, CLIENT};
+enum tUser {NA, ADMIN, CLIENT};
 
 class User
 {
     public:
         User();
-        User(string _name, string _pin, int _money);
-        User(string _name, string _pin, int _money, tUser _user_type);
+        User(string _name, string _pin, int _money = 0, tUser _user_type = CLIENT);
         ~User();
         string getName();
 
+        tUser getUserType(string _pin);
         int getBalance(string _pin);
         void withdraw(string _pin, unsigned int _amount) throw (const char*);
 
@@ -26,6 +26,7 @@ class User
         tUser user_type;
 
         bool checkPIN(string _pin);
+
     private:
 };
 

@@ -17,9 +17,9 @@ ATM::~ATM()
     //dtor
 }
 
-void ATM::addUser(string _name, string _pin, int _money)
+void ATM::addUser(string _name, string _pin, int _money, tUser _user_type)
 {
-    User *newUser = new User(_name, _pin, _money);
+    User *newUser = new User(_name, _pin, _money, _user_type);
     users.push_back(*newUser);
 }
 
@@ -65,4 +65,16 @@ void ATM::getUserData()
     getline(cin, name);
     cout << "Add your PIN: ";
     getline(cin, pin);
+}
+
+void ATM::fillup(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, unsigned int _m10000, unsigned int _m20000)
+{
+    User *u = pickUser();
+    if (u->getUserType(pin) == ADMIN) {
+        m1000 += _m1000;
+        m2000 += _m2000;
+        m5000 += _m5000;
+        m10000 += _m10000;
+        m20000 += _m20000;
+    }
 }
