@@ -35,10 +35,14 @@ bool User::checkPIN(string _pin)
             return true;
         } else {
             --pinTries;
-            throw "Incorrect PIN.";
+            if (pinTries > 0) {
+                throw "Incorrect PIN.";
+            } else {
+                throw "Incorrect PIN. You have no more chance.";
+            }
         }
     } else {
-        throw "No more chance. Please call Bank support.";
+        throw "You're blocked. Please call Bank support.";
     }
 }
 

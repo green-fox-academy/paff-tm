@@ -8,6 +8,7 @@ using namespace std;
 int main()
 {
     ATM a;
+    string input = "";
 
     a.addUser("Joe", "1111", 20500, ADMIN);
     a.addUser("Jack", "2222", 1500);
@@ -15,13 +16,23 @@ int main()
     a.addUser("Tibor", "4444", 200);
     a.addUser("Mustafa", "5555", 200500);
 
-    try {
-        a.fillup(1,1,1,1,1);
+    do {
+        try {
+            a.printMenu();
+            getline(cin, input);
+            if (input == "1") {
+                a.withdraw();
+            } else if (input == "2") {
 
-        a.withdraw();
-    } catch(const char *err) {
-        cout << "Error: " << err << endl;
-    }
+            }
+        } catch(const char *err) {
+            cout << "Error: " << err << endl;
+        }
+    } while (input != "exit");
+
+    a.fillup(1,1,1,1,1);
+
+    a.withdraw();
 
     return 0;
 }

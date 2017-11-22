@@ -144,3 +144,10 @@ void ATM::payATMMoney(unsigned int _m1000, unsigned int _m2000, unsigned int _m5
 
 
 }
+
+void ATM::printMenu()
+{
+    cout << "1     Withdraw money" << endl;
+    cout << "2     Fillup ATM" << endl;
+    cout << "exit  Exit the program" << endl;
+}
