@@ -13,6 +13,8 @@ User::User(string _name, string _pin, int _money, tUser _user_type)
     pin = _pin;
     money = _money;
     user_type = _user_type;
+
+    resetPinTries();
 }
 
 User::~User()
@@ -27,18 +29,22 @@ string User::getName()
 
 bool User::checkPIN(string _pin)
 {
-    if (_pin == pin) {
-        return true;
+    if (pinTries > 0) {
+        if (_pin == pin) {
+            resetPinTries();
+            return true;
+        } else {
+            --pinTries;
+            throw "Incorrect PIN.";
+        }
+    } else {
+        throw "No more chance. Please call Bank support.";
     }
-    throw "Incorrect PIN.";
 }
 
-tUser User::getUserType(string _pin)
+tUser User::getUserType()
 {
-    if (checkPIN(_pin)) {
-        return user_type;
-    }
-    return NA;
+    return user_type;
 }
 
 int User::getBalance(string _pin)
@@ -61,4 +67,19 @@ void User::withdraw(string _pin, unsigned int _amount) throw (char const*)
             throw "There is not enough money on your account";
         }
     }
+}
+
+void User::resetPinTries() {
+    if (user_type == ADMIN) {
+        pinTries = 1;
+    } else if (user_type == CLIENT)  {
+        pinTries = 3;
+    } else {
+        pinTries = 0;
+    }
+}
+
+int User::getPinTries()
+{
+    return pinTries;
 }

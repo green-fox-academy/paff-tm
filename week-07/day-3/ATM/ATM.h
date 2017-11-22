@@ -27,8 +27,10 @@ class ATM
         unsigned int m5000;
         unsigned int m10000;
         unsigned int m20000;
+        User *user;
 
         User* pickUser() throw (const char*);
+        string takePIN() throw (const char*);
         bool checkATMMoney(unsigned int amount);
         void payATMMoney(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, unsigned int _m10000, unsigned int _m20000);
 };
