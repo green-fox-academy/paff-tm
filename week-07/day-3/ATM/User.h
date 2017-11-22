@@ -10,12 +10,12 @@ class User
     public:
         User();
         ~User();
-        string getUsername();
-        bool ckeckPIN(int _pin);
+        string getName();
+        bool ckeckPIN(string _pin);
 
     protected:
         string name;
-        int pin;
+        string pin;
 
     private:
 };
