@@ -80,29 +80,46 @@ void ATM::takePIN() throw (const char*)
     user->checkPIN(pin);
 }
 
-void ATM::fillup(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, unsigned int _m10000, unsigned int _m20000)
+void ATM::fillup()
 {
+    unsigned int _m1000 = 0;
+    unsigned int _m2000 = 0;
+    unsigned int _m5000 = 0;
+    unsigned int _m10000 = 0;
+    unsigned int _m20000 = 0;
+
     pickUser();
     takePIN();
 
     if (user->getUserType() == ADMIN) {
-        m1000 += _m1000;
-        m2000 += _m2000;
-        m5000 += _m5000;
-        m10000 += _m10000;
-        m20000 += _m20000;
+        cout << " 1,000:";
+        cin >> _m1000;
+        cin.ignore();
+        cout << " 2,000:";
+        cin >> _m2000;
+        cin.ignore();
+        cout << " 5,000:";
+        cin >> _m5000;
+        cin.ignore();
+        cout << " 10,000:";
+        cin >> _m10000;
+        cin.ignore();
+        cout << " 20,000:";
+        cin >> _m20000;
+        cin.ignore();
 
         cout << "ATM has:" << endl;
-        cout << " 1000:" << m1000 << endl;
-        cout << " 2000:" << m2000 << endl;
-        cout << " 5000:" << m5000 << endl;
-        cout << "10000:" << m10000 << endl;
-        cout << "20000:" << m20000 << endl;
+        cout << " 1,000:" << m1000 << endl;
+        cout << " 2,000:" << m2000 << endl;
+        cout << " 5,000:" << m5000 << endl;
+        cout << "10,000:" << m10000 << endl;
+        cout << "20,000:" << m20000 << endl;
 
     } else {
         throw "You're not an admin.";
     }
 }
+
 bool ATM::payATMMoney(unsigned int amount)
 {
     bool havemoney = false;

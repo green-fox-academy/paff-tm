@@ -23,7 +23,7 @@ int main()
             if (input == "1") {
                 a.withdraw();
             } else if (input == "2") {
-                a.fillup(1,1,1,1,1);
+                a.fillup();
             } else {
 
             }
