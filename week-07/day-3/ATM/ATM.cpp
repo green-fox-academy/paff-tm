@@ -10,6 +10,7 @@ ATM::ATM()
 {
     name = "";
     pin = "";
+    pinTry = 0;
     m1000 = 0;
     m2000 = 0;
     m5000 = 0;
@@ -52,7 +53,10 @@ User* ATM::pickUser() throw (const char*)
 {
     bool userIsFound = false;
 
-    getUserData();
+    cout << "Add your username: ";
+    getline(cin, name);
+    cout << "Add your PIN: ";
+    getline(cin, pin);
 
     int i = 0;
     while (userIsFound == false && (unsigned int)i < users.size()) {
@@ -66,14 +70,6 @@ User* ATM::pickUser() throw (const char*)
     } else {
         throw "No user was found.";
     }
-}
-
-void ATM::getUserData()
-{
-    cout << "Add your username: ";
-    getline(cin, name);
-    cout << "Add your PIN: ";
-    getline(cin, pin);
 }
 
 void ATM::fillup(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, unsigned int _m10000, unsigned int _m20000)
