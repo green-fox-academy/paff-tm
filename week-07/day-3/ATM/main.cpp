@@ -16,6 +16,8 @@ int main()
     a.addUser("Mustafa", "5555", 200500);
 
     try {
+        a.fillup(1,1,1,1,1);
+
         a.withdraw();
     } catch(const char *err) {
         cout << "Error: " << err << endl;

@@ -10,6 +10,11 @@ ATM::ATM()
 {
     name = "";
     pin = "";
+    m1000 = 0;
+    m2000 = 0;
+    m5000 = 0;
+    m10000 = 0;
+    m20000 = 0;
 }
 
 ATM::~ATM()
@@ -32,7 +37,11 @@ void ATM::withdraw() throw (const char*)
         cout << "The amount you want to withdraw: ";
         cin >> amount;
         if (amount % 1000 == 0) {
-            u->withdraw(pin, amount);
+            if (checkATMMoney(amount)) {
+                u->withdraw(pin, amount);
+            } else {
+                throw "ATM has no money for that amount.";
+            }
         } else {
             throw "The amount must be dividable with 1000.";
         }
@@ -76,5 +85,57 @@ void ATM::fillup(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, 
         m5000 += _m5000;
         m10000 += _m10000;
         m20000 += _m20000;
+
+        cout << "ATM has:" << endl;
+        cout << " 1000:" << m1000 << endl;
+        cout << " 2000:" << m2000 << endl;
+        cout << " 5000:" << m5000 << endl;
+        cout << "10000:" << m10000 << endl;
+        cout << "20000:" << m20000 << endl;
+
+    } else {
+        throw "You're not an admin.";
     }
+}
+bool ATM::checkATMMoney(unsigned int amount)
+{
+    bool havemoney = false;
+    unsigned int i;
+
+    i = 0;
+    while (amount >= 20000 && i < m20000) {
+        amount -= 20000;
+        ++i;
+    }
+    i = 0;
+    while (amount >= 10000 && i < m10000) {
+        amount -= 10000;
+        ++i;
+    }
+    i = 0;
+    while (amount >= 5000 && i < m5000) {
+        amount -= 5000;
+        ++i;
+    }
+    i = 0;
+    while (amount >= 2000 && i < m2000) {
+        amount -= 2000;
+        ++i;
+    }
+    i = 0;
+    while (amount >= 1000 && i <m1000) {
+        amount -= 1000;
+        ++i;
+    }
+
+    if (amount == 0)
+        havemoney = true;
+
+    return havemoney;
+}
+
+void ATM::payATMMoney(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, unsigned int _m10000, unsigned int _m20000)
+{
+
+
 }
