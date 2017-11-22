@@ -9,13 +9,15 @@ class User
 {
     public:
         User();
+        User(string _name, string _pin, int money);
         ~User();
         string getName();
-        bool ckeckPIN(string _pin);
+        bool checkPIN(string _pin);
 
     protected:
         string name;
         string pin;
+        int money;
 
     private:
 };

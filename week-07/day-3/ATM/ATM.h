@@ -10,6 +10,7 @@ class ATM
     public:
         ATM();
         ~ATM();
+        void addUser(string _name, string _pin, int _money);
         void withdraw();
 
 

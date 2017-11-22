@@ -16,6 +16,12 @@ ATM::~ATM()
     //dtor
 }
 
+void ATM::addUser(string _name, string _pin, int _money)
+{
+    User *newUser = new User(_name, _pin, _money);
+    users.push_back(*newUser);
+}
+
 bool ATM::checkUser()
 {
     bool userIsFound = false;
@@ -31,5 +37,17 @@ bool ATM::checkUser()
     while (userIsFound == false && i < users.size()) {
         userIsFound = (users.at(i).getName() == name);
         ++i;
+    }
+
+    if (userIsFound) {
+        if (users.at(i).checkPIN(pin) == true) {
+            return true;
+        } else {
+            cout << "PIN is incorrect." << endl;
+            return false;
+        }
+    } else {
+        cout << "No user was found." << endl;
+        return false;
     }
 }
