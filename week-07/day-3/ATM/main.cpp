@@ -15,6 +15,7 @@ int main()
     a.addUser("Jani", "3333", 1000);
     a.addUser("Tibor", "4444", 200);
     a.addUser("Mustafa", "5555", 200500);
+    a.fillup(1,1,1,1,1);
 
     do {
         try {
@@ -29,10 +30,6 @@ int main()
             cout << "Error: " << err << endl;
         }
     } while (input != "exit");
-
-    a.fillup(1,1,1,1,1);
-
-    a.withdraw();
 
     return 0;
 }
