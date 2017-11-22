@@ -69,7 +69,8 @@ void User::withdraw(string _pin, unsigned int _amount) throw (char const*)
     }
 }
 
-void User::resetPinTries() {
+void User::resetPinTries()
+{
     if (user_type == ADMIN) {
         pinTries = 1;
     } else if (user_type == CLIENT)  {
@@ -79,7 +80,7 @@ void User::resetPinTries() {
     }
 }
 
-int User::getPinTries()
+unsigned int User::getPinTries()
 {
     return pinTries;
 }

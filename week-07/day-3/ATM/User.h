@@ -19,7 +19,7 @@ class User
         bool checkPIN(string _pin);
         int getBalance(string _pin);
         void withdraw(string _pin, unsigned int _amount) throw (const char*);
-        int getPinTries();
+        unsigned int getPinTries();
 
 
     protected:
@@ -28,6 +28,7 @@ class User
         int money;
         tUser user_type;
         unsigned int pinTries;
+
         void resetPinTries();
 
     private:

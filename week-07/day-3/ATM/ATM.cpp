@@ -10,7 +10,6 @@ ATM::ATM()
 {
     name = "";
     pin = "";
-    pinTry = 0;
     m1000 = 0;
     m2000 = 0;
     m5000 = 0;
@@ -34,13 +33,15 @@ void ATM::withdraw() throw (const char*)
 {
     unsigned int amount;
 
-    User *u = pickUser();
-    if (u != 0) {
+    pickUser();
+
+    if (user != 0) {
+        takePIN();
         cout << "The amount you want to withdraw: ";
         cin >> amount;
         if (amount % 1000 == 0) {
             if (checkATMMoney(amount)) {
-                u->withdraw(pin, amount);
+                user->withdraw(pin, amount);
             } else {
                 throw "ATM has no money for that amount.";
             }
@@ -50,7 +51,7 @@ void ATM::withdraw() throw (const char*)
     }
 }
 
-User* ATM::pickUser() throw (const char*)
+void ATM::pickUser() throw (const char*)
 {
     bool userIsFound = false;
 
@@ -65,32 +66,25 @@ User* ATM::pickUser() throw (const char*)
     --i;
 
     if (userIsFound) {
-        return &(users.at(i));
+        user = &(users.at(i));
     } else {
         throw "No user was found.";
     }
 }
 
-string ATM::takePIN() throw (const char*)
+void ATM::takePIN() throw (const char*)
 {
-    while (pinTry > 0) {
-        cout << "Add your PIN: ";
-        getline(cin, pin);
-        user->checkPIN(pin);
-        --pinTry;
-    }
-
-    if (pinTry = 0) {
-        throw "No more tries...";
-    }
-
-    return pin;
+    cout << "Add your PIN: ";
+    getline(cin, pin);
+    user->checkPIN(pin);
 }
 
 void ATM::fillup(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, unsigned int _m10000, unsigned int _m20000)
 {
-    User *u = pickUser();
-    if (u->getUserType() == ADMIN) {
+    pickUser();
+    takePIN();
+
+    if (user->getUserType() == ADMIN) {
         m1000 += _m1000;
         m2000 += _m2000;
         m5000 += _m5000;
