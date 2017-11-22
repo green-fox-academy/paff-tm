@@ -1,3 +1,10 @@
+/*  Kérdések:
+ *  hibakezelés? Ha van throw akkor kell-e után bármi feltételt írni? pl: ATM::withdraw()-ban?
+ *  Kell-e a method mögé throw-t írni?? Anélkül is müködik. pl: ATM::fillup()
+ *  TODO: TakePin-t integrálni pickUser-be
+*/
+
+
 #include <iostream>
 #include <string>
 #include "ATM.h"

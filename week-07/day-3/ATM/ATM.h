@@ -21,12 +21,13 @@ class ATM
         vector<User> users;
         string name;
         string pin;
+        User *user;
         unsigned int m1000;
         unsigned int m2000;
         unsigned int m5000;
         unsigned int m10000;
         unsigned int m20000;
-        User *user;
+
 
         void pickUser() throw (const char*);
         void takePIN() throw (const char*);
