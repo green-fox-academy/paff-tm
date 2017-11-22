@@ -41,7 +41,7 @@ void ATM::withdraw() throw (const char*)
         cin >> amount;
         cin.ignore();
         if (amount % 1000 == 0) {
-            if (checkATMMoney(amount)) {
+            if (payATMMoney(amount)) {
                 user->withdraw(pin, amount);
             } else {
                 throw "ATM has no money for that amount.";
@@ -103,47 +103,51 @@ void ATM::fillup(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, 
         throw "You're not an admin.";
     }
 }
-bool ATM::checkATMMoney(unsigned int amount)
+bool ATM::payATMMoney(unsigned int amount)
 {
     bool havemoney = false;
-    unsigned int i;
+    unsigned int _m1000 = 0;
+    unsigned int _m2000 = 0;
+    unsigned int _m5000 = 0;
+    unsigned int _m10000 = 0;
+    unsigned int _m20000 = 0;
 
-    i = 0;
-    while (amount >= 20000 && i < m20000) {
+    while (amount >= 20000 && _m20000 < m20000) {
         amount -= 20000;
-        ++i;
-    }
-    i = 0;
-    while (amount >= 10000 && i < m10000) {
-        amount -= 10000;
-        ++i;
-    }
-    i = 0;
-    while (amount >= 5000 && i < m5000) {
-        amount -= 5000;
-        ++i;
-    }
-    i = 0;
-    while (amount >= 2000 && i < m2000) {
-        amount -= 2000;
-        ++i;
-    }
-    i = 0;
-    while (amount >= 1000 && i <m1000) {
-        amount -= 1000;
-        ++i;
+        ++_m20000;
     }
 
-    if (amount == 0)
+    while (amount >= 10000 && _m10000 < m10000) {
+        amount -= 10000;
+        ++_m10000;
+    }
+
+    while (amount >= 5000 && _m5000 < m5000) {
+        amount -= 5000;
+        ++_m5000;
+    }
+
+    while (amount >= 2000 && _m2000 < m2000) {
+        amount -= 2000;
+        ++_m2000;
+    }
+
+    while (amount >= 1000 && _m1000 <m1000) {
+        amount -= 1000;
+        ++_m1000;
+    }
+
+    if (amount == 0) {
         havemoney = true;
+        m1000 -= _m1000;
+        m2000 -= _m2000;
+        m5000 -= _m5000;
+        m10000 -= _m10000;
+        m20000 -= _m20000;
+    }
+
 
     return havemoney;
-}
-
-void ATM::payATMMoney(unsigned int _m1000, unsigned int _m2000, unsigned int _m5000, unsigned int _m10000, unsigned int _m20000)
-{
-
-
 }
 
 void ATM::printMenu()
