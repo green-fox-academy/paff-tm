@@ -26,7 +26,8 @@ class TempLogger
         vector <TempData> vTemp;
         vector<string> ports;
 
-        TempData *strToTempData(string line);
+        TempData *strToTempData(string _line);
+        bool tempToken(char *_str, char *_tokchr, int *_result);
 };
 
 #endif // TEMPLOGGER_H

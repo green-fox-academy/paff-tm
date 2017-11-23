@@ -3,6 +3,7 @@
 //#include <vector>
 #include <conio.h>
 #include <cstdio>
+#include <stdexcept>
 
 #include "SerialPortWrapper.h"
 #include "TempLogger.h"
@@ -21,13 +22,16 @@ int main()
     printHelp();
     do {
         try {
+            cout << "command: ";
             userInput = _getch();
+            cout << userInput << endl;
+
             if (userInput == SHOW) {
                 printHelp();
             } else if (userInput == OPEN) {
                 t.lookupPorts();
                 cout << "Your selection: ";
-                userInput = getchar();
+                userInput = getc(stdin);
                 t.openPort(userInput - '0' - 1);
                 cout << "Port is opened" << endl;
             } else if (userInput == STARTSTOP) {
@@ -42,6 +46,8 @@ int main()
             }
         } catch(const char *err) {
             cout << err << endl;
+        //} catch(runtime_error &err) {
+        //    cout << err.what() << endl;
         } catch(...) {
             cout << "ERROR: Unexpected error." << endl;
         }

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <conio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "SerialPortWrapper.h"
 #include "TempData.h"
@@ -50,6 +52,8 @@ void TempLogger::startStop()
     string line;
 
     if (connected) {
+        TempData *td;
+
         // clear port until now
         do{
             serial->readLineFromPort(&line);
@@ -59,7 +63,10 @@ void TempLogger::startStop()
             serial->readLineFromPort(&line);
             if (line.length() > 0){
                 cout << line << endl;
-                vTemp.push_back(*strToTempData(line));
+                td = strToTempData(line);
+                if (td != NULL) {
+                    vTemp.push_back(*td);
+                }
             }
             if (_kbhit()) {
                 if (_getch() == STARTSTOP) {
@@ -72,10 +79,26 @@ void TempLogger::startStop()
     }
 }
 
-TempData *TempLogger::strToTempData(string line)
+TempData *TempLogger::strToTempData(string _line)
 {
-    TempData *td = new TempData(line);
+    char *str = strdup(_line.c_str());
+    tm time = {0};
+    int temperature;
+
+    tempToken(str, ".", &(time.tm_year));
+    tempToken(NULL, ".", &(time.tm_mon));
+    tempToken(NULL, " ", &(time.tm_mday));
+
+    tempToken(NULL, ":", &(time.tm_hour));
+    tempToken(NULL, ":", &(time.tm_min));
+    tempToken(NULL, " ", &(time.tm_sec));
+
+    tempToken(NULL, " ", &temperature);
+
+    TempData *td = new TempData(time, temperature);
+
     return td;
+
 }
 
 void TempLogger::listData()
@@ -97,4 +120,19 @@ void TempLogger::lookupPorts()
             cout << i + 1 << ".\t Port name: " << ports.at(i) << endl;
         }
     }
+}
+
+bool TempLogger::tempToken(char *_str, char *_tokchr, int *_result)
+{
+    char temp_str[80];
+    char *p_str = strtok(_str, _tokchr);
+
+    if (p_str == NULL){
+        return 0;
+    }
+
+    strcpy(temp_str, p_str);
+    *_result = atoi(temp_str);
+
+    return 1;
 }
