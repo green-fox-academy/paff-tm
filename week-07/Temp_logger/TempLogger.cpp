@@ -76,7 +76,8 @@ void TempLogger::startStop()
     }
 }
 
-TempData* TempLogger::strToTempData(string line)
+TempData *TempLogger::strToTempData(string line)
 {
     TempData *td = new TempData(line);
+    return td;
 }
