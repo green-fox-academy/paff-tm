@@ -3,30 +3,58 @@
 #include <vector>
 
 #include "SerialPortWrapper.h"
+#include "TempLogger.h"
+
+#define SHOW "h"
+#define OPEN "o"
+#define STARTSTOP "s"
+#define CLOSE "c"
+#define LIST "l"
+#define EXIT "e"
 
 using namespace std;
 
+void printHelp();
+
 int main()
 {
-    vector<string> ports = SerialPortWrapper::listAvailablePorts();
-    cout << "Number of found serial ports: " << ports.size() << endl;
-    for (unsigned int i = 0; i < ports.size(); i++) {
-        cout << "\tPort name: " << ports.at(i) << endl;
-    }
+    TempLogger t;
+    string userInput;
 
-    // connection
+    printHelp();
+    do {
+        try {
+            getline(cin, userInput);
+            if (userInput == SHOW) {
+                printHelp();
+            } else if (userInput == OPEN) {
+                t.openPort();
+            } else if (userInput == STARTSTOP) {
+                t.startStop();
+            } else if (userInput == CLOSE) {
+                t.closePort();
+            } else if (userInput == LIST) {
 
-        SerialPortWrapper *serial = new SerialPortWrapper("COM3", 115200);
-        serial->openPort();
-        string line;
-        while(1){
-            serial->readLineFromPort(&line);
-            if (line.length() > 0){
-                cout << line << endl;
             }
+        } catch(const char *err) {
+            cout << "Error: " << err << endl;
         }
-        serial->closePort();
-
+    } while (userInput != EXIT);
 
     return 0;
+}
+
+void printHelp()
+{
+    cout <<
+    "Temperature Logger Application       " << endl <<
+    "==============================       " << endl <<
+    "Commands:                            " << endl <<
+    "h        Show command list           " << endl <<
+    "o        Open port                   " << endl <<
+    "s        Start logging / Stop logging" << endl <<
+    "c        Close port                  " << endl <<
+    "l        List after error handling   " << endl <<
+    "e        Exit from the program       " << endl;
+
 }
