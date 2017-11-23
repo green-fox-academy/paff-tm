@@ -108,7 +108,6 @@ void TempLogger::listData()
     for (unsigned int i = 0; i < vTemp.size(); ++i) {
         cout << vTemp.at(i).getLine() << endl;
     }
-
 }
 
 void TempLogger::lookupPorts()
@@ -130,13 +129,13 @@ bool TempLogger::tempToken(char *_str, char *_tokchr, int *_result)
     char *p_str = strtok(_str, _tokchr);
 
     if (p_str == NULL){
-        return 0;
+        return false;
     }
 
     strcpy(temp_str, p_str);
     *_result = atoi(temp_str);
 
-    return 1;
+    return true;
 }
 
 bool TempLogger::isValidTempData(tm *_time, int _temperature)
@@ -149,17 +148,17 @@ bool TempLogger::isValidTempData(tm *_time, int _temperature)
         isBetween(_time->tm_min, 0, 59) &&
         isBetween(_time->tm_sec, 0, 59))
          == false) {
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 bool TempLogger::isBetween(int _x, int _min, int _max)
 {
     if (_x >= _min && _x <= _max) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
