@@ -5,6 +5,9 @@
 #include <vector>
 
 #include "SerialPortWrapper.h"
+#include "TempData.h"
+
+using namespace std;
 
 TempLogger::TempLogger()
 {
@@ -16,8 +19,6 @@ TempLogger::TempLogger()
     for (unsigned int i = 0; i < ports.size(); i++) {
         cout << "\tPort name: " << ports.at(i) << endl;
     }
-
-    serial = new SerialPortWrapper("COM3", 115200);
 }
 
 TempLogger::~TempLogger()
@@ -27,19 +28,29 @@ TempLogger::~TempLogger()
 
 void TempLogger::openPort()
 {
-    serial->openPort();
-    connected = true;
+    if (connected) {
+        throw "ERROR: Already connected.";
+    } else {
+        serial = new SerialPortWrapper("COM3", 115200);
+        serial->openPort();
+        connected = true;
+    }
 }
 
 void TempLogger::closePort()
 {
-    serial->closePort();
-    connected = false;
+    if (!connected) {
+        throw "ERROR: No open port.";
+    } else {
+        serial->closePort();
+        connected = false;
+    }
 }
 
 void TempLogger::startStop()
 {
     string line;
+
     if (connected) {
         while(1){
             serial->readLineFromPort(&line);
@@ -47,5 +58,7 @@ void TempLogger::startStop()
                 cout << line << endl;
             }
         }
+    } else {
+        throw "Connect port first.";
     }
 }

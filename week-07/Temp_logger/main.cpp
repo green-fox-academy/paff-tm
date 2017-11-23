@@ -19,6 +19,7 @@ void printHelp();
 
 int main()
 {
+
     TempLogger t;
     char userInput;
 
@@ -30,15 +31,19 @@ int main()
                 printHelp();
             } else if (userInput == OPEN) {
                 t.openPort();
+                cout << "Port is opened" << endl;
             } else if (userInput == STARTSTOP) {
                 t.startStop();
             } else if (userInput == CLOSE) {
                 t.closePort();
+                cout << "Port is closed" << endl;
             } else if (userInput == LIST) {
 
             }
         } catch(const char *err) {
-            cout << "Error: " << err << endl;
+            cout << err << endl;
+        } catch(...) {
+            cout << "ERROR: Unexpected error." << endl;
         }
     } while (userInput != EXIT);
 

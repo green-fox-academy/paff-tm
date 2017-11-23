@@ -6,6 +6,8 @@
 
 #include "SerialPortWrapper.h"
 
+using namespace std;
+
 class TempLogger
 {
     public:
