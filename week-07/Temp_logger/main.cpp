@@ -5,13 +5,7 @@
 
 #include "SerialPortWrapper.h"
 #include "TempLogger.h"
-
-#define SHOW 'h'
-#define OPEN 'o'
-#define STARTSTOP 's'
-#define CLOSE 'c'
-#define LIST 'l'
-#define EXIT 'e'
+#include "define.h"
 
 using namespace std;
 
@@ -33,7 +27,9 @@ int main()
                 t.openPort();
                 cout << "Port is opened" << endl;
             } else if (userInput == STARTSTOP) {
+                cout << "Starting temperature logging..." << endl;
                 t.startStop();
+                cout << "Temperature logging has stopped." << endl;
             } else if (userInput == CLOSE) {
                 t.closePort();
                 cout << "Port is closed" << endl;

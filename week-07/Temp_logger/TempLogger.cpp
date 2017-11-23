@@ -3,9 +3,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <conio.h>
 
 #include "SerialPortWrapper.h"
 #include "TempData.h"
+#include "define.h"
 
 using namespace std;
 
@@ -52,10 +54,20 @@ void TempLogger::startStop()
     string line;
 
     if (connected) {
-        while(1){
+        // clear port until now
+        do{
+            serial->readLineFromPort(&line);
+        } while (line.length() > 0);
+
+        while (1) {
             serial->readLineFromPort(&line);
             if (line.length() > 0){
                 cout << line << endl;
+            }
+            if (_kbhit()) {
+                if (_getch() == STARTSTOP) {
+                    break;
+                }
             }
         }
     } else {
