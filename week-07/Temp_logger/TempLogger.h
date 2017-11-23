@@ -17,6 +17,7 @@ class TempLogger
         void openPort();
         void closePort();
         void startStop();
+        void listData();
 
     private:
         SerialPortWrapper *serial;

@@ -34,7 +34,7 @@ int main()
                 t.closePort();
                 cout << "Port is closed" << endl;
             } else if (userInput == LIST) {
-
+                t.listData();
             }
         } catch(const char *err) {
             cout << err << endl;

@@ -11,3 +11,8 @@ TempData::~TempData()
 {
     //dtor
 }
+
+string TempData::getLine()
+{
+    return line;
+}

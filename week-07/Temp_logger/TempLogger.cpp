@@ -81,3 +81,11 @@ TempData *TempLogger::strToTempData(string line)
     TempData *td = new TempData(line);
     return td;
 }
+
+void TempLogger::listData()
+{
+    for (unsigned int i = 0; i < vTemp.size(); ++i) {
+        cout << vTemp.at(i).getLine() << endl;
+    }
+
+}

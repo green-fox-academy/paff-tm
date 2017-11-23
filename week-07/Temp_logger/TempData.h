@@ -11,9 +11,10 @@ class TempData
         TempData(string _line);
         ~TempData();
 
-        string getDate();
-        string getTime();
-        string getTemperature();
+        string getLine();
+        //string getDate();
+        //string getTime();
+        //string getTemperature();
 
     private:
         string line;
