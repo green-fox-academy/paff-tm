@@ -35,7 +35,6 @@ string TempData::getDate()
 
 string TempData::getTime()
 {
-
     return "";
 }
 

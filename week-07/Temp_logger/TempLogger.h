@@ -28,6 +28,8 @@ class TempLogger
 
         TempData *strToTempData(string _line);
         bool tempToken(char *_str, char *_tokchr, int *_result);
+        bool isValidTempData(tm *_time, int _temperature);
+        bool isBetween(int _x, int _min, int _max);
 };
 
 #endif // TEMPLOGGER_H

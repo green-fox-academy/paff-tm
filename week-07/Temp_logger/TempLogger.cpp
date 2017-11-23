@@ -85,20 +85,22 @@ TempData *TempLogger::strToTempData(string _line)
     tm time = {0};
     int temperature;
 
-    tempToken(str, ".", &(time.tm_year));
-    tempToken(NULL, ".", &(time.tm_mon));
-    tempToken(NULL, " ", &(time.tm_mday));
+    tempToken(str, (char *)".", &(time.tm_year));
+    tempToken(NULL, (char *)".", &(time.tm_mon));
+    tempToken(NULL, (char *)" ", &(time.tm_mday));
 
-    tempToken(NULL, ":", &(time.tm_hour));
-    tempToken(NULL, ":", &(time.tm_min));
-    tempToken(NULL, " ", &(time.tm_sec));
+    tempToken(NULL, (char *)":", &(time.tm_hour));
+    tempToken(NULL, (char *)":", &(time.tm_min));
+    tempToken(NULL, (char *)" ", &(time.tm_sec));
 
-    tempToken(NULL, " ", &temperature);
+    tempToken(NULL, (char *)" ", &temperature);
+
+    if (!isValidTempData(&time, temperature)) {
+        return NULL;
+    }
 
     TempData *td = new TempData(time, temperature);
-
     return td;
-
 }
 
 void TempLogger::listData()
@@ -135,4 +137,37 @@ bool TempLogger::tempToken(char *_str, char *_tokchr, int *_result)
     *_result = atoi(temp_str);
 
     return 1;
+}
+
+bool TempLogger::isValidTempData(tm *_time, int _temperature)
+{
+    //check date
+    if (_time->tm_year > 1950 &&
+        isBetween(_time->tm_mon, 1, 12) &&
+        isBetween(_time->tm_mday, 1, 31)
+         == false) {
+        return 0;
+    }
+
+    //check time
+    if (isBetween(_time->tm_hour, 0, 23) &&
+        isBetween(_time->tm_min, 0, 59) &&
+        isBetween(_time->tm_sec, 0, 59)
+         == false) {
+        return 0;
+    }
+
+
+
+    return 1;
+}
+
+bool TempLogger::isBetween(int _x, int _min, int _max)
+{
+    if (_x >= _min && _x <= _max) {
+        return 1;
+    } else {
+        return 0;
+    }
+
 }
