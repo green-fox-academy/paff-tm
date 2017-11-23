@@ -16,11 +16,7 @@ TempLogger::TempLogger()
     serial = NULL;
     connected = false;
 
-    vector<string> ports = SerialPortWrapper::listAvailablePorts();
-    cout << "Number of found serial ports: " << ports.size() << endl;
-    for (unsigned int i = 0; i < ports.size(); i++) {
-        cout << "\tPort name: " << ports.at(i) << endl;
-    }
+    lookupPorts();
 }
 
 TempLogger::~TempLogger()
@@ -28,12 +24,12 @@ TempLogger::~TempLogger()
     //dtor
 }
 
-void TempLogger::openPort()
+void TempLogger::openPort(int _port)
 {
     if (connected) {
-        throw "ERROR: Already connected.";
+        throw "ERROR: Already connected to a port.";
     } else {
-        serial = new SerialPortWrapper("COM3", 115200);
+        serial = new SerialPortWrapper(ports.at(_port), 115200);
         serial->openPort();
         connected = true;
     }
@@ -72,7 +68,7 @@ void TempLogger::startStop()
             }
         }
     } else {
-        throw "Connect port first.";
+        throw "Can't start logging. Open a port first.";
     }
 }
 
@@ -88,4 +84,17 @@ void TempLogger::listData()
         cout << vTemp.at(i).getLine() << endl;
     }
 
+}
+
+void TempLogger::lookupPorts()
+{
+    if (connected) {
+        throw "ERROR: Already connected to a port.";
+    } else {
+        ports = SerialPortWrapper::listAvailablePorts();
+        cout << "Number of found serial ports: " << ports.size() << endl;
+        for (unsigned int i = 0; i < ports.size(); i++) {
+            cout << i + 1 << ".\t Port name: " << ports.at(i) << endl;
+        }
+    }
 }

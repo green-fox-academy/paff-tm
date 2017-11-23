@@ -14,15 +14,17 @@ class TempLogger
     public:
         TempLogger();
         ~TempLogger();
-        void openPort();
+        void openPort(int _port);
         void closePort();
         void startStop();
         void listData();
+        void lookupPorts();
 
     private:
         SerialPortWrapper *serial;
         bool connected;
         vector <TempData> vTemp;
+        vector<string> ports;
 
         TempData *strToTempData(string line);
 };

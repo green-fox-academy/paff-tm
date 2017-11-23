@@ -2,6 +2,7 @@
 //#include <string>
 //#include <vector>
 #include <conio.h>
+#include <cstdio>
 
 #include "SerialPortWrapper.h"
 #include "TempLogger.h"
@@ -24,7 +25,10 @@ int main()
             if (userInput == SHOW) {
                 printHelp();
             } else if (userInput == OPEN) {
-                t.openPort();
+                t.lookupPorts();
+                cout << "Your selection: ";
+                userInput = getchar();
+                t.openPort(userInput - '0' - 1);
                 cout << "Port is opened" << endl;
             } else if (userInput == STARTSTOP) {
                 cout << "Starting temperature logging..." << endl;
