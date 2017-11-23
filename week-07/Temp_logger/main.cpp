@@ -1,16 +1,17 @@
 #include <iostream>
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
+#include <conio.h>
 
 #include "SerialPortWrapper.h"
 #include "TempLogger.h"
 
-#define SHOW "h"
-#define OPEN "o"
-#define STARTSTOP "s"
-#define CLOSE "c"
-#define LIST "l"
-#define EXIT "e"
+#define SHOW 'h'
+#define OPEN 'o'
+#define STARTSTOP 's'
+#define CLOSE 'c'
+#define LIST 'l'
+#define EXIT 'e'
 
 using namespace std;
 
@@ -19,12 +20,12 @@ void printHelp();
 int main()
 {
     TempLogger t;
-    string userInput;
+    char userInput;
 
     printHelp();
     do {
         try {
-            getline(cin, userInput);
+            userInput = _getch();
             if (userInput == SHOW) {
                 printHelp();
             } else if (userInput == OPEN) {
@@ -46,7 +47,7 @@ int main()
 
 void printHelp()
 {
-    cout <<
+    cout << endl <<
     "Temperature Logger Application       " << endl <<
     "==============================       " << endl <<
     "Commands:                            " << endl <<
