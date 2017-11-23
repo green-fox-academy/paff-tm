@@ -141,23 +141,16 @@ bool TempLogger::tempToken(char *_str, char *_tokchr, int *_result)
 
 bool TempLogger::isValidTempData(tm *_time, int _temperature)
 {
-    //check date
-    if (_time->tm_year > 1950 &&
-        isBetween(_time->tm_mon, 1, 12) &&
-        isBetween(_time->tm_mday, 1, 31)
-         == false) {
-        return 0;
-    }
-
     //check time
-    if (isBetween(_time->tm_hour, 0, 23) &&
+    if ((_time->tm_year > 1950 &&
+        isBetween(_time->tm_mon, 1, 12) &&
+        isBetween(_time->tm_mday, 1, 31) &&
+        isBetween(_time->tm_hour, 0, 23) &&
         isBetween(_time->tm_min, 0, 59) &&
-        isBetween(_time->tm_sec, 0, 59)
+        isBetween(_time->tm_sec, 0, 59))
          == false) {
         return 0;
     }
-
-
 
     return 1;
 }
@@ -169,5 +162,4 @@ bool TempLogger::isBetween(int _x, int _min, int _max)
     } else {
         return 0;
     }
-
 }
