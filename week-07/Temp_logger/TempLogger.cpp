@@ -63,6 +63,7 @@ void TempLogger::startStop()
             serial->readLineFromPort(&line);
             if (line.length() > 0){
                 cout << line << endl;
+                vTemp.push_back(*strToTempData(line));
             }
             if (_kbhit()) {
                 if (_getch() == STARTSTOP) {
@@ -73,4 +74,9 @@ void TempLogger::startStop()
     } else {
         throw "Connect port first.";
     }
+}
+
+TempData* TempLogger::strToTempData(string line)
+{
+    TempData *td = new TempData(line);
 }

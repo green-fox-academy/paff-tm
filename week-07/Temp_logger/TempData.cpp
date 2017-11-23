@@ -2,9 +2,9 @@
 
 using namespace std;
 
-TempData::TempData()
+TempData::TempData(string _line)
 {
-    //ctor
+    line = _line;
 }
 
 TempData::~TempData()

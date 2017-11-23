@@ -8,13 +8,15 @@ using namespace std;
 class TempData
 {
     public:
-        TempData();
+        TempData(string _line);
         ~TempData();
 
+        string getDate();
+        string getTime();
+        string getTemperature();
+
     private:
-        string date;
-        string time;
-        int temp;
+        string line;
 };
 
 #endif // TEMPDATA_H

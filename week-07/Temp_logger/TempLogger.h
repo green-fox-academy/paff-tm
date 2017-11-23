@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "SerialPortWrapper.h"
+#include "TempData.h"
 
 using namespace std;
 
@@ -20,6 +21,9 @@ class TempLogger
     private:
         SerialPortWrapper *serial;
         bool connected;
+        vector <TempData> vTemp;
+
+        TempData *strToTempData(string line);
 };
 
 #endif // TEMPLOGGER_H
