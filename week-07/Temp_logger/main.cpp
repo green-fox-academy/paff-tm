@@ -83,8 +83,15 @@ int main()
                 cout << "Your selection: ";
                 userInput = _getch();
                 cout << userInput << endl;
-                if (userInput != '0') {
+                if (userInput == '1') {
+                    //t.averageTemp();
+                }
+                if (userInput == '2') {
+
                     t.averageTemp();
+                }
+                if (userInput == '3') {
+                    //t.averageTemp();
                 }
                 userInput = NULLMENU;
                 break;
@@ -95,8 +102,6 @@ int main()
             }
         } catch(const char *err) {
             cout << err << endl;
-        //} catch(runtime_error &err) {
-        //    cout << err.what() << endl;
         } catch(...) {
             cout << "ERROR: Unexpected error." << endl;
         }
