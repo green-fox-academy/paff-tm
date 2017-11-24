@@ -19,13 +19,16 @@ class TempLogger
         void startStop();
         void listData();
         void lookupPorts();
+        void saveFile();
+        void openFile();
 
     private:
         SerialPortWrapper *serial;
         bool connected;
-        vector <TempData> vTemp;
+        vector<TempData> vTemp;
         vector<string> ports;
 
+        TempData *strToTempData2(string _line);
         TempData *strToTempData(string _line);
         bool tempToken(char *_str, char *_tokchr, int *_result);
         bool isValidTempData(tm *_time, int _temperature);

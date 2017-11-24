@@ -7,5 +7,7 @@
 #define CLOSE 'c'
 #define LIST 'l'
 #define EXIT 'e'
+#define SAVEFILE 'f'
+#define READFILE 'r'
 
 #endif // DEFINE_H_INCLUDED

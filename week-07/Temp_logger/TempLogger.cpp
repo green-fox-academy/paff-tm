@@ -6,6 +6,9 @@
 #include <conio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sstream>
+#include <fstream>
+//#include <locale>
 
 #include "SerialPortWrapper.h"
 #include "TempData.h"
@@ -79,6 +82,43 @@ void TempLogger::startStop()
     }
 }
 
+void TempLogger::listData()
+{
+    for (unsigned int i = 0; i < vTemp.size(); ++i) {
+        cout << vTemp.at(i).getLine() << endl;
+    }
+}
+
+void TempLogger::lookupPorts()
+{
+    if (connected) {
+        throw "ERROR: Already connected to a port.";
+    } else {
+        ports = SerialPortWrapper::listAvailablePorts();
+        cout << "Number of found serial ports: " << ports.size() << endl;
+        for (unsigned int i = 0; i < ports.size(); i++) {
+            cout << i + 1 << ".\t Port name: " << ports.at(i) << endl;
+        }
+    }
+}
+
+TempData *TempLogger::strToTempData2(string _line)
+{
+    istringstream linestream(_line);
+    tm time = {0};
+    int temperature = 0;
+
+    //linestream >> get_time(&time, "%Y.%m.%d %H:%M:%S") >> temperature;
+    // it won't work below gcc 7.1
+
+    if (1) {
+        return NULL;
+    }
+
+    TempData *td = new TempData(time, temperature);
+    return td;
+}
+
 TempData *TempLogger::strToTempData(string _line)
 {
     char *str = strdup(_line.c_str());
@@ -101,26 +141,6 @@ TempData *TempLogger::strToTempData(string _line)
 
     TempData *td = new TempData(time, temperature);
     return td;
-}
-
-void TempLogger::listData()
-{
-    for (unsigned int i = 0; i < vTemp.size(); ++i) {
-        cout << vTemp.at(i).getLine() << endl;
-    }
-}
-
-void TempLogger::lookupPorts()
-{
-    if (connected) {
-        throw "ERROR: Already connected to a port.";
-    } else {
-        ports = SerialPortWrapper::listAvailablePorts();
-        cout << "Number of found serial ports: " << ports.size() << endl;
-        for (unsigned int i = 0; i < ports.size(); i++) {
-            cout << i + 1 << ".\t Port name: " << ports.at(i) << endl;
-        }
-    }
 }
 
 bool TempLogger::tempToken(char *_str, char *_tokchr, int *_result)
@@ -162,3 +182,32 @@ bool TempLogger::isBetween(int _x, int _min, int _max)
         return false;
     }
 }
+
+void TempLogger::saveFile()
+{
+    ofstream ofile;
+    ofile.open("templog.txt");
+    for (unsigned int i = 0; i < vTemp.size(); ++i) {
+        ofile << vTemp.at(i).getLine() << endl;
+    }
+    ofile.close();
+}
+
+void TempLogger::openFile()
+{
+    string line(" ");
+    ifstream ifile;
+
+    ifile.open("templog.txt");
+    if (ifile.is_open()) {
+        vTemp.empty();
+        while (getline(ifile, line)) {
+            cout << line << endl;
+            vTemp.push_back(*strToTempData(line));
+        }
+        ifile.close();
+    } else {
+        throw "ERROR: Can't open file.";
+    }
+}
+

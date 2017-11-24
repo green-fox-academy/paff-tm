@@ -25,7 +25,9 @@ int main()
             userInput = _getch();
             cout << userInput << endl;
 
-            if (userInput == SHOW) {
+            if (userInput == EXIT) {
+                //do nothing
+            } else if (userInput == SHOW) {
                 printHelp();
             } else if (userInput == OPEN) {
                 t.lookupPorts();
@@ -45,6 +47,10 @@ int main()
                 cout << "Port is closed" << endl;
             } else if (userInput == LIST) {
                 t.listData();
+            } else if (userInput == SAVEFILE) {
+                t.saveFile();
+            } else if (userInput == READFILE) {
+                t.openFile();
             } else {
                 cout << "ERROR: Invalid command." << endl;
             }

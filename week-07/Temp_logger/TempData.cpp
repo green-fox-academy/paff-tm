@@ -46,3 +46,8 @@ int TempData::getTemperature()
 {
     return temperature;
 }
+
+tm TempData::getTM()
+{
+    return time;
+}

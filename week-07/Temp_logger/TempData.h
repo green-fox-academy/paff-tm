@@ -17,6 +17,7 @@ class TempData
         string getDate();
         string getTime();
         int getTemperature();
+        tm getTM();
 
     private:
         //string line;
