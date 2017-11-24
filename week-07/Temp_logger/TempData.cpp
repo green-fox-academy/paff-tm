@@ -1,3 +1,9 @@
+/*
+ *  CPP FILE FOR TEMPERATURE LOGGER
+ *  ===============================
+ *  Class TempData
+ */
+
 #include "TempData.h"
 
 #include <stdlib.h>

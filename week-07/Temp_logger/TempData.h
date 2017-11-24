@@ -1,3 +1,9 @@
+/*
+ *  H FILE FOR TEMPERATURE LOGGER
+ *  =============================
+ *  Class TempData
+ */
+
 #ifndef TEMPDATA_H
 #define TEMPDATA_H
 

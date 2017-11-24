@@ -1,3 +1,9 @@
+/*
+ *  CPP FILE FOR TEMPERATURE LOGGER
+ *  ===============================
+ *  Class TempLogger
+ */
+
 #include "TempLogger.h"
 
 #include <iostream>
@@ -102,23 +108,6 @@ void TempLogger::lookupPorts()
     }
 }
 
-TempData *TempLogger::strToTempData2(string _line)
-{
-    istringstream linestream(_line);
-    tm time = {0};
-    int temperature = 0;
-
-    //linestream >> get_time(&time, "%Y.%m.%d %H:%M:%S") >> temperature;
-    // it won't work below gcc 7.1
-
-    if (1) {
-        return NULL;
-    }
-
-    TempData *td = new TempData(time, temperature);
-    return td;
-}
-
 TempData *TempLogger::strToTempData(string _line)
 {
     char *str = strdup(_line.c_str());
@@ -210,3 +199,15 @@ void TempLogger::openFile()
     }
 }
 
+void TempLogger::averageTemp()
+{
+    int tempSum = 0;
+    int tempCount = 0;
+
+    for (unsigned int i = 0; i < vTemp.size(); ++i) {
+        tempSum += vTemp.at(i).getTemperature();
+        ++tempCount;
+    }
+
+    cout << "Average temperature: " << tempSum/tempCount << endl;
+}

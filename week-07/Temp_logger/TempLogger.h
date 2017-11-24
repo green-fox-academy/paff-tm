@@ -1,3 +1,9 @@
+/*
+ *  H FILE FOR TEMPERATURE LOGGER
+ *  =============================
+ *  Class TempLogger
+ */
+
 #ifndef TEMPLOGGER_H
 #define TEMPLOGGER_H
 
@@ -21,6 +27,7 @@ class TempLogger
         void lookupPorts();
         void saveFile();
         void openFile();
+        void averageTemp();
 
     private:
         SerialPortWrapper *serial;
@@ -28,7 +35,6 @@ class TempLogger
         vector<TempData> vTemp;
         vector<string> ports;
 
-        TempData *strToTempData2(string _line);
         TempData *strToTempData(string _line);
         bool tempToken(char *_str, char *_tokchr, int *_result);
         bool isValidTempData(tm *_time, int _temperature);

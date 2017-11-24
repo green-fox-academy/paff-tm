@@ -1,3 +1,9 @@
+/*             Temperature Logger
+ * ============================================
+ * Greenfox Academy Pallida Cohort Static Class
+ *               András Pásztor
+ */
+
 #include <iostream>
 //#include <string>
 //#include <vector>
@@ -25,13 +31,17 @@ int main()
             userInput = _getch();
             cout << userInput << endl;
 
-            if (userInput == EXIT) {
+            switch (userInput) {
+            case EXIT:
+            case NULLMENU:
                 //do nothing
-            } else if (userInput == NULLMENU) {
-                //do nothing
-            } else if (userInput == SHOW) {
+                break;
+
+            case SHOW:
                 printHelp();
-            } else if (userInput == OPEN) {
+                break;
+
+            case OPEN:
                 t.lookupPorts();
                 cout << "Your selection: ";
                 userInput = _getch();
@@ -41,21 +51,47 @@ int main()
                     cout << "Port is opened." << endl;
                 }
                 userInput = NULLMENU;
-            } else if (userInput == STARTSTOP) {
+                break;
+
+            case STARTSTOP:
                 cout << "Starting temperature logging..." << endl;
                 t.startStop();
                 cout << "Temperature logging has stopped." << endl;
-            } else if (userInput == CLOSE) {
+                break;
+
+            case CLOSE:
                 t.closePort();
                 cout << "Port is closed" << endl;
-            } else if (userInput == LIST) {
+                break;
+
+            case LIST:
                 t.listData();
-            } else if (userInput == SAVEFILE) {
+                break;
+
+            case SAVEFILE:
                 t.saveFile();
-            } else if (userInput == READFILE) {
+                break;
+
+            case READFILE:
                 t.openFile();
-            } else {
+                break;
+
+            case AVERAGE:
+                cout << "1. average on a day" << endl;
+                cout << "2. average of last days" << endl;
+                cout << "3. average of day-to-day" << endl;
+                cout << "Your selection: ";
+                userInput = _getch();
+                cout << userInput << endl;
+                if (userInput != '0') {
+                    t.averageTemp();
+                }
+                userInput = NULLMENU;
+                break;
+
+            default:
                 cout << "ERROR: Invalid command." << endl;
+                break;
             }
         } catch(const char *err) {
             cout << err << endl;
@@ -80,6 +116,9 @@ void printHelp()
     "s        Start logging / Stop logging" << endl <<
     "c        Close port                  " << endl <<
     "l        List after error handling   " << endl <<
+    "f        Store data in a file        " << endl <<
+    "r        Read data from a file       " << endl <<
+    "a        Avarage temperature by days " << endl <<
     "e        Exit from the program       " << endl;
 
 }

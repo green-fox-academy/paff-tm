@@ -1,3 +1,9 @@
+/*
+ *  H FILE FOR TEMPERATURE LOGGER
+ *  ===============================
+ *  Define data types and constants
+ */
+
 #ifndef DEFINE_H_INCLUDED
 #define DEFINE_H_INCLUDED
 
@@ -10,5 +16,6 @@
 #define EXIT 'e'
 #define SAVEFILE 'f'
 #define READFILE 'r'
+#define AVERAGE 'a'
 
 #endif // DEFINE_H_INCLUDED
