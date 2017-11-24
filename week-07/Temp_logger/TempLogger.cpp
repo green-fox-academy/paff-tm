@@ -85,7 +85,7 @@ void TempLogger::startStop()
 void TempLogger::listData()
 {
     for (unsigned int i = 0; i < vTemp.size(); ++i) {
-        cout << vTemp.at(i).getLine() << endl;
+        cout << vTemp.at(i).getLineStr() << endl;
     }
 }
 
@@ -188,7 +188,7 @@ void TempLogger::saveFile()
     ofstream ofile;
     ofile.open("templog.txt");
     for (unsigned int i = 0; i < vTemp.size(); ++i) {
-        ofile << vTemp.at(i).getLine() << endl;
+        ofile << vTemp.at(i).getLineStr() << endl;
     }
     ofile.close();
 }
@@ -200,9 +200,8 @@ void TempLogger::openFile()
 
     ifile.open("templog.txt");
     if (ifile.is_open()) {
-        vTemp.empty();
+        vTemp.clear();
         while (getline(ifile, line)) {
-            cout << line << endl;
             vTemp.push_back(*strToTempData(line));
         }
         ifile.close();

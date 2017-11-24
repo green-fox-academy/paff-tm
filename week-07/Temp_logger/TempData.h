@@ -13,9 +13,9 @@ class TempData
         TempData(tm _time, int _temperature);
         ~TempData();
 
-        string getLine();
-        string getDate();
-        string getTime();
+        string getLineStr();
+        string getDateStr();
+        string getTimeStr();
         int getTemperature();
         tm getTM();
 

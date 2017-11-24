@@ -36,7 +36,7 @@ int main()
                 cout << userInput << endl;
                 if (userInput != '0') {
                     t.openPort(userInput - '0' - 1);
-                    cout << "Port is opened" << endl;
+                    cout << "Port is opened." << endl;
                 }
             } else if (userInput == STARTSTOP) {
                 cout << "Starting temperature logging..." << endl;

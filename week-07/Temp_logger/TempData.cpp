@@ -21,24 +21,24 @@ TempData::~TempData()
     //dtor
 }
 
-string TempData::getLine()
+string TempData::getLineStr()
 {
     char str_temp[10];
     itoa(getTemperature(), str_temp, 10);
-    return getDate() + " " + getTime() + " " + str_temp;
+    return getDateStr() + " " + getTimeStr() + " " + str_temp;
 }
 
-string TempData::getDate()
+string TempData::getDateStr()
 {
     stringstream strstr;
     strstr << time.tm_year << "." << time.tm_mon << "." << time.tm_mday;
     return strstr.str();
 }
 
-string TempData::getTime()
+string TempData::getTimeStr()
 {
     stringstream strstr;
-    strstr << time.tm_hour << "." << time.tm_min << "." << time.tm_sec;
+    strstr << time.tm_hour << ":" << time.tm_min << ":" << time.tm_sec;
     return strstr.str();
 }
 
