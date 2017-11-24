@@ -15,7 +15,6 @@ void printHelp();
 
 int main()
 {
-
     TempLogger t;
     char userInput;
 
@@ -31,9 +30,12 @@ int main()
             } else if (userInput == OPEN) {
                 t.lookupPorts();
                 cout << "Your selection: ";
-                userInput = getc(stdin);
-                t.openPort(userInput - '0' - 1);
-                cout << "Port is opened" << endl;
+                userInput = _getch();
+                cout << userInput << endl;
+                if (userInput != '0') {
+                    t.openPort(userInput - '0' - 1);
+                    cout << "Port is opened" << endl;
+                }
             } else if (userInput == STARTSTOP) {
                 cout << "Starting temperature logging..." << endl;
                 t.startStop();
@@ -43,6 +45,8 @@ int main()
                 cout << "Port is closed" << endl;
             } else if (userInput == LIST) {
                 t.listData();
+            } else {
+                cout << "ERROR: Invalid command." << endl;
             }
         } catch(const char *err) {
             cout << err << endl;
