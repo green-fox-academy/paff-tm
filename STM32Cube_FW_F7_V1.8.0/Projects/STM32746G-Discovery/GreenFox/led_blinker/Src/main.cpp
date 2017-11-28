@@ -95,6 +95,30 @@ void My_Init(void)
 	led3.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
 
 	HAL_GPIO_Init(GPIOF, &led3);      // initialize the pin on GPIOA port with HAL
+
+	__HAL_RCC_GPIOG_CLK_ENABLE();
+	GPIO_InitTypeDef pb1;            // create a config structure
+	pb1.Pin = GPIO_PIN_6;
+	pb1.Mode = GPIO_MODE_INPUT;
+	pb1.Pull = GPIO_PULLUP;
+	pb1.Speed = GPIO_SPEED_LOW;
+	HAL_GPIO_Init(GPIOG, &pb1);
+
+	__HAL_RCC_GPIOC_CLK_ENABLE();
+	GPIO_InitTypeDef pb2;            // create a config structure
+	pb2.Pin = GPIO_PIN_6;
+	pb2.Mode = GPIO_MODE_INPUT;
+	pb2.Pull = GPIO_PULLUP;
+	pb2.Speed = GPIO_SPEED_LOW;
+	HAL_GPIO_Init(GPIOC, &pb2);
+
+	GPIO_InitTypeDef pb3;            // create a config structure
+	pb3.Pin = GPIO_PIN_7;
+	pb3.Mode = GPIO_MODE_INPUT;
+	pb3.Pull = GPIO_PULLUP;
+	pb3.Speed = GPIO_SPEED_LOW;
+	HAL_GPIO_Init(GPIOC, &pb3);
+
 }
 
 void RGB_Red(GPIO_PinState state)
@@ -120,6 +144,8 @@ void RGB_Blue(GPIO_PinState state)
 	else
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
 }
+
+
 
 
 /**
@@ -162,24 +188,115 @@ int main(void)
 
 
   /* Infinite loop */
-  int del = 100;
+  int del = 20;
+  float del_red_mul = 1;
+  float del_green_mul = 1;
+  float del_blue_mul = 1;
 
-  //RGB_Red(GPIO_PIN_RESET);
-  //RGB_Green(GPIO_PIN_RESET);
-  //RGB_Blue(GPIO_PIN_RESET);
-  int i = 0;
-  GPIOF->ODR = 0b1111111011111111;
+  int del_red = del;
+  int del_green = del;
+  int del_blue = del;
+
+  //GPIOF->ODR = 0b1111111011111111;
   while (1)
   {
-	  if (BSP_PB_GetState(BUTTON_KEY) != 0) {
-		  ++i;
-		  if (i % 3 == 0){
-			  i = 0;
-			  GPIOF->ODR >>= 3;
+
+	  if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 0) {
+		  del_red_mul -= 0.01;
+		  if (del_red_mul <= -0.01){
+			  del_red_mul = 1;
 		  }
-		  GPIOF->ODR <<= 1;
+		  HAL_Delay(5);
 	  }
-	  HAL_Delay(del);
+
+	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0) {
+		  del_green_mul -= 0.01;
+		  if (del_green_mul <= -0.01){
+			  del_green_mul = 1;
+		  }
+		  HAL_Delay(5);
+	  }
+
+	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 0) {
+		  del_blue_mul -= 0.01;
+		  if (del_blue_mul <= -0.01){
+			  del_blue_mul = 1;
+		  }
+		  HAL_Delay(5);
+	  }
+
+	  RGB_Red(GPIO_PIN_RESET);
+	  RGB_Green(GPIO_PIN_RESET);
+	  RGB_Blue(GPIO_PIN_RESET);
+
+	  del_red = del * del_red_mul;
+	  del_green = del * del_green_mul;
+	  del_blue = del * del_blue_mul;
+
+	  RGB_Red(GPIO_PIN_SET);
+	  RGB_Green(GPIO_PIN_SET);
+	  RGB_Blue(GPIO_PIN_SET);
+
+	  if ((del_red < del_green) && (del_red < del_blue)) {
+		  HAL_Delay(del_red);
+		  RGB_Red(GPIO_PIN_RESET);
+
+		  if (del_green < del_blue) {
+			  HAL_Delay(del_green - del_red);
+			  RGB_Green(GPIO_PIN_RESET);
+
+			  HAL_Delay(del_blue - del_green);
+			  RGB_Blue(GPIO_PIN_RESET);
+			  HAL_Delay(del - del_blue);
+		  } else {
+			  HAL_Delay(del_blue - del_red);
+			  RGB_Blue(GPIO_PIN_RESET);
+
+			  HAL_Delay(del_green - del_blue);
+			  RGB_Green(GPIO_PIN_RESET);
+			  HAL_Delay(del - del_green);
+		  }
+
+	  } else if (del_green < del_blue) {
+		  HAL_Delay(del_green);
+		  RGB_Green(GPIO_PIN_RESET);
+
+		  if (del_blue < del_red) {
+			  HAL_Delay(del_blue - del_green);
+			  RGB_Blue(GPIO_PIN_RESET);
+
+			  HAL_Delay(del_red - del_blue);
+			  RGB_Red(GPIO_PIN_RESET);
+			  HAL_Delay(del - del_red);
+		  } else {
+			  HAL_Delay(del_red - del_green);
+			  RGB_Red(GPIO_PIN_RESET);
+
+			  HAL_Delay(del_blue - del_red);
+			  RGB_Blue(GPIO_PIN_RESET);
+			  HAL_Delay(del - del_blue);
+	      }
+
+	  } else {
+		  HAL_Delay(del_blue);
+		  RGB_Blue(GPIO_PIN_RESET);
+
+		  if (del_green < del_red) {
+			  HAL_Delay(del_green - del_blue);
+			  RGB_Green(GPIO_PIN_RESET);
+
+			  HAL_Delay(del_red - del_green);
+			  RGB_Red(GPIO_PIN_RESET);
+			  HAL_Delay(del - del_red);
+		  } else {
+			  HAL_Delay(del_red - del_blue);
+			  RGB_Red(GPIO_PIN_RESET);
+
+			  HAL_Delay(del_green - del_red);
+			  RGB_Green(GPIO_PIN_RESET);
+			  HAL_Delay(del - del_green);
+	      }
+	  }
 
   }
 }
