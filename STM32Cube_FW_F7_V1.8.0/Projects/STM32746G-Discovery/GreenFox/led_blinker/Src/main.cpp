@@ -189,40 +189,40 @@ int main(void)
 
   /* Infinite loop */
   int del = 20;
-  float del_red_mul = 1;
-  float del_green_mul = 1;
-  float del_blue_mul = 1;
+  float del_red_mul = 0;
+  float del_green_mul = 0;
+  float del_blue_mul = 0;
 
-  int del_red = del;
-  int del_green = del;
-  int del_blue = del;
+  int del_red;
+  int del_green;
+  int del_blue;
 
   //GPIOF->ODR = 0b1111111011111111;
   while (1)
   {
 
 	  if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 0) {
-		  del_red_mul -= 0.01;
-		  if (del_red_mul <= -0.01){
-			  del_red_mul = 1;
+		  del_red_mul += 0.01;
+		  if (del_red_mul >= 1){
+			  del_red_mul = 0;
 		  }
-		  HAL_Delay(5);
+		  HAL_Delay(3);
 	  }
 
 	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0) {
-		  del_green_mul -= 0.01;
-		  if (del_green_mul <= -0.01){
-			  del_green_mul = 1;
+		  del_green_mul += 0.01;
+		  if (del_green_mul >= 1){
+			  del_green_mul = 0;
 		  }
-		  HAL_Delay(5);
+		  HAL_Delay(3);
 	  }
 
 	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 0) {
-		  del_blue_mul -= 0.01;
-		  if (del_blue_mul <= -0.01){
-			  del_blue_mul = 1;
+		  del_blue_mul += 0.01;
+		  if (del_blue_mul >= 1){
+			  del_blue_mul = 0;
 		  }
-		  HAL_Delay(5);
+		  HAL_Delay(3);
 	  }
 
 	  RGB_Red(GPIO_PIN_RESET);
