@@ -98,8 +98,10 @@ int main(void)
   /* Add your application code here     */
   /* Infinite loop */
 
+  /*
   int del = 1;
   while (1)
+  */
   {
 	  //TODO:
 	  //Write a simple program witch flashes(toggle) the led when the button is pressed
@@ -114,7 +116,6 @@ int main(void)
 			  ++del;
 			  HAL_Delay(100);
 		  }
-
       BSP_LED_Toggle(LED_GREEN);
 	  HAL_Delay(del);
 	 */

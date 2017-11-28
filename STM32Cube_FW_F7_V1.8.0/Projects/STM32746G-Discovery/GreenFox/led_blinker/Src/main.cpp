@@ -58,6 +58,70 @@ static void CPU_CACHE_Enable(void);
 
 /* Private functions ---------------------------------------------------------*/
 
+void My_Init(void)
+{
+	__HAL_RCC_GPIOA_CLK_ENABLE();    // we need to enable the GPIOA port's clock first
+
+	GPIO_InitTypeDef led0;            // create a config structure
+	led0.Pin = GPIO_PIN_0;            // this is about PIN 0
+	led0.Mode = GPIO_MODE_OUTPUT_PP;  // Configure as output with push-up-down enabled
+	led0.Pull = GPIO_PULLDOWN;        // the push-up-down should work as pulldown
+	led0.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
+
+	HAL_GPIO_Init(GPIOA, &led0);      // initialize the pin on GPIOA port with HAL
+
+	__HAL_RCC_GPIOF_CLK_ENABLE();    // we need to enable the GPIOA port's clock first
+
+	GPIO_InitTypeDef led1;            // create a config structure
+	led1.Pin = GPIO_PIN_8;            // this is about PIN 0
+	led1.Mode = GPIO_MODE_OUTPUT_PP;  // Configure as output with push-up-down enabled
+	led1.Pull = GPIO_PULLDOWN;        // the push-up-down should work as pulldown
+	led1.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
+
+	HAL_GPIO_Init(GPIOF, &led1);      // initialize the pin on GPIOA port with HAL
+
+	GPIO_InitTypeDef led2;            // create a config structure
+	led2.Pin = GPIO_PIN_9;            // this is about PIN 0
+	led2.Mode = GPIO_MODE_OUTPUT_PP;  // Configure as output with push-up-down enabled
+	led2.Pull = GPIO_PULLDOWN;        // the push-up-down should work as pulldown
+	led2.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
+
+	HAL_GPIO_Init(GPIOF, &led2);      // initialize the pin on GPIOA port with HAL
+
+	GPIO_InitTypeDef led3;            // create a config structure
+	led3.Pin = GPIO_PIN_10;            // this is about PIN 0
+	led3.Mode = GPIO_MODE_OUTPUT_PP;  // Configure as output with push-up-down enabled
+	led3.Pull = GPIO_PULLDOWN;        // the push-up-down should work as pulldown
+	led3.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
+
+	HAL_GPIO_Init(GPIOF, &led3);      // initialize the pin on GPIOA port with HAL
+}
+
+void RGB_Red(GPIO_PinState state)
+{
+	if (state == GPIO_PIN_SET)
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10, GPIO_PIN_RESET);
+	else
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10, GPIO_PIN_SET);
+}
+
+void RGB_Green(GPIO_PinState state)
+{
+	if (state == GPIO_PIN_SET)
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+	else
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+}
+
+void RGB_Blue(GPIO_PinState state)
+{
+	if (state == GPIO_PIN_SET)
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_RESET);
+	else
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
+}
+
+
 /**
   * @brief  Main program
   * @param  None
@@ -91,19 +155,31 @@ int main(void)
 
 
   /* Add your application code here     */
-  BSP_LED_Init(LED_GREEN);
-  BSP_LED_On(LED_GREEN);
+  //BSP_LED_Init(LED_GREEN);
+  //BSP_LED_On(LED_GREEN);
+  My_Init();
+  BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
+
 
   /* Infinite loop */
+  int del = 100;
+
+  //RGB_Red(GPIO_PIN_RESET);
+  //RGB_Green(GPIO_PIN_RESET);
+  //RGB_Blue(GPIO_PIN_RESET);
+  int i = 0;
+  GPIOF->ODR = 0b1111111011111111;
   while (1)
   {
-	  //TODO:
-	  //Flash the ledwith 200 ms period time
-	  BSP_LED_Off(LED_GREEN);
-	  HAL_Delay(200);
-	  BSP_LED_On(LED_GREEN);
-	  HAL_Delay(200);
-
+	  if (BSP_PB_GetState(BUTTON_KEY) != 0) {
+		  ++i;
+		  if (i % 3 == 0){
+			  i = 0;
+			  GPIOF->ODR >>= 3;
+		  }
+		  GPIOF->ODR <<= 1;
+	  }
+	  HAL_Delay(del);
 
   }
 }
