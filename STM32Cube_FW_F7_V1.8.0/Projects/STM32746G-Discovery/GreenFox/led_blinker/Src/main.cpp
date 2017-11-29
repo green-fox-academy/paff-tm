@@ -145,97 +145,25 @@ void RGB_Blue(GPIO_PinState state)
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
 }
 
-
-
-
-/**
-  * @brief  Main program
-  * @param  None
-  * @retval None
-  */
-int main(void)
+void RGB_Show(int del, float del_red_mul, float del_green_mul, float del_blue_mul)
 {
-
-  /* This project template calls firstly two functions in order to configure MPU feature 
-     and to enable the CPU Cache, respectively MPU_Config() and CPU_CACHE_Enable().
-     These functions are provided as template implementation that User may integrate 
-     in his application, to enhance the performance in case of use of AXI interface 
-     with several masters. */ 
-  
-  /* Configure the MPU attributes as Write Through */
-  MPU_Config();
-
-  /* Enable the CPU Cache */
-  CPU_CACHE_Enable();
-
-  /* STM32F7xx HAL library initialization:
-       - Configure the Flash ART accelerator on ITCM interface
-       - Configure the Systick to generate an interrupt each 1 msec
-       - Set NVIC Group Priority to 4
-       - Low Level Initialization
-     */
-  HAL_Init();
-
-  /* Configure the System clock to have a frequency of 216 MHz */
-  SystemClock_Config();
-
-
-  /* Add your application code here     */
-  //BSP_LED_Init(LED_GREEN);
-  //BSP_LED_On(LED_GREEN);
-  My_Init();
-  BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
-
-
-  /* Infinite loop */
-  int del = 20;
-  float del_red_mul = 0;
-  float del_green_mul = 0;
-  float del_blue_mul = 0;
-
-  int del_red;
-  int del_green;
-  int del_blue;
-
-  //GPIOF->ODR = 0b1111111011111111;
-  while (1)
-  {
-
-	  if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 0) {
-		  del_red_mul += 0.01;
-		  if (del_red_mul >= 1){
-			  del_red_mul = 0;
-		  }
-		  HAL_Delay(3);
-	  }
-
-	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0) {
-		  del_green_mul += 0.01;
-		  if (del_green_mul >= 1){
-			  del_green_mul = 0;
-		  }
-		  HAL_Delay(3);
-	  }
-
-	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 0) {
-		  del_blue_mul += 0.01;
-		  if (del_blue_mul >= 1){
-			  del_blue_mul = 0;
-		  }
-		  HAL_Delay(3);
-	  }
-
-	  RGB_Red(GPIO_PIN_RESET);
-	  RGB_Green(GPIO_PIN_RESET);
-	  RGB_Blue(GPIO_PIN_RESET);
+	  int del_red = 0;
+	  int del_green = 0;
+	  int del_blue = 0;
 
 	  del_red = del * del_red_mul;
 	  del_green = del * del_green_mul;
 	  del_blue = del * del_blue_mul;
 
-	  RGB_Red(GPIO_PIN_SET);
-	  RGB_Green(GPIO_PIN_SET);
-	  RGB_Blue(GPIO_PIN_SET);
+	  if (del_red_mul > 0){
+		  RGB_Red(GPIO_PIN_SET);
+	  }
+	  if (del_green_mul > 0){
+		  RGB_Green(GPIO_PIN_SET);
+	  }
+	  if (del_blue_mul > 0){
+		  RGB_Blue(GPIO_PIN_SET);
+	  }
 
 	  if ((del_red < del_green) && (del_red < del_blue)) {
 		  HAL_Delay(del_red);
@@ -297,6 +225,116 @@ int main(void)
 			  HAL_Delay(del - del_green);
 	      }
 	  }
+}
+
+
+/**
+  * @brief  Main program
+  * @param  None
+  * @retval None
+  */
+int main(void)
+{
+
+  /* This project template calls firstly two functions in order to configure MPU feature 
+     and to enable the CPU Cache, respectively MPU_Config() and CPU_CACHE_Enable().
+     These functions are provided as template implementation that User may integrate 
+     in his application, to enhance the performance in case of use of AXI interface 
+     with several masters. */ 
+  
+  /* Configure the MPU attributes as Write Through */
+  MPU_Config();
+
+  /* Enable the CPU Cache */
+  CPU_CACHE_Enable();
+
+  /* STM32F7xx HAL library initialization:
+       - Configure the Flash ART accelerator on ITCM interface
+       - Configure the Systick to generate an interrupt each 1 msec
+       - Set NVIC Group Priority to 4
+       - Low Level Initialization
+     */
+  HAL_Init();
+
+  /* Configure the System clock to have a frequency of 216 MHz */
+  SystemClock_Config();
+
+
+  /* Add your application code here     */
+  My_Init();
+
+  int del = 20;
+  float del_red_mul = 0;
+  float del_green_mul = 0;
+  float del_blue_mul = 0;
+
+  /* Infinite loop */
+  while (1)
+  {
+
+	  if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 0) {
+		  HAL_Delay(100);
+		  if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 1) {
+			  if (del_red_mul > 0) {
+				  del_red_mul = 0;
+			  } else {
+				  del_red_mul = 1;
+			  }
+			  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
+		  } else {
+			  while (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 0) {
+				  del_red_mul += 0.025;
+				  if (del_red_mul >= 1){
+					  del_red_mul = 0;
+				  }
+				  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
+			  }
+		  }
+
+	  }
+
+	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0) {
+		  HAL_Delay(100);
+		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 1) {
+			  if (del_green_mul > 0) {
+				  del_green_mul = 0;
+			  } else {
+				  del_green_mul = 1;
+			  }
+		  } else {
+			  while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0) {
+				  del_green_mul += 0.025;
+				  if (del_green_mul >= 1){
+					  del_green_mul = 0;
+				  }
+				  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
+			  }
+		  }
+
+	  }
+
+
+	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 0) {
+		  HAL_Delay(100);
+		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 1) {
+			  if (del_blue_mul > 0) {
+				  del_blue_mul = 0;
+			  } else {
+				  del_blue_mul = 1;
+			  }
+		  } else {
+			  while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 0) {
+				  del_blue_mul += 0.025;
+				  if (del_blue_mul >= 1){
+					  del_blue_mul = 0;
+				  }
+				  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
+			  }
+		  }
+
+	  }
+
+	  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
 
   }
 }
