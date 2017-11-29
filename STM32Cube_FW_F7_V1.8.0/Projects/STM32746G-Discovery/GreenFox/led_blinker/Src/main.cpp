@@ -63,6 +63,9 @@
 #define mLED6_PORT	GPIOA
 #define mLED6_PIN	GPIO_PIN_8
 
+#define mPB0_PORT	GPIOC
+#define mPB0_PIN	GPIO_PIN_7
+
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -116,6 +119,16 @@ struct tPin {
 	  uint16_t		pin;
 };
 
+void LED_On(tPin _led)
+{
+	 HAL_GPIO_WritePin(_led.port, _led.pin, GPIO_PIN_SET);
+}
+
+void LED_Off(tPin _led)
+{
+	 HAL_GPIO_WritePin(_led.port, _led.pin, GPIO_PIN_RESET);
+}
+
 
 /**
   * @brief  Main program
@@ -163,15 +176,60 @@ int main(void)
 	{mLED6_PORT, mLED6_PIN}
   };
 
-  for (unsigned int i = 0; i < sizeof(aPins) / sizeof(aPins[0]); ++i)
+  unsigned int led_num = (int)(sizeof(aPins) / sizeof(aPins[0]));
+
+  for (unsigned int i = 0; i < led_num; ++i){
 	  LED_Init(aPins[i].port, aPins[i].pin);
+  }
+
+  Button_Init(mPB0_PORT, mPB0_PIN);
+
+  int dir = 1;
+  int del = 100;
+  unsigned int ion = 0;
+  unsigned int ioff = led_num;
 
   /* Infinite loop */
   while (1)
   {
+	  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
+		  dir = -dir;
+		  for (unsigned int i = 0; i < led_num; ++i){
+			  LED_Off(aPins[i]);
+		  }
+		  ion = 0;
+		  ioff = led_num;
+		  while (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
+			  //delay
+		  }
+	  }
 
-	  HAL_GPIO_WritePin(mLED0_PORT, mLED0_PIN, GPIO_PIN_SET);
 
+	  if (ion < led_num) {
+		 if (dir > 0){
+			  LED_On(aPins[ion]);
+		  } else {
+			  LED_On(aPins[led_num - ion - 1]);
+		  }
+		  ++ion;
+		  HAL_Delay(del);
+		  if (ion == led_num && ioff == led_num) {
+			  ioff = 0;
+		  }
+	  }
+
+	  if (ioff < led_num){
+		  if (dir > 0) {
+			  LED_Off(aPins[ioff]);
+		  } else {
+			  LED_Off(aPins[led_num - ioff - 1]);
+		  }
+		  ++ioff;
+		  HAL_Delay(del);
+		  if (ion == led_num && ioff == led_num) {
+			  ion = 0;
+	  	  }
+	  }
 
   }
 }
