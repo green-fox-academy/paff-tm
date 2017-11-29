@@ -152,7 +152,7 @@ void DoWhenButtonIsPushed(unsigned int *ion, unsigned int *ioff, int *dir, unsig
 {
 	  *ion = 0;
 	  *ioff = *led_num;
-	  HAL_Delay(150);
+	  HAL_Delay(200);
 	  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 1)
 		  *dir = -*dir;
 	  else
@@ -162,8 +162,13 @@ void DoWhenButtonIsPushed(unsigned int *ion, unsigned int *ioff, int *dir, unsig
 				  *speed = 0;
 		      }
 			  ShowSpeed(*speed, aPins, *led_num);
+
 			  if (*speed == 100) {
-				  HAL_Delay(100);
+				  for (unsigned int i = 0; i < 20; ++i)
+					  if(HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 1)
+						  break;
+					  else
+						  HAL_Delay(100);
 		      }
 			  HAL_Delay(50);
 		  }
@@ -226,7 +231,7 @@ int main(void)
   Button_Init(mPB0_PORT, mPB0_PIN);
 
   int dir = 1;
-  int del = 200;	// slowest speed / max delay
+  int del = 300;	// slowest speed / max delay
   unsigned int speed = 50; // 50%
   unsigned int ion = 0;
   unsigned int ioff = led_num;
@@ -257,16 +262,13 @@ int main(void)
 			  ion = 0;
 	  	  }
 	  }
-	  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
-		  DoWhenButtonIsPushed(&ion, &ioff,  &dir,  &speed, aPins, &led_num);
-	  }
-	  HAL_Delay((del - del * ((float)speed) / 100) / 2);
 
-	  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
-		  DoWhenButtonIsPushed(&ion, &ioff,  &dir,  &speed, aPins, &led_num);
+	  for (unsigned int i = 0; i < 10; ++i ) {
+		  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
+			  DoWhenButtonIsPushed(&ion, &ioff,  &dir,  &speed, aPins, &led_num);
+		  }
+		  HAL_Delay((del - del * ((float)speed) / 100) / 10);
 	  }
-	  HAL_Delay((del - del * ((float)speed) / 100) / 2);
-
   }
 }
 
