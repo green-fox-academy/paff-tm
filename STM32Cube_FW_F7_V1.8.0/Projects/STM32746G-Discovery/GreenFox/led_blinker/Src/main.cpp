@@ -148,6 +148,29 @@ void ShowSpeed(unsigned int _speed, tPin _aPins[], unsigned int _led_num)
 
 }
 
+void DoWhenButtonIsPushed(unsigned int *ion, unsigned int *ioff, int *dir, unsigned int *speed, tPin *aPins, unsigned int *led_num)
+{
+	  *ion = 0;
+	  *ioff = *led_num;
+	  HAL_Delay(150);
+	  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 1)
+		  *dir = -*dir;
+	  else
+		  while (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
+			  *speed += 1;
+			  if (*speed > 100) {
+				  *speed = 0;
+		      }
+			  ShowSpeed(*speed, aPins, *led_num);
+			  if (*speed == 100) {
+				  HAL_Delay(100);
+		      }
+			  HAL_Delay(50);
+		  }
+    LED_ResetAll(aPins, *led_num);
+}
+
+
 /**
   * @brief  Main program
   * @param  None
@@ -211,28 +234,6 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
-	  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
-		  ion = 0;
-		  ioff = led_num;
-		  HAL_Delay(150);
-		  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 1)
-			  dir = -dir;
-		  else
-			  while (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
-				  speed += 1;
-				  if (speed > 100) {
-					  speed = 0;
-			      }
-				  ShowSpeed(speed, aPins, led_num);
-				  if (speed == 100) {
-					  HAL_Delay(100);
-			      }
-				  HAL_Delay(50);
-			  }
-		  LED_ResetAll(aPins, led_num);
-	  }
-
-
 	  if (ion < led_num) {
 		 if (dir > 0){
 			  LED_On(aPins[ion]);
@@ -240,7 +241,6 @@ int main(void)
 			  LED_On(aPins[led_num - ion - 1]);
 		  }
 		  ++ion;
-		  HAL_Delay(del - del * ((float)speed) / 100);
 		  if (ion == led_num && ioff == led_num) {
 			  ioff = 0;
 		  }
@@ -253,11 +253,19 @@ int main(void)
 			  LED_Off(aPins[led_num - ioff - 1]);
 		  }
 		  ++ioff;
-		  HAL_Delay(del - del * ((float)speed) / 100);
 		  if (ion == led_num && ioff == led_num) {
 			  ion = 0;
 	  	  }
 	  }
+	  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
+		  DoWhenButtonIsPushed(&ion, &ioff,  &dir,  &speed, aPins, &led_num);
+	  }
+	  HAL_Delay((del - del * ((float)speed) / 100) / 2);
+
+	  if (HAL_GPIO_ReadPin(mPB0_PORT, mPB0_PIN) == 0) {
+		  DoWhenButtonIsPushed(&ion, &ioff,  &dir,  &speed, aPins, &led_num);
+	  }
+	  HAL_Delay((del - del * ((float)speed) / 100) / 2);
 
   }
 }
