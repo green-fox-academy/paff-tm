@@ -54,8 +54,10 @@
 UART_HandleTypeDef uart_handle;
 RNG_HandleTypeDef rnd;
 uint32_t rnd_num;
+uint32_t tickstart = 0;
 
 /* Private function prototypes -----------------------------------------------*/
+void My_Delay(uint32_t delay);
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -125,22 +127,45 @@ int main(void)
   printf("\n------------------WELCOME------------------\r\n");
   printf("**********in STATIC reaction game**********\r\n\n");
 
+  printf("Let's play a game! Are you ready?\n");
+
   while (1)
   {
-
-	  printf("Let's play a game! Are you ready?\n");
 	  while (BSP_PB_GetState(BUTTON_KEY) == 0) {
 		  BSP_LED_On(LED_GREEN);
-		  HAL_Delay(100);
+		  My_Delay(100);
 		  BSP_LED_Off(LED_GREEN);
-		  HAL_Delay(900);
+		  My_Delay(900);
+	  }
+	  BSP_LED_Off(LED_GREEN);
+	  while(BSP_PB_GetState(BUTTON_KEY) == 1)
+	  {
+		  //do nothing
 	  }
 	  HAL_RNG_GenerateRandomNumber(&rnd, &rnd_num);
-	  HAL_RNG_GetRandomNumber(&rnd);
-	  rnd_num = rnd_num % 10 + 1;
-	  printf("%i\n", rnd_num);
-	  HAL_Delay(1000);
+	  rnd_num = rnd_num % 10000 + 1;
+	  printf("WAIT!\n");
+	  tickstart = HAL_GetTick();
+	  My_Delay(rnd_num);
+	  if (HAL_GetTick() - tickstart < rnd_num) {
+		  printf("Too fast... You lose!\n");
+	  } else {
+		  printf("PUSH!\n");
+		  BSP_LED_On(LED_GREEN);
+		  tickstart = HAL_GetTick();
 
+		  while(BSP_PB_GetState(BUTTON_KEY) == 0) {
+			  //do nothing
+		  }
+
+		  printf("Your reaction time was: %lu msec.\n", HAL_GetTick() - tickstart);
+	  }
+
+	  while(BSP_PB_GetState(BUTTON_KEY) == 1) {
+		  //do nothing
+	  }
+
+	  printf("Next round! Are you ready?\n");
   }
 }
 /**
@@ -296,6 +321,18 @@ void assert_failed(uint8_t* file, uint32_t line)
   }
 }
 #endif
+
+void My_Delay(uint32_t delay)
+{
+	uint32_t tickstart = 0;
+	tickstart = HAL_GetTick();
+	while((HAL_GetTick() - tickstart) < delay)
+	{
+		if (BSP_PB_GetState(BUTTON_KEY) == 1)
+			return;
+	}
+}
+
 
 /**
   * @}
