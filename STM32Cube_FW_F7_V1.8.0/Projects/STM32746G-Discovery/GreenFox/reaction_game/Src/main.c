@@ -56,10 +56,12 @@ RNG_HandleTypeDef rnd;
 uint32_t rnd_num;
 uint32_t tickstart = 0;
 unsigned int results[10] = {0};
-unsigned int results_num = 0;
+unsigned int results_length = 0;
+unsigned int result_pos = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 int My_Delay(uint32_t delay);
+unsigned int resultAverage(unsigned int *results, unsigned int results_length);
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -159,7 +161,16 @@ int main(void)
 			  //do nothing
 		  }
 
-		  printf("Your reaction time was: %lu msec.\n", HAL_GetTick() - tickstart);
+		  if (results_length < 10)
+			  ++results_length;
+		  results[result_pos] = HAL_GetTick() - tickstart;
+		  printf("Your reaction time was: %u msec.\n", results[result_pos]);
+		  printf("The average of the last %u tries is: %i msec\n", results_length, resultAverage(results, results_length));
+
+		  if (result_pos < 9)
+			  ++result_pos;
+		  else
+			  result_pos = 0;
 	  }
 
 	  while(BSP_PB_GetState(BUTTON_KEY) == 1) {
@@ -335,6 +346,14 @@ int My_Delay(uint32_t delay)
 	return 0;
 }
 
+unsigned int resultAverage(unsigned int *results, unsigned int results_length)
+{
+	int sum = 0;
+	for (unsigned int i = 0; i < results_length; ++i) {
+		sum += results[i];
+	}
+	return sum / results_length;
+}
 
 /**
   * @}
