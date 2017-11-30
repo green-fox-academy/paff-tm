@@ -47,6 +47,11 @@
   */ 
 
 /* Private typedef -----------------------------------------------------------*/
+typedef struct {
+	  GPIO_TypeDef* port;
+	  uint16_t		pin;
+} tPin;
+
 /* Private define ------------------------------------------------------------*/
 #define A0 			GPIOA, GPIO_PIN_0
 #define A1 			GPIOF, GPIO_PIN_10
@@ -73,7 +78,6 @@
 #define MPIN3		D2
 #define MPIN2		D1
 #define MPIN1		D0
-
 
 #define COL1 MPIN13
 #define COL2 MPIN3
@@ -195,32 +199,14 @@ static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 
+void My_Init();
+void Col_Init(GPIO_TypeDef *_port, uint16_t _pin);
+void Row_Init(GPIO_TypeDef *_port, uint16_t _pin);
+void LED_On(GPIO_TypeDef* col_port, uint16_t col_pin, GPIO_TypeDef* row_port, uint16_t row_pin);
+void LED_Off(GPIO_TypeDef* col_port, uint16_t col_pin, GPIO_TypeDef* row_port, uint16_t row_pin);
+void PrintNumber(unsigned int n, unsigned int numbers[10][7][5], tPin *cols, tPin *rows, uint32_t delay);
+
 /* Private functions ---------------------------------------------------------*/
-
-void Col_Init(GPIO_TypeDef *_port, uint16_t _pin)
-{
-	GPIO_InitTypeDef col;
-	col.Pin = _pin;
-	col.Mode = GPIO_MODE_OUTPUT_PP;
-	col.Pull = GPIO_PULLDOWN;
-	col.Speed = GPIO_SPEED_HIGH;
-
-	HAL_GPIO_Init(_port, &col);
-	HAL_GPIO_WritePin(_port, _pin, GPIO_PIN_RESET);
-}
-
-void Row_Init(GPIO_TypeDef *_port, uint16_t _pin)
-{
-	GPIO_InitTypeDef row;
-	row.Pin = _pin;
-	row.Mode = GPIO_MODE_OUTPUT_PP;
-	row.Pull = GPIO_PULLUP;
-	row.Speed = GPIO_SPEED_HIGH;
-
-	HAL_GPIO_Init(_port, &row);
-	HAL_GPIO_WritePin(_port, _pin, GPIO_PIN_SET);
-}
-
 void My_Init()
 {
 	__HAL_RCC_GPIOA_CLK_ENABLE();
@@ -250,20 +236,28 @@ void My_Init()
 	Row_Init(ROW7);
 }
 
-
-struct tPin {
-	  GPIO_TypeDef* port;
-	  uint16_t		pin;
-};
-
-void Row_On(GPIO_TypeDef* col_port, uint16_t col_pin)
+void Col_Init(GPIO_TypeDef *_port, uint16_t _pin)
 {
+	GPIO_InitTypeDef col;
+	col.Pin = _pin;
+	col.Mode = GPIO_MODE_OUTPUT_PP;
+	col.Pull = GPIO_PULLDOWN;
+	col.Speed = GPIO_SPEED_HIGH;
 
+	HAL_GPIO_Init(_port, &col);
+	HAL_GPIO_WritePin(_port, _pin, GPIO_PIN_RESET);
 }
 
-void Row_Off(GPIO_TypeDef* col_port, uint16_t col_pin)
+void Row_Init(GPIO_TypeDef *_port, uint16_t _pin)
 {
+	GPIO_InitTypeDef row;
+	row.Pin = _pin;
+	row.Mode = GPIO_MODE_OUTPUT_PP;
+	row.Pull = GPIO_PULLUP;
+	row.Speed = GPIO_SPEED_HIGH;
 
+	HAL_GPIO_Init(_port, &row);
+	HAL_GPIO_WritePin(_port, _pin, GPIO_PIN_SET);
 }
 
 void LED_On(GPIO_TypeDef* col_port, uint16_t col_pin, GPIO_TypeDef* row_port, uint16_t row_pin)
