@@ -48,23 +48,48 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define mLED0_PORT	GPIOG
-#define mLED0_PIN 	GPIO_PIN_7
-#define mLED1_PORT	GPIOI
-#define mLED1_PIN	GPIO_PIN_0
-#define mLED2_PORT	GPIOH
-#define mLED2_PIN	GPIO_PIN_6
-#define mLED3_PORT	GPIOI
-#define mLED3_PIN	GPIO_PIN_3
-#define mLED4_PORT	GPIOI
-#define mLED4_PIN	GPIO_PIN_2
-#define mLED5_PORT	GPIOA
-#define mLED5_PIN	GPIO_PIN_15
-#define mLED6_PORT	GPIOA
-#define mLED6_PIN	GPIO_PIN_8
+#define A0 			GPIOA, GPIO_PIN_0
+#define A1 			GPIOF, GPIO_PIN_10
+#define A2 			GPIOF, GPIO_PIN_9
+#define A3 			GPIOF, GPIO_PIN_8
+#define A4 			GPIOF, GPIO_PIN_7
+#define A5 			GPIOF, GPIO_PIN_6
+#define D0 			GPIOC, GPIO_PIN_7
+#define D1 			GPIOC, GPIO_PIN_6
+#define D2 			GPIOG, GPIO_PIN_6
+#define D3 			GPIOB, GPIO_PIN_4
+#define D4 			GPIOG, GPIO_PIN_7
+#define D5 			GPIOI, GPIO_PIN_0
 
-#define mLED0	mLED0_PORT, mLED0_PIN
-#define mLED1	mLED1_PORT, mLED1_PIN
+#define MPIN14		A5
+#define MPIN13		A4
+#define MPIN12		A3
+#define MPIN10		A2
+#define MPIN9		A1
+#define MPIN8		A0
+#define MPIN7		D5
+#define MPIN6		D4
+#define MPIN4		D3
+#define MPIN3		D2
+#define MPIN2		D1
+#define MPIN1		D0
+
+
+#define COL1 MPIN13
+#define COL2 MPIN3
+#define COL3 MPIN4
+#define COL4 MPIN10
+#define COL5 MPIN6
+
+#define ROW1 MPIN9
+#define ROW2 MPIN14
+#define ROW3 MPIN8
+#define ROW4 MPIN12
+#define ROW5 MPIN1
+#define ROW6 MPIN7
+#define ROW7 MPIN2
+
+#define LM1 0,0,0,0,0,	0,0,1,0,0,	0,1,1,0,0,	0,0,1,0,0,	0,0,1,0,0,	0,1,1,1,0,	0,0,0,0,0
 
 
 /* Private macro -------------------------------------------------------------*/
@@ -77,56 +102,106 @@ static void CPU_CACHE_Enable(void);
 
 /* Private functions ---------------------------------------------------------*/
 
+void Col_Init(GPIO_TypeDef *_port, uint16_t _pin)
+{
+	GPIO_InitTypeDef col;
+	col.Pin = _pin;
+	col.Mode = GPIO_MODE_OUTPUT_PP;
+	col.Pull = GPIO_PULLDOWN;
+	col.Speed = GPIO_SPEED_HIGH;
+
+	HAL_GPIO_Init(_port, &col);
+	HAL_GPIO_WritePin(_port, _pin, GPIO_PIN_RESET);
+}
+
+void Row_Init(GPIO_TypeDef *_port, uint16_t _pin)
+{
+	GPIO_InitTypeDef row;
+	row.Pin = _pin;
+	row.Mode = GPIO_MODE_OUTPUT_PP;
+	row.Pull = GPIO_PULLUP;
+	row.Speed = GPIO_SPEED_HIGH;
+
+	HAL_GPIO_Init(_port, &row);
+	HAL_GPIO_WritePin(_port, _pin, GPIO_PIN_SET);
+}
+
 void My_Init()
 {
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOC_CLK_ENABLE();
-	__HAL_RCC_GPIOD_CLK_ENABLE();
-	__HAL_RCC_GPIOE_CLK_ENABLE();
+	//__HAL_RCC_GPIOD_CLK_ENABLE();
+	//__HAL_RCC_GPIOE_CLK_ENABLE();
 	__HAL_RCC_GPIOF_CLK_ENABLE();
 	__HAL_RCC_GPIOG_CLK_ENABLE();
-	__HAL_RCC_GPIOH_CLK_ENABLE();
+	//__HAL_RCC_GPIOH_CLK_ENABLE();
 	__HAL_RCC_GPIOI_CLK_ENABLE();
-	__HAL_RCC_GPIOJ_CLK_ENABLE();
-	__HAL_RCC_GPIOK_CLK_ENABLE();
+	//__HAL_RCC_GPIOJ_CLK_ENABLE();
+	//__HAL_RCC_GPIOK_CLK_ENABLE();
+
+	Col_Init(COL1);
+	Col_Init(COL2);
+	Col_Init(COL3);
+	Col_Init(COL4);
+	Col_Init(COL5);
+
+	Row_Init(ROW1);
+	Row_Init(ROW2);
+	Row_Init(ROW3);
+	Row_Init(ROW4);
+	Row_Init(ROW5);
+	Row_Init(ROW6);
+	Row_Init(ROW7);
 }
 
-
-void LED_Init(GPIO_TypeDef *_port, uint16_t _pin)
-{
-	GPIO_InitTypeDef led;            // create a config structure
-	led.Pin = _pin;
-	led.Mode = GPIO_MODE_OUTPUT_PP;
-	led.Pull = GPIO_PULLDOWN;
-	led.Speed = GPIO_SPEED_HIGH;
-
-	HAL_GPIO_Init(_port, &led);
-}
-
-void Button_Init(GPIO_TypeDef *_port, uint16_t _pin)
-{
-	GPIO_InitTypeDef pb;
-	pb.Pin = _pin;
-	pb.Mode = GPIO_MODE_INPUT;
-	pb.Pull = GPIO_PULLUP;
-	pb.Speed = GPIO_SPEED_LOW;
-	HAL_GPIO_Init(_port, &pb);
-}
 
 struct tPin {
 	  GPIO_TypeDef* port;
 	  uint16_t		pin;
 };
 
-void LED_On(tPin _led)
+void Row_On(GPIO_TypeDef* col_port, uint16_t col_pin)
 {
-	 HAL_GPIO_WritePin(_led.port, _led.pin, GPIO_PIN_SET);
+
 }
 
-void LED_Off(tPin _led)
+void Row_Off(GPIO_TypeDef* col_port, uint16_t col_pin)
 {
-	 HAL_GPIO_WritePin(_led.port, _led.pin, GPIO_PIN_RESET);
+
+}
+
+void LED_On(GPIO_TypeDef* col_port, uint16_t col_pin, GPIO_TypeDef* row_port, uint16_t row_pin)
+{
+	 HAL_GPIO_WritePin(col_port, col_pin, GPIO_PIN_SET);
+	 HAL_GPIO_WritePin(row_port, row_pin, GPIO_PIN_RESET);
+}
+
+void LED_Off(GPIO_TypeDef* col_port, uint16_t col_pin, GPIO_TypeDef* row_port, uint16_t row_pin)
+{
+	 HAL_GPIO_WritePin(col_port, col_pin, GPIO_PIN_RESET);
+	 HAL_GPIO_WritePin(row_port, row_pin, GPIO_PIN_SET);
+}
+
+void PrintNumber(unsigned int n, unsigned int numbers[10][7][5], tPin *cols, tPin *rows, uint32_t delay)
+{
+	uint32_t tickstart = 0;
+	tickstart = HAL_GetTick();
+	while((HAL_GetTick() - tickstart) < delay)
+	{
+		  for (unsigned int r = 0; r < 7; ++r) {
+			  for (unsigned int c = 0; c < 5; ++c) {
+				  if (numbers[n][r][c] == 1) {
+					  HAL_GPIO_WritePin(cols[c].port, cols[c].pin, GPIO_PIN_SET);
+				  } else {
+					  HAL_GPIO_WritePin(cols[c].port, cols[c].pin, GPIO_PIN_RESET);
+				  }
+			  }
+			  HAL_GPIO_WritePin(rows[r].port, rows[r].pin, GPIO_PIN_RESET);
+			  HAL_Delay(1);
+			  HAL_GPIO_WritePin(rows[r].port, rows[r].pin, GPIO_PIN_SET);
+		  }
+	}
 }
 
 
@@ -162,40 +237,146 @@ int main(void)
   SystemClock_Config();
   My_Init();
 
-
   /* Add your application code here     */
 
-  tPin aPins[7] =
+  tPin rows[7] =
   {
-	{mLED0_PORT, mLED0_PIN},
-	{mLED1_PORT, mLED1_PIN},
-	{mLED2_PORT, mLED2_PIN},
-	{mLED3_PORT, mLED3_PIN},
-	{mLED4_PORT, mLED4_PIN},
-	{mLED5_PORT, mLED5_PIN},
-	{mLED6_PORT, mLED6_PIN}
+	ROW1,
+	ROW2,
+	ROW3,
+	ROW4,
+	ROW5,
+	ROW6,
+	ROW7,
   };
 
-  unsigned int led_num = (int)(sizeof(aPins) / sizeof(aPins[0]));
+  tPin cols[5] =
+  {
+	COL1,
+	COL2,
+	COL3,
+	COL4,
+	COL5,
+  };
 
-  for (unsigned int i = 0; i < led_num; ++i){
-	  LED_Init(aPins[i].port, aPins[i].pin);
-  }
+  //typedef unsigned int tMask[7][5];
+
+  unsigned int numbers[10][7][5] =  {
+	// 0
+	  0,1,1,1,0,
+	  1,0,0,0,1,
+	  1,0,0,1,1,
+	  1,0,1,0,1,
+	  1,1,0,0,1,
+	  1,0,0,0,1,
+	  0,1,1,1,0,
+
+	// 1
+	  0,0,1,0,0,
+	  0,1,1,0,0,
+	  0,0,1,0,0,
+	  0,0,1,0,0,
+	  0,0,1,0,0,
+	  0,0,1,0,0,
+	  0,1,1,1,0,
+
+    // 2
+	  0,1,1,1,0,
+	  1,0,0,0,1,
+	  0,0,0,0,1,
+	  0,0,0,1,0,
+	  0,0,1,0,0,
+	  0,1,0,0,0,
+	  1,1,1,1,1,
+
+	// 3
+	  1,1,1,1,1,
+	  0,0,0,1,0,
+	  0,0,1,0,0,
+	  0,0,0,1,0,
+	  0,0,0,0,1,
+	  1,0,0,0,1,
+	  0,1,1,1,0,
+
+	// 4
+	  0,0,0,1,0,
+	  0,0,1,1,0,
+	  0,1,0,1,0,
+	  1,0,0,1,0,
+	  1,1,1,1,1,
+	  0,0,0,1,0,
+	  0,0,0,1,0,
+
+	// 5
+	  1,1,1,1,1,
+	  1,0,0,0,0,
+	  1,1,1,1,0,
+	  0,0,0,0,1,
+	  0,0,0,0,1,
+	  1,0,0,0,1,
+	  0,1,1,1,0,
+
+	// 6
+	  0,0,1,1,0,
+	  0,1,0,0,0,
+	  1,0,0,0,0,
+	  1,1,1,1,0,
+	  1,0,0,0,1,
+	  1,0,0,0,1,
+	  0,1,1,1,0,
+
+
+	// 7
+	  1,1,1,1,1,
+	  0,0,0,0,1,
+	  0,0,0,1,0,
+	  0,0,1,0,0,
+	  0,1,0,0,0,
+	  0,1,0,0,0,
+	  0,1,0,0,0,
+
+	// 8
+	  0,1,1,1,0,
+	  1,0,0,0,1,
+	  1,0,0,0,1,
+	  0,1,1,1,0,
+	  1,0,0,0,1,
+	  1,0,0,0,1,
+	  0,1,1,1,0,
+
+	// 9
+	  0,1,1,1,0,
+	  1,0,0,0,1,
+	  1,0,0,0,1,
+	  0,1,1,1,1,
+	  0,0,0,0,1,
+	  0,0,0,1,0,
+	  0,1,1,0,0,
+  };
+
+  //unsigned int led_num = (int)(sizeof(aPins) / sizeof(aPins[0]));
+
+  //for (unsigned int i = 0; i < led_num; ++i){
+	//  LED_Init(aPins[i].port, aPins[i].pin);
+  //}
 
   /* Infinite loop */
+
+  //LED_On(COL3, ROW4);
+
+
+
   while (1)
   {
-	  for (unsigned int i = 0; i < led_num; ++i){
-		  LED_On(aPins[i]);
-		  HAL_Delay(100);
+	  HAL_Delay(5000);
+	  //PrintNumber(3, numbers, cols, rows, 5000);
+	  for (int i = 3; i >= 0 ; --i) {
+		  PrintNumber(i, numbers, cols, rows, 1500);
 	  }
-
-	  for (unsigned int i = 0; i < led_num; ++i){
-		  LED_Off(aPins[i]);
-		  HAL_Delay(100);
-	  }
+	  PrintNumber(0, numbers, cols, rows, 5000);
 
   }
+
 }
 
 /**
