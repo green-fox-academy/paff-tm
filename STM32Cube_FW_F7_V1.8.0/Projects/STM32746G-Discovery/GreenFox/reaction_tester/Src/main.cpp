@@ -48,6 +48,25 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define mLED0_PORT	GPIOG
+#define mLED0_PIN 	GPIO_PIN_7
+#define mLED1_PORT	GPIOI
+#define mLED1_PIN	GPIO_PIN_0
+#define mLED2_PORT	GPIOH
+#define mLED2_PIN	GPIO_PIN_6
+#define mLED3_PORT	GPIOI
+#define mLED3_PIN	GPIO_PIN_3
+#define mLED4_PORT	GPIOI
+#define mLED4_PIN	GPIO_PIN_2
+#define mLED5_PORT	GPIOA
+#define mLED5_PIN	GPIO_PIN_15
+#define mLED6_PORT	GPIOA
+#define mLED6_PIN	GPIO_PIN_8
+
+#define mLED0	mLED0_PORT, mLED0_PIN
+#define mLED1	mLED1_PORT, mLED1_PIN
+
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -58,173 +77,56 @@ static void CPU_CACHE_Enable(void);
 
 /* Private functions ---------------------------------------------------------*/
 
-void My_Init(void)
+void My_Init()
 {
-	__HAL_RCC_GPIOA_CLK_ENABLE();    // we need to enable the GPIOA port's clock first
-
-	GPIO_InitTypeDef led0;            // create a config structure
-	led0.Pin = GPIO_PIN_0;            // this is about PIN 0
-	led0.Mode = GPIO_MODE_OUTPUT_PP;  // Configure as output with push-up-down enabled
-	led0.Pull = GPIO_PULLDOWN;        // the push-up-down should work as pulldown
-	led0.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
-
-	HAL_GPIO_Init(GPIOA, &led0);      // initialize the pin on GPIOA port with HAL
-
-	__HAL_RCC_GPIOF_CLK_ENABLE();    // we need to enable the GPIOA port's clock first
-
-	GPIO_InitTypeDef led1;            // create a config structure
-	led1.Pin = GPIO_PIN_8;            // this is about PIN 0
-	led1.Mode = GPIO_MODE_OUTPUT_PP;  // Configure as output with push-up-down enabled
-	led1.Pull = GPIO_PULLDOWN;        // the push-up-down should work as pulldown
-	led1.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
-
-	HAL_GPIO_Init(GPIOF, &led1);      // initialize the pin on GPIOA port with HAL
-
-	GPIO_InitTypeDef led2;            // create a config structure
-	led2.Pin = GPIO_PIN_9;            // this is about PIN 0
-	led2.Mode = GPIO_MODE_OUTPUT_PP;  // Configure as output with push-up-down enabled
-	led2.Pull = GPIO_PULLDOWN;        // the push-up-down should work as pulldown
-	led2.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
-
-	HAL_GPIO_Init(GPIOF, &led2);      // initialize the pin on GPIOA port with HAL
-
-	GPIO_InitTypeDef led3;            // create a config structure
-	led3.Pin = GPIO_PIN_10;            // this is about PIN 0
-	led3.Mode = GPIO_MODE_OUTPUT_PP;  // Configure as output with push-up-down enabled
-	led3.Pull = GPIO_PULLDOWN;        // the push-up-down should work as pulldown
-	led3.Speed = GPIO_SPEED_HIGH;     // we need a high-speed output
-
-	HAL_GPIO_Init(GPIOF, &led3);      // initialize the pin on GPIOA port with HAL
-
-	__HAL_RCC_GPIOG_CLK_ENABLE();
-	GPIO_InitTypeDef pb1;            // create a config structure
-	pb1.Pin = GPIO_PIN_6;
-	pb1.Mode = GPIO_MODE_INPUT;
-	pb1.Pull = GPIO_PULLUP;
-	pb1.Speed = GPIO_SPEED_LOW;
-	HAL_GPIO_Init(GPIOG, &pb1);
-
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOC_CLK_ENABLE();
-	GPIO_InitTypeDef pb2;            // create a config structure
-	pb2.Pin = GPIO_PIN_6;
-	pb2.Mode = GPIO_MODE_INPUT;
-	pb2.Pull = GPIO_PULLUP;
-	pb2.Speed = GPIO_SPEED_LOW;
-	HAL_GPIO_Init(GPIOC, &pb2);
-
-	GPIO_InitTypeDef pb3;            // create a config structure
-	pb3.Pin = GPIO_PIN_7;
-	pb3.Mode = GPIO_MODE_INPUT;
-	pb3.Pull = GPIO_PULLUP;
-	pb3.Speed = GPIO_SPEED_LOW;
-	HAL_GPIO_Init(GPIOC, &pb3);
-
+	__HAL_RCC_GPIOD_CLK_ENABLE();
+	__HAL_RCC_GPIOE_CLK_ENABLE();
+	__HAL_RCC_GPIOF_CLK_ENABLE();
+	__HAL_RCC_GPIOG_CLK_ENABLE();
+	__HAL_RCC_GPIOH_CLK_ENABLE();
+	__HAL_RCC_GPIOI_CLK_ENABLE();
+	__HAL_RCC_GPIOJ_CLK_ENABLE();
+	__HAL_RCC_GPIOK_CLK_ENABLE();
 }
 
-void RGB_Red(GPIO_PinState state)
+
+void LED_Init(GPIO_TypeDef *_port, uint16_t _pin)
 {
-	if (state == GPIO_PIN_SET)
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10, GPIO_PIN_RESET);
-	else
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10, GPIO_PIN_SET);
+	GPIO_InitTypeDef led;            // create a config structure
+	led.Pin = _pin;
+	led.Mode = GPIO_MODE_OUTPUT_PP;
+	led.Pull = GPIO_PULLDOWN;
+	led.Speed = GPIO_SPEED_HIGH;
+
+	HAL_GPIO_Init(_port, &led);
 }
 
-void RGB_Green(GPIO_PinState state)
+void Button_Init(GPIO_TypeDef *_port, uint16_t _pin)
 {
-	if (state == GPIO_PIN_SET)
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-	else
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+	GPIO_InitTypeDef pb;
+	pb.Pin = _pin;
+	pb.Mode = GPIO_MODE_INPUT;
+	pb.Pull = GPIO_PULLUP;
+	pb.Speed = GPIO_SPEED_LOW;
+	HAL_GPIO_Init(_port, &pb);
 }
 
-void RGB_Blue(GPIO_PinState state)
+struct tPin {
+	  GPIO_TypeDef* port;
+	  uint16_t		pin;
+};
+
+void LED_On(tPin _led)
 {
-	if (state == GPIO_PIN_SET)
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_RESET);
-	else
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
+	 HAL_GPIO_WritePin(_led.port, _led.pin, GPIO_PIN_SET);
 }
 
-void RGB_Show(int del, float del_red_mul, float del_green_mul, float del_blue_mul)
+void LED_Off(tPin _led)
 {
-	  int del_red = 0;
-	  int del_green = 0;
-	  int del_blue = 0;
-
-	  del_red = del * del_red_mul;
-	  del_green = del * del_green_mul;
-	  del_blue = del * del_blue_mul;
-
-	  if (del_red_mul > 0){
-		  RGB_Red(GPIO_PIN_SET);
-	  }
-	  if (del_green_mul > 0){
-		  RGB_Green(GPIO_PIN_SET);
-	  }
-	  if (del_blue_mul > 0){
-		  RGB_Blue(GPIO_PIN_SET);
-	  }
-
-	  if ((del_red < del_green) && (del_red < del_blue)) {
-		  HAL_Delay(del_red);
-		  RGB_Red(GPIO_PIN_RESET);
-
-		  if (del_green < del_blue) {
-			  HAL_Delay(del_green - del_red);
-			  RGB_Green(GPIO_PIN_RESET);
-
-			  HAL_Delay(del_blue - del_green);
-			  RGB_Blue(GPIO_PIN_RESET);
-			  HAL_Delay(del - del_blue);
-		  } else {
-			  HAL_Delay(del_blue - del_red);
-			  RGB_Blue(GPIO_PIN_RESET);
-
-			  HAL_Delay(del_green - del_blue);
-			  RGB_Green(GPIO_PIN_RESET);
-			  HAL_Delay(del - del_green);
-		  }
-
-	  } else if (del_green < del_blue) {
-		  HAL_Delay(del_green);
-		  RGB_Green(GPIO_PIN_RESET);
-
-		  if (del_blue < del_red) {
-			  HAL_Delay(del_blue - del_green);
-			  RGB_Blue(GPIO_PIN_RESET);
-
-			  HAL_Delay(del_red - del_blue);
-			  RGB_Red(GPIO_PIN_RESET);
-			  HAL_Delay(del - del_red);
-		  } else {
-			  HAL_Delay(del_red - del_green);
-			  RGB_Red(GPIO_PIN_RESET);
-
-			  HAL_Delay(del_blue - del_red);
-			  RGB_Blue(GPIO_PIN_RESET);
-			  HAL_Delay(del - del_blue);
-	      }
-
-	  } else {
-		  HAL_Delay(del_blue);
-		  RGB_Blue(GPIO_PIN_RESET);
-
-		  if (del_green < del_red) {
-			  HAL_Delay(del_green - del_blue);
-			  RGB_Green(GPIO_PIN_RESET);
-
-			  HAL_Delay(del_red - del_green);
-			  RGB_Red(GPIO_PIN_RESET);
-			  HAL_Delay(del - del_red);
-		  } else {
-			  HAL_Delay(del_red - del_blue);
-			  RGB_Red(GPIO_PIN_RESET);
-
-			  HAL_Delay(del_green - del_red);
-			  RGB_Green(GPIO_PIN_RESET);
-			  HAL_Delay(del - del_green);
-	      }
-	  }
+	 HAL_GPIO_WritePin(_led.port, _led.pin, GPIO_PIN_RESET);
 }
 
 
@@ -258,83 +160,40 @@ int main(void)
 
   /* Configure the System clock to have a frequency of 216 MHz */
   SystemClock_Config();
+  My_Init();
 
 
   /* Add your application code here     */
-  My_Init();
 
-  int del = 20;
-  float del_red_mul = 0;
-  float del_green_mul = 0;
-  float del_blue_mul = 0;
+  tPin aPins[7] =
+  {
+	{mLED0_PORT, mLED0_PIN},
+	{mLED1_PORT, mLED1_PIN},
+	{mLED2_PORT, mLED2_PIN},
+	{mLED3_PORT, mLED3_PIN},
+	{mLED4_PORT, mLED4_PIN},
+	{mLED5_PORT, mLED5_PIN},
+	{mLED6_PORT, mLED6_PIN}
+  };
+
+  unsigned int led_num = (int)(sizeof(aPins) / sizeof(aPins[0]));
+
+  for (unsigned int i = 0; i < led_num; ++i){
+	  LED_Init(aPins[i].port, aPins[i].pin);
+  }
 
   /* Infinite loop */
   while (1)
   {
-
-	  if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 0) {
+	  for (unsigned int i = 0; i < led_num; ++i){
+		  LED_On(aPins[i]);
 		  HAL_Delay(100);
-		  if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 1) {
-			  if (del_red_mul > 0) {
-				  del_red_mul = 0;
-			  } else {
-				  del_red_mul = 1;
-			  }
-			  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
-		  } else {
-			  while (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_6) == 0) {
-				  del_red_mul += 0.015;
-				  if (del_red_mul >= 1){
-					  del_red_mul = 0;
-				  }
-				  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
-			  }
-		  }
-
 	  }
 
-	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0) {
+	  for (unsigned int i = 0; i < led_num; ++i){
+		  LED_Off(aPins[i]);
 		  HAL_Delay(100);
-		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 1) {
-			  if (del_green_mul > 0) {
-				  del_green_mul = 0;
-			  } else {
-				  del_green_mul = 1;
-			  }
-		  } else {
-			  while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0) {
-				  del_green_mul += 0.015;
-				  if (del_green_mul >= 1){
-					  del_green_mul = 0;
-				  }
-				  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
-			  }
-		  }
-
 	  }
-
-
-	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 0) {
-		  HAL_Delay(100);
-		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 1) {
-			  if (del_blue_mul > 0) {
-				  del_blue_mul = 0;
-			  } else {
-				  del_blue_mul = 1;
-			  }
-		  } else {
-			  while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == 0) {
-				  del_blue_mul += 0.015;
-				  if (del_blue_mul >= 1){
-					  del_blue_mul = 0;
-				  }
-				  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
-			  }
-		  }
-
-	  }
-
-	  RGB_Show(del, del_red_mul, del_green_mul, del_blue_mul);
 
   }
 }
