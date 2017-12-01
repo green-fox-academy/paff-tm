@@ -41,4 +41,17 @@
 ## week-07 - C++
 - [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-1) - try-catch
 - [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-2) - Function Override
+- [day-3](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-3)
+- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-5)
+- [Temp logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/Temp_logger)
+
+## week-08 - [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0\Projects\STM32746G-Discovery\GreenFox)
+- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/day-5)
+
+
+
+
+
+
+
 
