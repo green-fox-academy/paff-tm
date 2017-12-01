@@ -102,22 +102,22 @@
 			<locationURI>PARENT-6-PROJECT_LOC/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_uart.c</locationURI>
 		</link>
 		<link>
-			<name>LEDBlinker/SW4STM32/startup_stm32f746xx.s</name>
+			<name>matrix_led/SW4STM32/startup_stm32f746xx.s</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/startup_stm32f746xx.s</locationURI>
 		</link>
 		<link>
-			<name>LEDBlinker/User/main.cpp</name>
+			<name>matrix_led/User/main.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Src/main.cpp</locationURI>
 		</link>
 		<link>
-			<name>LEDBlinker/User/stm32f7xx_hal_msp.c</name>
+			<name>matrix_led/User/stm32f7xx_hal_msp.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Src/stm32f7xx_hal_msp.c</locationURI>
 		</link>
 		<link>
-			<name>LEDBlinker/User/stm32f7xx_it.c</name>
+			<name>matrix_led/User/stm32f7xx_it.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Src/stm32f7xx_it.c</locationURI>
 		</link>

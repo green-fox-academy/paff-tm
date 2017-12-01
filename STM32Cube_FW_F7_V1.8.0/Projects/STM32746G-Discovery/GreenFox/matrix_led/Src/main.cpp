@@ -252,7 +252,7 @@ void Row_Init(GPIO_TypeDef *_port, uint16_t _pin)
 {
 	GPIO_InitTypeDef row;
 	row.Pin = _pin;
-	row.Mode = GPIO_MODE_OUTPUT_PP;
+	row.Mode = GPIO_MODE_OUTPUT_OD;
 	row.Pull = GPIO_PULLUP;
 	row.Speed = GPIO_SPEED_HIGH;
 
