@@ -49,6 +49,17 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define A0 				GPIOA, GPIO_PIN_0
+#define A1 				GPIOF, GPIO_PIN_10
+#define A2 				GPIOF, GPIO_PIN_9
+#define A3 				GPIOF, GPIO_PIN_8
+#define A4 				GPIOF, GPIO_PIN_7
+#define A5 				GPIOF, GPIO_PIN_6
+
+#define RGB_LED_R_PIN 	A5
+#define RGB_LED_G_PIN 	A4
+#define RGB_LED_B_PIN 	A3
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
@@ -112,6 +123,14 @@ int main(void)
   uart_handle.Init.Mode       = UART_MODE_TX_RX;
 
   BSP_COM_Init(COM1, &uart_handle);
+
+  __HAL_RCC_GPIOF_CLK_ENABLE();
+  Init_LED_Pin(RGB_LED_R_PIN);
+  HAL_GPIO_WritePin(RGB_LED_R_PIN, GPIO_PIN_RESET);
+  Init_LED_Pin(RGB_LED_G_PIN);
+  HAL_GPIO_WritePin(RGB_LED_G_PIN, GPIO_PIN_SET);
+  Init_LED_Pin(RGB_LED_B_PIN);
+  HAL_GPIO_WritePin(RGB_LED_B_PIN, GPIO_PIN_SET);
 
   /* Output without printf, using HAL function*/
   //char msg[] = "UART HAL Example\r\n";

@@ -65,19 +65,16 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-void Init_Pin()
+void Init_LED_Pin(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin_x)
 {
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-
 	GPIO_InitTypeDef	led;
-
 	//led.Alternate =
 	led.Mode = 			GPIO_MODE_OUTPUT_PP;
-	led.Pin = 			GPIO_PIN_0;
-	led.Pull = 			GPIO_PULLDOWN;
-	led.Speed = 		GPIO_SPEED_FAST;
+	led.Pin = 			GPIO_Pin_x;
+	led.Pull = 			GPIO_PULLUP;
+	led.Speed = 		GPIO_SPEED_HIGH;
 
-	HAL_GPIO_Init(GPIOA, &led);
+	HAL_GPIO_Init(GPIOx, &led);
 }
 
 /** @defgroup HAL_MSP_Private_Functions
