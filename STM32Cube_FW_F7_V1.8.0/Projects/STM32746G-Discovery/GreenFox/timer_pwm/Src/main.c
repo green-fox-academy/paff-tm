@@ -55,9 +55,13 @@
 #define A3 				GPIOF, GPIO_PIN_8
 #define A4 				GPIOF, GPIO_PIN_7
 #define A5 				GPIOF, GPIO_PIN_6
+#define D11 			GPIOB, GPIO_PIN_11
+#define	D3				GPIOB, GPIO_PIN_4
+#define	D10				GPIOA, GPIO_PIN_8
+#define	D9				GPIOA, GPIO_PIN_15
 
-#define RGB_LED_R_PIN 	A5
-#define RGB_LED_G_PIN 	A4
+#define RGB_LED_R_PIN 	D10
+#define RGB_LED_G_PIN 	D9
 #define RGB_LED_B_PIN 	A3
 
 /* Private macro -------------------------------------------------------------*/
@@ -124,13 +128,15 @@ int main(void)
 
   BSP_COM_Init(COM1, &uart_handle);
 
-  __HAL_RCC_GPIOF_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  Init_TIM_PWM();
   Init_LED_Pin(RGB_LED_R_PIN);
-  HAL_GPIO_WritePin(RGB_LED_R_PIN, GPIO_PIN_RESET);
+  //HAL_GPIO_WritePin(RGB_LED_R_PIN, GPIO_PIN_SET);
   Init_LED_Pin(RGB_LED_G_PIN);
-  HAL_GPIO_WritePin(RGB_LED_G_PIN, GPIO_PIN_SET);
-  Init_LED_Pin(RGB_LED_B_PIN);
-  HAL_GPIO_WritePin(RGB_LED_B_PIN, GPIO_PIN_SET);
+  //HAL_GPIO_WritePin(RGB_LED_G_PIN, GPIO_PIN_SET);
+  //Init_LED_Pin(RGB_LED_B_PIN);
+  //HAL_GPIO_WritePin(RGB_LED_B_PIN, GPIO_PIN_SET);
 
   /* Output without printf, using HAL function*/
   //char msg[] = "UART HAL Example\r\n";
@@ -142,6 +148,10 @@ int main(void)
 
 	  while (1)
 	  {
+		  //if (TIM1->CNT == 0)
+			  printf("%u\n", TIM1->CNT);
+		  //HAL_Delay(100);
+
 	  }
 }
 
@@ -308,3 +318,4 @@ void assert_failed(uint8_t* file, uint32_t line)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
