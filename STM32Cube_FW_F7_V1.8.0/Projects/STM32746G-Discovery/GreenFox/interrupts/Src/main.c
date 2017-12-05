@@ -51,10 +51,7 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef uart_handle;
-GPIO_InitTypeDef led;
-TIM_HandleTypeDef TimHandle;
-TIM_OC_InitTypeDef sConfig;
+
 
 volatile uint32_t timIntPeriod;
 
@@ -110,7 +107,7 @@ int main(void) {
 	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
 	//BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_GPIO);
 
-	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x0F, 0x00);
+	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x0E, 0x00);
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 	//BSP_LED_Init(LED_GREEN);
@@ -125,8 +122,8 @@ int main(void) {
 
 	__HAL_RCC_TIM1_CLK_ENABLE();
   	TimHandle.Instance               = TIM1;
-  	TimHandle.Init.Period            = 1000;
-  	TimHandle.Init.Prescaler         = 1;
+  	TimHandle.Init.Period            = 8000;//8000
+  	TimHandle.Init.Prescaler         = 1;	//6750
   	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
   	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
   	HAL_TIM_PWM_Init(&TimHandle);
@@ -144,11 +141,29 @@ int main(void) {
 	led.Speed = 		GPIO_SPEED_HIGH;
 	HAL_GPIO_Init(GPIOA, &led);
 
+
+	__HAL_RCC_TIM8_CLK_ENABLE();
+	TimHandle2.Instance               = TIM8;
+	TimHandle2.Init.Period            = 8000;
+	TimHandle2.Init.Prescaler         = 6750;
+	TimHandle2.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	TimHandle2.Init.CounterMode       = TIM_COUNTERMODE_UP;
+	HAL_TIM_Base_Init(&TimHandle2);
+
+	//sConfig2.OCMode       = TIM_OCMODE_TIMING;
+	//sConfig2.Pulse		  = 100;
+	//HAL_TIM_Base_Init(&TimHandle2, &sConfig2, TIM_CHANNEL_1);
+	HAL_TIM_Base_Start_IT(&TimHandle2);
+
+	HAL_NVIC_SetPriority(TIM8_UP_TIM13_IRQn, 0x0F, 0x00);
+	HAL_NVIC_EnableIRQ(TIM8_UP_TIM13_IRQn);
+
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("**********in STATIC interrupts WS**********\r\n\n");
 
 	while (1)
 	{
+
 		/*
 		TIM1->CCR1 = 1000;
 		while (BSP_PB_GetState(BUTTON_WAKEUP) != 0) {
