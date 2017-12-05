@@ -104,7 +104,8 @@ int main(void) {
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
 
-	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
+	//BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
+	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
 
 	/* Add your application code here
 	 */
@@ -135,7 +136,7 @@ int main(void) {
 	led.Alternate =		GPIO_AF1_TIM1;
 	led.Mode = 			GPIO_MODE_AF_PP;
 	led.Pin = 			GPIO_PIN_8;
-	//led.Pull = 			GPIO_NOPULL;
+	led.Pull = 			GPIO_NOPULL;
 	led.Speed = 		GPIO_SPEED_HIGH;
 	HAL_GPIO_Init(GPIOA, &led);
 
@@ -145,6 +146,17 @@ int main(void) {
 
 	while (1)
 	{
+		while (BSP_PB_GetState(BUTTON_KEY) != 0) {
+			//sConfig.Pulse = 0;
+		  	//HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
+		  	//HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
+			TIM1->CCR1 = 0;
+			printf("de\n");
+		}
+		//sConfig.Pulse = 1000;
+	  	//HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
+	  	//HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
+		TIM1->CCR1 = 1000;
 	}
 
 }
