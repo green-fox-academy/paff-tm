@@ -104,11 +104,15 @@ int main(void) {
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
 
-	//BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
-	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
-
 	/* Add your application code here
 	 */
+
+	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
+	//BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_GPIO);
+
+	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x0F, 0x00);
+	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
 	//BSP_LED_Init(LED_GREEN);
 	uart_handle.Init.BaudRate = 115200;
 	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
@@ -128,7 +132,7 @@ int main(void) {
   	HAL_TIM_PWM_Init(&TimHandle);
 
   	sConfig.OCMode       = TIM_OCMODE_PWM1;
-  	sConfig.Pulse		 = 500;
+  	sConfig.Pulse		 = 100;
   	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
   	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
 
@@ -143,20 +147,23 @@ int main(void) {
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("**********in STATIC interrupts WS**********\r\n\n");
 
-
 	while (1)
 	{
-		while (BSP_PB_GetState(BUTTON_KEY) != 0) {
+		/*
+		TIM1->CCR1 = 1000;
+		while (BSP_PB_GetState(BUTTON_WAKEUP) != 0) {
 			//sConfig.Pulse = 0;
 		  	//HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
 		  	//HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
-			TIM1->CCR1 = 0;
-			printf("de\n");
+			if (TIM1->CCR1 >= 1)
+				TIM1->CCR1 -= 1;
+			HAL_Delay(1);
+			//printf("de\n");
 		}
+		*/
 		//sConfig.Pulse = 1000;
 	  	//HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
 	  	//HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
-		TIM1->CCR1 = 1000;
 	}
 
 }

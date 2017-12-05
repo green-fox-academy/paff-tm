@@ -65,6 +65,20 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+void EXTI15_10_IRQHandler()
+{
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
+	if (TIM1->CCR1 > 0)
+		TIM1->CCR1 = 0;
+	else
+		TIM1->CCR1 = 1000;
+}
+
 /** @defgroup HAL_MSP_Private_Functions
   * @{
   */
