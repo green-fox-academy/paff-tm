@@ -56,19 +56,22 @@
 #define A4 				GPIOF, GPIO_PIN_7
 #define A5 				GPIOF, GPIO_PIN_6
 #define D11 			GPIOB, GPIO_PIN_11
-#define	D3				GPIOB, GPIO_PIN_4
-#define	D10				GPIOA, GPIO_PIN_8
-#define	D9				GPIOA, GPIO_PIN_15
+
+#define	D10				GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1
+#define	D9				GPIOA, GPIO_PIN_15, GPIO_AF1_TIM2
+#define	D3				GPIOB, GPIO_PIN_4, GPIO_AF2_TIM3
 
 #define RGB_LED_R_PIN 	D10
 #define RGB_LED_G_PIN 	D9
-#define RGB_LED_B_PIN 	A3
+#define RGB_LED_B_PIN 	D3
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
 
 /* Private function prototypes -----------------------------------------------*/
+void Init_LED_Pin(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
+void Init_TIM_PWM(TIM_TypeDef *_TIM, uint32_t pls);
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -117,7 +120,9 @@ int main(void)
 
   /* Add your application code here
      */
-  BSP_LED_Init(LED_GREEN);
+  //BSP_LED_Init(LED_GREEN);
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   uart_handle.Init.BaudRate   = 115200;
   uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
@@ -127,16 +132,21 @@ int main(void)
   uart_handle.Init.Mode       = UART_MODE_TX_RX;
 
   BSP_COM_Init(COM1, &uart_handle);
-
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-
-  Init_TIM_PWM();
+/*
+  __HAL_RCC_TIM1_CLK_ENABLE();
+  Init_TIM_PWM(TIM1, 500);
   Init_LED_Pin(RGB_LED_R_PIN);
-  //HAL_GPIO_WritePin(RGB_LED_R_PIN, GPIO_PIN_SET);
+*/
+
+  __HAL_RCC_TIM2_CLK_ENABLE();
+  Init_TIM_PWM(TIM2, 500);
   Init_LED_Pin(RGB_LED_G_PIN);
-  //HAL_GPIO_WritePin(RGB_LED_G_PIN, GPIO_PIN_SET);
-  //Init_LED_Pin(RGB_LED_B_PIN);
-  //HAL_GPIO_WritePin(RGB_LED_B_PIN, GPIO_PIN_SET);
+
+/*
+  __HAL_RCC_TIM3_CLK_ENABLE();
+  Init_TIM_PWM(TIM3, 500);
+  Init_LED_Pin(RGB_LED_B_PIN);
+*/
 
   /* Output without printf, using HAL function*/
   //char msg[] = "UART HAL Example\r\n";
@@ -146,13 +156,61 @@ int main(void)
   printf("\n-----------------WELCOME-----------------\r\n");
   printf("**********in STATIC timer & pwm WS**********\r\n\n");
 
+
+  	  //uint32_t _pulse = 0;
+
 	  while (1)
 	  {
-		  //if (TIM1->CNT == 0)
-			  printf("%u\n", TIM1->CNT);
-		  //HAL_Delay(100);
+		  if (TIM2->CNT == 0) {
+
+			  //printf("%lu, %lu, %lu\n", TIM1->CNT, TIM2->CNT, TIM3->CNT);
+			  //printf("%lu\n", ((((216000000) / ((0xFFFF) / (1 / 1))) + 0.5) - 1));
+
+			  HAL_Delay(10);
+		  }
+		 /*
+		 _pulse += 1;
+		 if (_pulse > 1000)
+			 _pulse = 1000;
+
+		 //sConfig.Pulse		 = _pulse;
+		 TIM2->CCR1 = _pulse;
+		 */
 
 	  }
+}
+
+void Init_LED_Pin(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF)
+{
+	GPIO_InitTypeDef	led;
+	led.Alternate =		_GPIO_AF;
+	led.Mode = 			GPIO_MODE_AF_PP;
+	led.Pin = 			_GPIO_Pin_x;
+	led.Pull = 			GPIO_NOPULL;
+	led.Speed = 		GPIO_SPEED_HIGH;
+
+	HAL_GPIO_Init(_GPIOx, &led);
+}
+
+void Init_TIM_PWM(TIM_TypeDef *_TIM, uint32_t pls)
+{
+	//int pls = 250;
+  	TIM_HandleTypeDef    TimHandle;           //the timer's config structure
+
+  	TimHandle.Instance               = _TIM;
+  	TimHandle.Init.Period            = 1000;
+  	TimHandle.Init.Prescaler         = 0xFFFF;
+  	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+  	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
+  	HAL_TIM_PWM_Init(&TimHandle);
+
+  	TIM_OC_InitTypeDef sConfig;
+
+  	sConfig.OCMode       = TIM_OCMODE_PWM1;
+  	sConfig.Pulse		 = pls;
+
+  	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
+  	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
 }
 
 /**
@@ -220,8 +278,8 @@ static void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;  
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;  
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV8;
   if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
   {
     Error_Handler();
