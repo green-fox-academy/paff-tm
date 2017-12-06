@@ -38,7 +38,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <string.h>
-#include "define.h"
+//#include "define.h"
 
 /** @addtogroup STM32F7xx_HAL_Examples
  * @{
@@ -154,7 +154,7 @@ int main(void) {
 	led.Speed = 		GPIO_SPEED_HIGH;
 	HAL_GPIO_Init(GPIOA, &led);
 
-	__HAL_RCC_TIM8_CLK_ENABLE();
+	//__HAL_RCC_TIM8_CLK_ENABLE();
 	TimHandle2.Instance               = TIM8;
 	TimHandle2.Init.Period            = 16000;
 	TimHandle2.Init.Prescaler         = 13500;
@@ -171,22 +171,9 @@ int main(void) {
 
 	while (1)
 	{
-
-		/*
-		TIM1->CCR1 = 1000;
-		while (BSP_PB_GetState(BUTTON_WAKEUP) != 0) {
-			//sConfig.Pulse = 0;
-		  	//HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
-		  	//HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
-			if (TIM1->CCR1 >= 1)
-				TIM1->CCR1 -= 1;
-			HAL_Delay(1);
-			//printf("de\n");
-		}
-		*/
-		//sConfig.Pulse = 1000;
-	  	//HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
-	  	//HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
+		if (TIM1->CCR1 >= 1)
+			TIM1->CCR1 -= 1;
+		HAL_Delay(5);
 	}
 
 }

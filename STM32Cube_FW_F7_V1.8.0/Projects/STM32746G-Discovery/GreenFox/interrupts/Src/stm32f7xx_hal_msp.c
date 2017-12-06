@@ -49,7 +49,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
 #include "main.h"
-#include "define.h"
+//#include "define.h"
 
 /** @addtogroup STM32F7xx_HAL_Driver
   * @{
@@ -82,8 +82,8 @@ void EXTI15_10_IRQHandler()
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if (TIM1->CCR1 > 0)
-		TIM1->CCR1 = 0;
+	if (TIM1->CCR1 < 1000-100)
+		TIM1->CCR1 += 100;
 	else
 		TIM1->CCR1 = 1000;
 }
