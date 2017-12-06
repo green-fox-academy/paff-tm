@@ -82,6 +82,8 @@ static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 void TIM8_UP_TIM13_IRQHandler();
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+void UART4_IRQHandler();
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 
 
 /* Private functions ---------------------------------------------------------*/
@@ -130,8 +132,11 @@ int main(void) {
 	uart_handle.Init.Parity = UART_PARITY_NONE;
 	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	uart_handle.Init.Mode = UART_MODE_TX_RX;
-
 	BSP_COM_Init(COM1, &uart_handle);
+	//HAL_UART_Receive_IT(&uart_handle, )
+
+	HAL_NVIC_SetPriority(USART1_IRQn, 0x0F, 0x00);
+	HAL_NVIC_EnableIRQ(USART1_IRQn);
 
 	__HAL_RCC_TIM1_CLK_ENABLE();
   	TimHandle.Instance               = TIM1;
@@ -154,9 +159,9 @@ int main(void) {
 	led.Speed = 		GPIO_SPEED_HIGH;
 	HAL_GPIO_Init(GPIOA, &led);
 
-	//__HAL_RCC_TIM8_CLK_ENABLE();
+	__HAL_RCC_TIM8_CLK_ENABLE();
 	TimHandle2.Instance               = TIM8;
-	TimHandle2.Init.Period            = 16000;
+	TimHandle2.Init.Period            = HAL_RCC_GetPCLK2Freq() / 13500 * 2;
 	TimHandle2.Init.Prescaler         = 13500;
 	TimHandle2.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
 	TimHandle2.Init.CounterMode       = TIM_COUNTERMODE_UP;
@@ -171,9 +176,9 @@ int main(void) {
 
 	while (1)
 	{
-		if (TIM1->CCR1 >= 1)
-			TIM1->CCR1 -= 1;
-		HAL_Delay(5);
+		//if (TIM1->CCR1 >= 1)
+		//	TIM1->CCR1 -= 1;
+		//HAL_Delay(5);
 	}
 
 }
@@ -241,7 +246,7 @@ static void SystemClock_Config(void) {
 	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
 	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV8;
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
 		Error_Handler();
 	}
@@ -323,6 +328,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 }
 
+void USART1_IRQHandler()
+{
+	HAL_UART_IRQHandler(&uart_handle);
+	printf("message received1\n");
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	printf("message received2\n");
+
+}
 
 #ifdef  USE_FULL_ASSERT
 
