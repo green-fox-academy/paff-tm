@@ -61,6 +61,9 @@
 
 #define SERVO 			D10
 
+#define	MIN_POS			50
+#define	MAX_POS			230
+
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -151,15 +154,18 @@ int main(void)
   printf("**********in STATIC timer & pwm WS**********\r\n\n");
 
   printf("%u\n", HAL_RCC_GetPCLK2Freq());
-  TIM1->CCR1 = 100;
-
+  TIM1->CCR1 = (MAX_POS + MIN_POS) / 2;
+  int direction = 1;
 	  while (1)
 	  {
-		  if (BSP_PB_GetState(BUTTON_KEY) == 1) {
-			  TIM1->CCR1 += 10;
-			  printf("%u\n", TIM1->CCR1);
-			  HAL_Delay(500);
+		  if (TIM1->CCR1 >= MAX_POS) {
+			  direction = -1;
+		  } else if (TIM1->CCR1 <= MIN_POS) {
+			  direction = 1;
 		  }
+		  TIM1->CCR1 += direction;
+		  printf("%u\n", TIM1->CCR1);
+		  HAL_Delay(50);
 
 	  }
 }
@@ -179,11 +185,10 @@ void Init_Servo_Pin(GPIO_InitTypeDef *_servo, GPIO_TypeDef  *_GPIOx, uint32_t _G
 void Init_TIM1_PWM(TIM_HandleTypeDef *_TimHandle, TIM_OC_InitTypeDef *_sConfig, uint32_t _pls)
 {
   	_TimHandle->Instance               = TIM1;
-	_TimHandle->Init.Period            = 3000;
+	_TimHandle->Init.Period            = 2000;
     _TimHandle->Init.Prescaler         = 540;
   	_TimHandle->Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
   	_TimHandle->Init.CounterMode       = TIM_COUNTERMODE_UP;
-  	_TimHandle->Init.RepetitionCounter = 10;
   	HAL_TIM_PWM_Init(_TimHandle);
 
   	_sConfig->OCMode     = TIM_OCMODE_PWM1;
