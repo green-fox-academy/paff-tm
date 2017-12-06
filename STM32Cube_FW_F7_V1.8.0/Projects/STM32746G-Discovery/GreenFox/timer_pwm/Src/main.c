@@ -69,9 +69,16 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
 
+GPIO_InitTypeDef	ledR;
+GPIO_InitTypeDef	ledG;
+GPIO_InitTypeDef	ledB;
+TIM_HandleTypeDef   TimHandle;
+TIM_OC_InitTypeDef  sConfig;
+
+
 /* Private function prototypes -----------------------------------------------*/
-void Init_LED_Pin(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
-void Init_TIM_PWM(TIM_TypeDef *_TIM, uint32_t pls);
+void Init_LED_Pin(GPIO_InitTypeDef	*_led, GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
+void Init_TIM_PWM(TIM_HandleTypeDef *_TimHandle, TIM_OC_InitTypeDef *_sConfig, TIM_TypeDef *_TIM, uint32_t pls);
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -132,21 +139,21 @@ int main(void)
   uart_handle.Init.Mode       = UART_MODE_TX_RX;
 
   BSP_COM_Init(COM1, &uart_handle);
-/*
+
   __HAL_RCC_TIM1_CLK_ENABLE();
-  Init_TIM_PWM(TIM1, 500);
-  Init_LED_Pin(RGB_LED_R_PIN);
-*/
+  Init_TIM_PWM(&TimHandle, &sConfig, TIM1, 000);
+  Init_LED_Pin(&ledR, RGB_LED_R_PIN);
+
 
   __HAL_RCC_TIM2_CLK_ENABLE();
-  Init_TIM_PWM(TIM2, 500);
-  Init_LED_Pin(RGB_LED_G_PIN);
+  Init_TIM_PWM(&TimHandle, &sConfig, TIM2, 300);
+  Init_LED_Pin(&ledR, RGB_LED_G_PIN);
 
-/*
+
   __HAL_RCC_TIM3_CLK_ENABLE();
-  Init_TIM_PWM(TIM3, 500);
-  Init_LED_Pin(RGB_LED_B_PIN);
-*/
+  Init_TIM_PWM(&TimHandle, &sConfig, TIM3, 300);
+  Init_LED_Pin(&ledR, RGB_LED_B_PIN);
+
 
   /* Output without printf, using HAL function*/
   //char msg[] = "UART HAL Example\r\n";
@@ -159,58 +166,66 @@ int main(void)
 
   	  //uint32_t _pulse = 0;
 
+  	  unsigned int T1Dir = 1;
+  	  unsigned int T2Dir = 1;
+  	  unsigned int T3Dir = 1;
+
 	  while (1)
 	  {
-		  if (TIM2->CNT == 0) {
-
-			  //printf("%lu, %lu, %lu\n", TIM1->CNT, TIM2->CNT, TIM3->CNT);
-			  //printf("%lu\n", ((((216000000) / ((0xFFFF) / (1 / 1))) + 0.5) - 1));
-
-			  HAL_Delay(10);
+		  if (TIM1->CCR1 == 1000) {
+			  T1Dir = -1;
+		  } else if (TIM1->CCR1 == 0) {
+			  T1Dir = 1;
 		  }
-		 /*
-		 _pulse += 1;
-		 if (_pulse > 1000)
-			 _pulse = 1000;
+		  if (TIM2->CCR1 == 1000) {
+			  T1Dir = -1;
+		  } else if (TIM2->CCR1 == 0) {
+			  T2Dir = 1;
+		  }
+		  if (TIM3->CCR1 == 1000) {
+			  T3Dir = -1;
+		  } else if (TIM3->CCR1 == 0) {
+			  T3Dir = 1;
+		  }
 
-		 //sConfig.Pulse		 = _pulse;
-		 TIM2->CCR1 = _pulse;
-		 */
+		  TIM1->CCR1 += T1Dir;
+		  TIM2->CCR1 += T2Dir;
+		  TIM3->CCR1 += T3Dir;
 
+
+		HAL_Delay(1);
 	  }
 }
 
-void Init_LED_Pin(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF)
+void Init_LED_Pin(GPIO_InitTypeDef	*_led, GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF)
 {
-	GPIO_InitTypeDef	led;
-	led.Alternate =		_GPIO_AF;
-	led.Mode = 			GPIO_MODE_AF_PP;
-	led.Pin = 			_GPIO_Pin_x;
-	led.Pull = 			GPIO_NOPULL;
-	led.Speed = 		GPIO_SPEED_HIGH;
 
-	HAL_GPIO_Init(_GPIOx, &led);
+	_led->Alternate =	_GPIO_AF;
+	_led->Mode = 		GPIO_MODE_AF_PP;
+	_led->Pin = 		_GPIO_Pin_x;
+	_led->Pull = 		GPIO_NOPULL;
+	_led->Speed = 		GPIO_SPEED_HIGH;
+
+	HAL_GPIO_Init(_GPIOx, _led);
 }
 
-void Init_TIM_PWM(TIM_TypeDef *_TIM, uint32_t pls)
+void Init_TIM_PWM(TIM_HandleTypeDef *_TimHandle, TIM_OC_InitTypeDef *_sConfig, TIM_TypeDef *_TIM, uint32_t pls)
 {
-	//int pls = 250;
-  	TIM_HandleTypeDef    TimHandle;           //the timer's config structure
+  	_TimHandle->Instance               = _TIM;
+	_TimHandle->Init.Period            = 1000;
+  	if (_TIM == TIM1)
+  		_TimHandle->Init.Prescaler         = 0x7F;
+  	else
+  		_TimHandle->Init.Prescaler         = 0xFF;
+  	_TimHandle->Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+  	_TimHandle->Init.CounterMode       = TIM_COUNTERMODE_UP;
+  	HAL_TIM_PWM_Init(_TimHandle);
 
-  	TimHandle.Instance               = _TIM;
-  	TimHandle.Init.Period            = 1000;
-  	TimHandle.Init.Prescaler         = 0xFFFF;
-  	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-  	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
-  	HAL_TIM_PWM_Init(&TimHandle);
+  	_sConfig->OCMode     = TIM_OCMODE_PWM2;
+  	_sConfig->Pulse		 = pls;
 
-  	TIM_OC_InitTypeDef sConfig;
-
-  	sConfig.OCMode       = TIM_OCMODE_PWM1;
-  	sConfig.Pulse		 = pls;
-
-  	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
-  	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
+  	HAL_TIM_PWM_ConfigChannel(_TimHandle, _sConfig, TIM_CHANNEL_1);
+  	HAL_TIM_PWM_Start(_TimHandle, TIM_CHANNEL_1);
 }
 
 /**
