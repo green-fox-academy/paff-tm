@@ -37,6 +37,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <string.h>
 
 /** @addtogroup STM32F7xx_HAL_Examples
   * @{
@@ -48,109 +49,46 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define D7 			GPIOI, GPIO_PIN_3
-#define D0 			GPIOC, GPIO_PIN_7
-#define SERVO		D0
+#define A0 				GPIOA, GPIO_PIN_0
+#define A1 				GPIOF, GPIO_PIN_10
+#define A2 				GPIOF, GPIO_PIN_9
+#define A3 				GPIOF, GPIO_PIN_8
+#define A4 				GPIOF, GPIO_PIN_7
+#define A5 				GPIOF, GPIO_PIN_6
+#define D11 			GPIOB, GPIO_PIN_11
+
+#define	D10				GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1
+
+#define SERVO 			D10
+
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+UART_HandleTypeDef uart_handle;
+
+GPIO_InitTypeDef	servo;
+TIM_HandleTypeDef   TimHandle;
+TIM_OC_InitTypeDef  sConfig;
+
+
 /* Private function prototypes -----------------------------------------------*/
+void Init_Servo_Pin(GPIO_InitTypeDef *_servo, GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
+void Init_TIM1_PWM(TIM_HandleTypeDef *_TimHandle, TIM_OC_InitTypeDef *_sConfig, uint32_t _pls);
+
+#ifdef __GNUC__
+/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 
 /* Private functions ---------------------------------------------------------*/
-void My_Init()
-{
-	//__HAL_RCC_GPIOA_CLK_ENABLE();
-	//__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_GPIOC_CLK_ENABLE();
-	//__HAL_RCC_GPIOD_CLK_ENABLE();
-	//__HAL_RCC_GPIOE_CLK_ENABLE();
-	//__HAL_RCC_GPIOF_CLK_ENABLE();
-	//__HAL_RCC_GPIOG_CLK_ENABLE();
-	//__HAL_RCC_GPIOH_CLK_ENABLE();
-	//__HAL_RCC_GPIOI_CLK_ENABLE();
-	//__HAL_RCC_GPIOJ_CLK_ENABLE();
-	//__HAL_RCC_GPIOK_CLK_ENABLE();
-}
-
-void Pin_Init(GPIO_TypeDef *_port, uint16_t _pin)
-{
-	GPIO_InitTypeDef pin;
-	pin.Pin = _pin;
-	pin.Mode = GPIO_MODE_OUTPUT_PP;
-	pin.Pull = GPIO_PULLDOWN;
-	pin.Speed = GPIO_SPEED_HIGH;
-
-	HAL_GPIO_Init(_port, &pin);
-	HAL_GPIO_WritePin(_port, _pin, GPIO_PIN_RESET);
-}
-
-void Move_Left()
-{
-	uint32_t period = 20;
-	uint32_t del = 2;
-	uint32_t tickstart = 0;
-	tickstart = HAL_GetTick();
-
-	HAL_GPIO_WritePin(SERVO, GPIO_PIN_SET);
-	while((HAL_GetTick() - tickstart) < del)
-	{
-
-	}
-
-	HAL_GPIO_WritePin(SERVO, GPIO_PIN_RESET);
-	while((HAL_GetTick() - tickstart) < period)
-	{
-
-	}
-
-}
-
-void Move_Right()
-{
-	uint32_t period = 20;
-	uint32_t del = 1;
-	uint32_t tickstart = 0;
-	tickstart = HAL_GetTick();
-
-	HAL_GPIO_WritePin(SERVO, GPIO_PIN_SET);
-	while((HAL_GetTick() - tickstart) < del)
-	{
-	}
-
-	HAL_GPIO_WritePin(SERVO, GPIO_PIN_RESET);
-	while((HAL_GetTick() - tickstart) < period)
-	{
-	}
-}
-
-void Move(float del)
-{
-	uint32_t period = 20;
-	uint32_t del_mul = 43000;
-	uint32_t tickstart = HAL_GetTick();
-
-	HAL_GPIO_WritePin(SERVO, GPIO_PIN_SET);
-	for (unsigned int i = 0; i < (uint32_t)(del_mul * del); ++i)
-	{
-		// do nothing
-	}
-	/*while((HAL_GetTick() - tickstart) < del)
-	{
-		BSP_LED_On(LED_GREEN);
-	}
-	 */
-
-	HAL_GPIO_WritePin(SERVO, GPIO_PIN_RESET);
-	while((HAL_GetTick() - tickstart) < period)
-	{
-	}
-
-	//HAL_Delay(15);
-}
 
 /**
   * @brief  Main program
@@ -159,7 +97,6 @@ void Move(float del)
   */
 int main(void)
 {
-	  My_Init();
   /* This project template calls firstly two functions in order to configure MPU feature 
      and to enable the CPU Cache, respectively MPU_Config() and CPU_CACHE_Enable().
      These functions are provided as template implementation that User may integrate 
@@ -168,7 +105,6 @@ int main(void)
   
   /* Configure the MPU attributes as Write Through */
   MPU_Config();
-  Pin_Init(SERVO);
 
   /* Enable the CPU Cache */
   CPU_CACHE_Enable();
@@ -184,52 +120,99 @@ int main(void)
   /* Configure the System clock to have a frequency of 216 MHz */
   SystemClock_Config();
 
-  //TODO:
-  //Initialization the push button and the led with using BSP
-  BSP_LED_Init(LED_GREEN);
+  /* Add your application code here
+     */
+
+
+  uart_handle.Init.BaudRate   = 115200;
+  uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+  uart_handle.Init.StopBits   = UART_STOPBITS_1;
+  uart_handle.Init.Parity     = UART_PARITY_NONE;
+  uart_handle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
+  uart_handle.Init.Mode       = UART_MODE_TX_RX;
+
+  BSP_COM_Init(COM1, &uart_handle);
+
   BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
-  
-  //Turn the led on to validate the initialization is occured.
-  
-  /* Add your application code here     */
 
-  /* Infinite loop */
+  __HAL_RCC_TIM1_CLK_ENABLE();
+  Init_TIM1_PWM(&TimHandle, &sConfig, 150);
 
-  while (1)
-  {
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  Init_Servo_Pin(&servo, SERVO);
 
+
+  /* Output without printf, using HAL function*/
+  //char msg[] = "UART HAL Example\r\n";
+  //HAL_UART_Transmit(&uart_handle, msg, strlen(msg), 100);
+
+  /* Output a message using printf function */
+  printf("\n-----------------WELCOME-----------------\r\n");
+  printf("**********in STATIC timer & pwm WS**********\r\n\n");
+
+  printf("%u\n", HAL_RCC_GetPCLK2Freq());
+  TIM1->CCR1 = 100;
+
+	  while (1)
+	  {
+		  if (BSP_PB_GetState(BUTTON_KEY) == 1) {
+			  TIM1->CCR1 += 10;
+			  printf("%u\n", TIM1->CCR1);
+			  HAL_Delay(500);
+		  }
+
+	  }
+}
+
+void Init_Servo_Pin(GPIO_InitTypeDef *_servo, GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF)
+{
+
+	_servo->Alternate =	_GPIO_AF;
+	_servo->Mode = 		GPIO_MODE_AF_PP;
+	_servo->Pin = 		_GPIO_Pin_x;
+	_servo->Pull = 		GPIO_NOPULL;
+	_servo->Speed = 	GPIO_SPEED_HIGH;
+
+	HAL_GPIO_Init(_GPIOx, _servo);
+}
+
+void Init_TIM1_PWM(TIM_HandleTypeDef *_TimHandle, TIM_OC_InitTypeDef *_sConfig, uint32_t _pls)
+{
+  	_TimHandle->Instance               = TIM1;
+	_TimHandle->Init.Period            = 3000;
+    _TimHandle->Init.Prescaler         = 540;
+  	_TimHandle->Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+  	_TimHandle->Init.CounterMode       = TIM_COUNTERMODE_UP;
+  	_TimHandle->Init.RepetitionCounter = 10;
+  	HAL_TIM_PWM_Init(_TimHandle);
+
+  	_sConfig->OCMode     = TIM_OCMODE_PWM1;
+  	_sConfig->Pulse		 = _pls;
+
+  	HAL_TIM_PWM_ConfigChannel(_TimHandle, _sConfig, TIM_CHANNEL_1);
+  	HAL_TIM_PWM_Start(_TimHandle, TIM_CHANNEL_1);
+}
 /*
-	  HAL_GPIO_WritePin(SERVO, GPIO_PIN_SET);
-	  HAL_Delay(1000);
-	  HAL_GPIO_WritePin(SERVO, GPIO_PIN_RESET);
-	  HAL_Delay(1000);
+void Set_TIM1_PulseWidth(uint32_t _pulse)
+{
+	HAL_TIM_PWM_Start(_TimHandle, TIM_CHANNEL_1);
+	TIM1->CCR1 = _pulse;
+
+}
 */
 
-	  while (BSP_PB_GetState(BUTTON_KEY) == 1)   {
+/**
+  * @brief  Retargets the C library printf function to the USART.
+  * @param  None
+  * @retval None
+  */
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+  HAL_UART_Transmit(&uart_handle, (uint8_t *)&ch, 1, 0xFFFF);
 
-		  //HAL_Delay(100);
-		  Move_Right();
-	  }
-	  for (int i = 0; i < 20; ++i) {
-		  Move(i/10);
-		  //Move_Left();
-		  HAL_Delay(250);
-	  }
-	  HAL_Delay(1000);
-	  for (int i = 20; i < 0; --i) {
-		  Move(i/10);
-		  //Move_Right();
-		  HAL_Delay(250);
-	  }
-
-
-
-	  //BSP_LED_On(LED_GREEN);
-	  //HAL_Delay(500);
-	 // BSP_LED_Off(LED_GREEN);
-	  //HAL_Delay(500);
-
-  }
+  return ch;
 }
 
 /**
@@ -283,8 +266,8 @@ static void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;  
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;  
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV8;
   if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
   {
     Error_Handler();
@@ -381,3 +364,4 @@ void assert_failed(uint8_t* file, uint32_t line)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

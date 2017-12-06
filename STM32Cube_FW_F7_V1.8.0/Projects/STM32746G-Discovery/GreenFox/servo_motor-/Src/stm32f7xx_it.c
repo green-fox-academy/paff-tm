@@ -1,21 +1,12 @@
 /**
   ******************************************************************************
-  * @file    stm32f7xx_hal_msp.c
+  * @file    Templates/stm32f7xx_it.c 
   * @author  MCD Application Team
   * @version V1.0.3
   * @date    22-April-2016 
-  * @brief   HAL MSP module.
-  *          This file template is located in the HAL folder and should be copied 
-  *          to the user folder.
-  *         
-  @verbatim
- ===============================================================================
-                     ##### How to use this driver #####
- ===============================================================================
-    [..]
-
-
-  @endverbatim
+  * @brief   Main Interrupt Service Routines.
+  *          This file provides template for all exceptions handler and 
+  *          peripherals interrupt service routine.
   ******************************************************************************
   * @attention
   *
@@ -44,17 +35,17 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f7xx_hal.h"
+#include "stm32f7xx_it.h"
+#include "main.h"
 
-/** @addtogroup STM32F7xx_HAL_Driver
+/** @addtogroup STM32F7xx_HAL_Examples
   * @{
   */
 
-/** @defgroup HAL_MSP
-  * @brief HAL MSP module.
+/** @addtogroup Templates
   * @{
   */
 
@@ -65,41 +56,129 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+/******************************************************************************/
+/*            Cortex-M7 Processor Exceptions Handlers                         */
+/******************************************************************************/
 
-
-
-/** @defgroup HAL_MSP_Private_Functions
-  * @{
-  */
 /**
-  * @brief  Initializes the Global MSP.
+  * @brief   This function handles NMI exception.
   * @param  None
   * @retval None
   */
-void HAL_MspInit(void)
+void NMI_Handler(void)
 {
-
 }
 
 /**
-  * @brief  DeInitializes the Global MSP.
-  * @param  None  
+  * @brief  This function handles Hard Fault exception.
+  * @param  None
   * @retval None
   */
-void HAL_MspDeInit(void)
+void HardFault_Handler(void)
 {
-  /* NOTE : This function is generated automatically by STM32CubeMX and eventually  
-            modified by the user
-   */
+  /* Go to infinite loop when Hard Fault exception occurs */
+  while (1)
+  {
+  }
 }
 
 /**
-  * @}
+  * @brief  This function handles Memory Manage exception.
+  * @param  None
+  * @retval None
   */
+void MemManage_Handler(void)
+{
+  /* Go to infinite loop when Memory Manage exception occurs */
+  while (1)
+  {
+  }
+}
+
+/**
+  * @brief  This function handles Bus Fault exception.
+  * @param  None
+  * @retval None
+  */
+void BusFault_Handler(void)
+{
+  /* Go to infinite loop when Bus Fault exception occurs */
+  while (1)
+  {
+  }
+}
+
+/**
+  * @brief  This function handles Usage Fault exception.
+  * @param  None
+  * @retval None
+  */
+void UsageFault_Handler(void)
+{
+  /* Go to infinite loop when Usage Fault exception occurs */
+  while (1)
+  {
+  }
+}
+
+/**
+  * @brief  This function handles SVCall exception.
+  * @param  None
+  * @retval None
+  */
+void SVC_Handler(void)
+{
+}
+
+/**
+  * @brief  This function handles Debug Monitor exception.
+  * @param  None
+  * @retval None
+  */
+void DebugMon_Handler(void)
+{
+}
+
+/**
+  * @brief  This function handles PendSVC exception.
+  * @param  None
+  * @retval None
+  */
+void PendSV_Handler(void)
+{
+}
+
+/**
+  * @brief  This function handles SysTick Handler.
+  * @param  None
+  * @retval None
+  */
+void SysTick_Handler(void)
+{
+  HAL_IncTick();
+}
+  
+
+/******************************************************************************/
+/*                 STM32F7xx Peripherals Interrupt Handlers                   */
+/*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
+/*  available peripheral interrupt handler's name please refer to the startup */
+/*  file (startup_stm32f7xx.s).                                               */
+/******************************************************************************/
+
+/**
+  * @brief  This function handles PPP interrupt request.
+  * @param  None
+  * @retval None
+  */
+/*void PPP_IRQHandler(void)
+{
+}*/
+
 
 /**
   * @}
-  */
+  */ 
 
 /**
   * @}

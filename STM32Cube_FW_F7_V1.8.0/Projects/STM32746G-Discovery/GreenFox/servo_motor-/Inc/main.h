@@ -1,21 +1,10 @@
 /**
   ******************************************************************************
-  * @file    stm32f7xx_hal_msp.c
+  * @file    Templates/main.h 
   * @author  MCD Application Team
   * @version V1.0.3
   * @date    22-April-2016 
-  * @brief   HAL MSP module.
-  *          This file template is located in the HAL folder and should be copied 
-  *          to the user folder.
-  *         
-  @verbatim
- ===============================================================================
-                     ##### How to use this driver #####
- ===============================================================================
-    [..]
-
-
-  @endverbatim
+  * @brief   Header for main.c module
   ******************************************************************************
   * @attention
   *
@@ -44,65 +33,21 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */ 
+  */
+  
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __MAIN_H
+#define __MAIN_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
+#include "stm32746g_discovery.h"
 
-/** @addtogroup STM32F7xx_HAL_Driver
-  * @{
-  */
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
 
-/** @defgroup HAL_MSP
-  * @brief HAL MSP module.
-  * @{
-  */
-
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
-
-
-
-
-/** @defgroup HAL_MSP_Private_Functions
-  * @{
-  */
-/**
-  * @brief  Initializes the Global MSP.
-  * @param  None
-  * @retval None
-  */
-void HAL_MspInit(void)
-{
-
-}
-
-/**
-  * @brief  DeInitializes the Global MSP.
-  * @param  None  
-  * @retval None
-  */
-void HAL_MspDeInit(void)
-{
-  /* NOTE : This function is generated automatically by STM32CubeMX and eventually  
-            modified by the user
-   */
-}
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
+#endif /* __MAIN_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

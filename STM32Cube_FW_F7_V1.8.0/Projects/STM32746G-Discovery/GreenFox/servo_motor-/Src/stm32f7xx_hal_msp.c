@@ -65,12 +65,10 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-
-
-
 /** @defgroup HAL_MSP_Private_Functions
   * @{
   */
+
 /**
   * @brief  Initializes the Global MSP.
   * @param  None
