@@ -49,6 +49,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
 #include "main.h"
+#include "define.h"
 
 /** @addtogroup STM32F7xx_HAL_Driver
   * @{
@@ -63,16 +64,15 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef uart_handle;
-GPIO_InitTypeDef led;
-TIM_HandleTypeDef TimHandle;
-TIM_OC_InitTypeDef sConfig;
-TIM_HandleTypeDef TimHandle2;
-TIM_OC_InitTypeDef sConfig2;
-unsigned int LED_Status = 1;
 
+//volatile TIM_HandleTypeDef TimHandle;
+//volatile TIM_HandleTypeDef TimHandle2;
 
 /* Private function prototypes -----------------------------------------------*/
+void EXTI15_10_IRQHandler();
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+
+
 /* Private functions ---------------------------------------------------------*/
 
 void EXTI15_10_IRQHandler()
@@ -86,28 +86,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		TIM1->CCR1 = 0;
 	else
 		TIM1->CCR1 = 1000;
-
-	printf("tim1 it\n");
-}
-
-void TIM8_UP_TIM13_IRQHandler()
-{
-	HAL_TIM_IRQHandler(&TimHandle2);
 }
 
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	//printf("%u\n", HAL_TIM_PWM_GetState(&TimHandle));
-	if (LED_Status == 1) {
-		HAL_TIM_PWM_Stop(&TimHandle, TIM_CHANNEL_1);
-		LED_Status = 0;
-	} else {
-		HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
-		LED_Status = 1;
-	}
-
-}
 
 /** @defgroup HAL_MSP_Private_Functions
   * @{

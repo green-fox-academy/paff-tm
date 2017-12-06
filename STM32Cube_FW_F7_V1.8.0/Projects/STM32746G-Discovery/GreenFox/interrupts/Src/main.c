@@ -38,6 +38,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <string.h>
+#include "define.h"
 
 /** @addtogroup STM32F7xx_HAL_Examples
  * @{
@@ -52,8 +53,18 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
+UART_HandleTypeDef uart_handle;
+GPIO_InitTypeDef led;
+TIM_OC_InitTypeDef sConfig;
+TIM_OC_InitTypeDef sConfig2;
+unsigned int LED_Status = 1;
 
-volatile uint32_t timIntPeriod;
+//volatile uint32_t timIntPeriod;
+
+volatile TIM_HandleTypeDef TimHandle;
+volatile TIM_HandleTypeDef TimHandle2;
+unsigned int LED_Pulse = 500;
+
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -69,6 +80,9 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
+void TIM8_UP_TIM13_IRQHandler();
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -105,7 +119,6 @@ int main(void) {
 	 */
 
 	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
-	//BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_GPIO);
 
 	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x0E, 0x00);
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
@@ -122,7 +135,7 @@ int main(void) {
 
 	__HAL_RCC_TIM1_CLK_ENABLE();
   	TimHandle.Instance               = TIM1;
-  	TimHandle.Init.Period            = 8000;//8000
+  	TimHandle.Init.Period            = 1000;//8000
   	TimHandle.Init.Prescaler         = 1;	//6750
   	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
   	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
@@ -141,18 +154,13 @@ int main(void) {
 	led.Speed = 		GPIO_SPEED_HIGH;
 	HAL_GPIO_Init(GPIOA, &led);
 
-
 	__HAL_RCC_TIM8_CLK_ENABLE();
 	TimHandle2.Instance               = TIM8;
-	TimHandle2.Init.Period            = 8000;
-	TimHandle2.Init.Prescaler         = 6750;
+	TimHandle2.Init.Period            = 16000;
+	TimHandle2.Init.Prescaler         = 13500;
 	TimHandle2.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
 	TimHandle2.Init.CounterMode       = TIM_COUNTERMODE_UP;
 	HAL_TIM_Base_Init(&TimHandle2);
-
-	//sConfig2.OCMode       = TIM_OCMODE_TIMING;
-	//sConfig2.Pulse		  = 100;
-	//HAL_TIM_Base_Init(&TimHandle2, &sConfig2, TIM_CHANNEL_1);
 	HAL_TIM_Base_Start_IT(&TimHandle2);
 
 	HAL_NVIC_SetPriority(TIM8_UP_TIM13_IRQn, 0x0F, 0x00);
@@ -246,7 +254,7 @@ static void SystemClock_Config(void) {
 	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
 	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV8;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
 		Error_Handler();
 	}
@@ -307,6 +315,27 @@ static void CPU_CACHE_Enable(void) {
 	/* Enable D-Cache */
 	SCB_EnableDCache();
 }
+
+
+void TIM8_UP_TIM13_IRQHandler()
+{
+	HAL_TIM_IRQHandler(&TimHandle2);
+}
+
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	//printf("%u\n", HAL_TIM_PWM_GetState(&TimHandle));
+	if (LED_Status == 1) {
+		HAL_TIM_PWM_Stop(&TimHandle, TIM_CHANNEL_1);
+		LED_Status = 0;
+	} else {
+		HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
+		LED_Status = 1;
+	}
+
+}
+
 
 #ifdef  USE_FULL_ASSERT
 
