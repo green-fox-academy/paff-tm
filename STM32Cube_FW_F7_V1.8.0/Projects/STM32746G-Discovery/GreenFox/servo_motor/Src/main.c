@@ -38,6 +38,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <string.h>
+#include <math.h>
 
 /** @addtogroup STM32F7xx_HAL_Examples
   * @{
@@ -63,6 +64,7 @@
 
 #define	MIN_POS			50
 #define	MAX_POS			230
+#define PI 				3.14159265
 
 
 /* Private macro -------------------------------------------------------------*/
@@ -75,6 +77,7 @@ TIM_OC_InitTypeDef  sConfig;
 
 
 /* Private function prototypes -----------------------------------------------*/
+int SetPos(int arc, int *pos);
 void Init_Servo_Pin(GPIO_InitTypeDef *_servo, GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
 void Init_TIM1_PWM(TIM_HandleTypeDef *_TimHandle, TIM_OC_InitTypeDef *_sConfig, uint32_t _pls);
 
@@ -153,21 +156,28 @@ int main(void)
   printf("\n-----------------WELCOME-----------------\r\n");
   printf("**********in STATIC timer & pwm WS**********\r\n\n");
 
-  printf("%u\n", HAL_RCC_GetPCLK2Freq());
-  TIM1->CCR1 = (MAX_POS + MIN_POS) / 2;
-  int direction = 1;
+  int degree = 0;
+  int pos = (MAX_POS + MIN_POS) / 2;
+  TIM1->CCR1 = pos;
+
 	  while (1)
 	  {
-		  if (TIM1->CCR1 >= MAX_POS) {
-			  direction = -1;
-		  } else if (TIM1->CCR1 <= MIN_POS) {
-			  direction = 1;
+		  degree += 1;
+		  if (degree == 360) {
+			  degree = 0;
 		  }
-		  TIM1->CCR1 += direction;
-		  printf("%u\n", TIM1->CCR1);
-		  HAL_Delay(50);
+		  SetPos(degree, &pos);
+		  TIM1->CCR1 = pos;
+		  //printf("CCR1: %lu\n", TIM1->CCR1);
+		  HAL_Delay(4);
 
 	  }
+}
+
+int SetPos(int degree, int *pos)
+{
+	*pos = ((MAX_POS + MIN_POS) / 2) + (((MAX_POS - MIN_POS) * cos((PI / 180) * degree)) / 2);
+	return (int)*pos;
 }
 
 void Init_Servo_Pin(GPIO_InitTypeDef *_servo, GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF)
