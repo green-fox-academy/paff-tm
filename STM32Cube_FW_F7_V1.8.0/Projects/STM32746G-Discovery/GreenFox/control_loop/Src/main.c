@@ -59,11 +59,10 @@
 #define A2 				GPIOF, GPIO_PIN_9
 #define A3 				GPIOF, GPIO_PIN_8
 #define A4 				GPIOF, A4_PIN
-
 #define D11 			GPIOB, GPIO_PIN_11
 #define	D9				GPIOA, GPIO_PIN_15//, GPIO_AF1_TIM2
-#define	D3				GPIOB, GPIO_PIN_4//, GPIO_AF2_TIM3
 
+#define	D3				GPIOB, GPIO_PIN_4, GPIO_AF2_TIM3	//Vent RPM in
 #define	D10				GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1	//Vent
 #define	D5				GPIOI, D5_PIN	//Button 2
 #define	D7				GPIOI, D7_PIN	//Button 1
@@ -74,8 +73,7 @@
 #define		BUTTON_1_PIN	D7_PIN
 #define		BUTTON_2		D5
 #define		BUTTON_2_PIN	D5_PIN
-#define		VENT_RPM_IN		A5
-#define		VENT_RPM_IN_PIN	A5_PIN
+#define		VENT_RPM_IN		D3
 
 #define 	TIM1_PERIOD		1000
 #define		RPM_IT_COUNT	5
@@ -87,6 +85,7 @@
 UART_HandleTypeDef uart_handle;
 GPIO_InitTypeDef gpio_inittypedef;
 TIM_OC_InitTypeDef sConfig;
+TIM_IC_InitTypeDef icConfig;
 unsigned int PWM_percent = 50;
 
 uint32_t tick_before = 0;
@@ -114,8 +113,10 @@ static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 void Init_UART();
 void Init_TIM1();
+void Init_TIM3();
 void Init_PIN_Vent(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
 void Init_PIN_PB(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x);
+void Init_PIN_LED(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x, uint32_t _GPIO_AF);
 void Init_PIN_RPM_in(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x);
 void EXTI0_IRQHandler();
 void EXTI3_IRQHandler();
@@ -160,6 +161,7 @@ int main(void) {
 
 	Init_UART();
 	Init_TIM1();
+	Init_TIM3();
 
   	__HAL_RCC_GPIOI_CLK_ENABLE();
 	Init_PIN_PB(BUTTON_1);
@@ -170,13 +172,11 @@ int main(void) {
 	HAL_NVIC_SetPriority(EXTI0_IRQn, 0x0E, 0x00);
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 
-  	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
   	Init_PIN_Vent(VENT);
 
-  	__HAL_RCC_GPIOF_CLK_ENABLE();
-  	Init_PIN_RPM_in(VENT_RPM_IN);
-	HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0x0D, 0x00);
-	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	Init_PIN_LED(VENT_RPM_IN);
 
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("*********in STATIC control loop WS*********\r\n\n");
@@ -331,7 +331,7 @@ void Init_TIM1()
 {
 	__HAL_RCC_TIM1_CLK_ENABLE();
   	TimHandle.Instance               = TIM1;
-  	TimHandle.Init.Period            = TIM1_PERIOD;		//8000
+  	TimHandle.Init.Period            = TIM1_PERIOD - 1;		//8000
   	TimHandle.Init.Prescaler         = 6750;			//6750
   	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
   	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
@@ -339,6 +339,22 @@ void Init_TIM1()
 
   	sConfig.OCMode       = TIM_OCMODE_PWM1;
   	sConfig.Pulse		 = 0;
+  	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
+  	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
+}
+
+void Init_TIM3()
+{
+	__HAL_RCC_TIM3_CLK_ENABLE();
+  	TimHandle.Instance               = TIM3;
+  	TimHandle.Init.Period            = 3000 - 1;	//3000
+  	TimHandle.Init.Prescaler         = 45000;		//45000
+  	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+  	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
+  	HAL_TIM_PWM_Init(&TimHandle);
+
+  	sConfig.OCMode       = TIM_OCMODE_PWM1;
+  	sConfig.Pulse		 = 100;
   	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
   	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
 }
@@ -371,6 +387,15 @@ void Init_PIN_RPM_in(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x)
 	HAL_GPIO_Init(_GPIOx, &gpio_inittypedef);
 }
 
+void Init_PIN_LED(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x, uint32_t _GPIO_AF)
+{
+	gpio_inittypedef.Alternate =	_GPIO_AF;
+	gpio_inittypedef.Mode = 		GPIO_MODE_AF_OD;
+	gpio_inittypedef.Pin = 			_GPIO_PIN_x;
+	gpio_inittypedef.Pull = 		GPIO_PULLDOWN;
+	gpio_inittypedef.Speed = 		GPIO_SPEED_HIGH;
+	HAL_GPIO_Init(_GPIOx, &gpio_inittypedef);
+}
 
 void EXTI0_IRQHandler()
 {
@@ -382,24 +407,9 @@ void EXTI3_IRQHandler()
 	HAL_GPIO_EXTI_IRQHandler(BUTTON_1_PIN);
 }
 
-void EXTI9_5_IRQHandler()
-{
-	HAL_GPIO_EXTI_IRQHandler(VENT_RPM_IN_PIN);
-}
-
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if (GPIO_Pin == VENT_RPM_IN_PIN) {
-		RPM_rise_count -= 1;
-		if (RPM_rise_count == 0) {
-			RPM_time_now = HAL_GetTick();
-			printf("%u\n", RPM_time_now - RPM_time_before);
-			RPM = (60000 * (RPM_IT_COUNT / 2)) / ((RPM_time_now - RPM_time_before));
-			RPM_time_before = RPM_time_now;
-			RPM_rise_count = RPM_IT_COUNT;
-		}
-
-	} else if ((HAL_GetTick() - tick_before) > 250) {
+	if ((HAL_GetTick() - tick_before) > 250) {
 		unsigned int dif = 5;
 		if ((GPIO_Pin == BUTTON_1_PIN) && (PWM_percent <= 100 - dif)) {
 			PWM_percent += dif;
