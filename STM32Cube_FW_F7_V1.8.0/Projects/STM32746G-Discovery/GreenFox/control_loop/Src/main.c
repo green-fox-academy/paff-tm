@@ -49,25 +49,30 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define A4_PIN			GPIO_PIN_7
+#define A5_PIN			GPIO_PIN_6
+#define D5_PIN			GPIO_PIN_0	//Button 2
+#define D7_PIN			GPIO_PIN_3	//Button 1
+
 #define A0 				GPIOA, GPIO_PIN_0
 #define A1 				GPIOF, GPIO_PIN_10
 #define A2 				GPIOF, GPIO_PIN_9
 #define A3 				GPIOF, GPIO_PIN_8
-#define A4 				GPIOF, GPIO_PIN_7
-#define A5 				GPIOF, GPIO_PIN_6
+#define A4 				GPIOF, A4_PIN
+#define A5 				GPIOF, A5_PIN
 #define D11 			GPIOB, GPIO_PIN_11
-#define	D10				GPIOA, GPIO_PIN_8//, GPIO_AF1_TIM1
 #define	D9				GPIOA, GPIO_PIN_15//, GPIO_AF1_TIM2
-#define	D3				GPIOB, GPIO_PIN_4, GPIO_AF2_TIM3
+#define	D3				GPIOB, GPIO_PIN_4//, GPIO_AF2_TIM3
 
-#define RGB_LED_R_PIN 	D10
-#define RGB_LED_G_PIN 	D9
-#define RGB_LED_B_PIN 	D3
+#define	D10				GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1
+#define	D5				GPIOI, D5_PIN	//Button 2
+#define	D7				GPIOI, D7_PIN	//Button 1
 
-
-#define		VENT		D3
-#define		BUTTON_1	D9
-#define		BUTTON_2	D10
+#define		VENT			D10
+#define		BUTTON_1		D7
+#define		BUTTON_1_PIN	D7_PIN
+#define		BUTTON_2		D5
+#define		BUTTON_2_PIN	D5_PIN
 
 #define 	TIM1_PERIOD		1000
 
@@ -78,14 +83,11 @@
 UART_HandleTypeDef uart_handle;
 GPIO_InitTypeDef gpio_inittypedef;
 TIM_OC_InitTypeDef sConfig;
-//TIM_OC_InitTypeDef sConfig2;
-unsigned int LED_Status = 1;
-
-//volatile uint32_t timIntPeriod;
+unsigned int PWM_percent = 50;
+uint32_t tickstart = 0;
+uint32_t tick_before = 0;
 
 TIM_HandleTypeDef TimHandle;
-//TIM_HandleTypeDef TimHandle2;
-unsigned int LED_Pulse = 500;
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -106,6 +108,9 @@ void Init_UART();
 void Init_TIM1();
 void Init_PIN_Vent(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
 void Init_PIN_PB(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x);
+void EXTI0_IRQHandler();
+void EXTI3_IRQHandler();
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 void Set_TIM1_PWM(uint32_t percent);
 
 
@@ -142,24 +147,32 @@ int main(void) {
 
 	/* Add your application code here
 	 */
+	tick_before = HAL_GetTick();
+
 	Init_UART();
 	Init_TIM1();
 
-  	__HAL_RCC_GPIOB_CLK_ENABLE();
-	Init_PIN_Vent(VENT);
+  	__HAL_RCC_GPIOI_CLK_ENABLE();
+	Init_PIN_PB(BUTTON_1);
+	HAL_NVIC_SetPriority(EXTI3_IRQn, 0x0E, 0x00);
+	HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+
+	Init_PIN_PB(BUTTON_2);
+	HAL_NVIC_SetPriority(EXTI0_IRQn, 0x0E, 0x00);
+	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 
   	__HAL_RCC_GPIOA_CLK_ENABLE();
-	Init_PIN_PB(BUTTON_1);
-	Init_PIN_PB(BUTTON_2);
+  	Init_PIN_Vent(VENT);
 
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("*********in STATIC control loop WS*********\r\n\n");
 
+	Set_TIM1_PWM(PWM_percent);
+
 	while (1)
 	{
-		//if (TIM1->CCR1 >= 1)
-		//	TIM1->CCR1 -= 1;
-		//HAL_Delay(5);
+
+		HAL_Delay(500);
 	}
 
 }
@@ -311,7 +324,7 @@ void Init_TIM1()
   	HAL_TIM_PWM_Init(&TimHandle);
 
   	sConfig.OCMode       = TIM_OCMODE_PWM1;
-  	sConfig.Pulse		 = TIM1_PERIOD / 10;
+  	sConfig.Pulse		 = TIM1_PERIOD / 5;
   	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
   	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
 }
@@ -331,14 +344,42 @@ void Init_PIN_PB(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x)
 	//gpio_inittypedef.Alternate =	_GPIO_AF;
 	gpio_inittypedef.Mode = 		GPIO_MODE_IT_RISING;
 	gpio_inittypedef.Pin = 			_GPIO_PIN_x;
-	gpio_inittypedef.Pull = 		GPIO_NOPULL;
+	gpio_inittypedef.Pull = 		GPIO_PULLDOWN;
 	gpio_inittypedef.Speed = 		GPIO_SPEED_HIGH;
 	HAL_GPIO_Init(_GPIOx, &gpio_inittypedef);
 }
 
+
+void EXTI0_IRQHandler()
+{
+	HAL_GPIO_EXTI_IRQHandler(BUTTON_2_PIN);
+}
+
+
+void EXTI3_IRQHandler()
+{
+	HAL_GPIO_EXTI_IRQHandler(BUTTON_1_PIN);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if ((HAL_GetTick() - tick_before) > 250) {
+		if ((GPIO_Pin == BUTTON_1_PIN) && (PWM_percent <= 90)) {
+			PWM_percent = PWM_percent + 10;
+		} else if ((GPIO_Pin == BUTTON_2_PIN) && (PWM_percent >= 10)) {
+			PWM_percent = PWM_percent - 10;
+		}
+		Set_TIM1_PWM(PWM_percent);
+		tick_before = HAL_GetTick();
+		printf("%u\n", PWM_percent);
+	}
+}
+
 void Set_TIM1_PWM(uint32_t percent)
 {
-	TIM1->CCR1 = TIM1_PERIOD / 100 * percent;
+	if (percent >= 0 && percent <= 100) {
+		TIM1->CCR1 = TIM1_PERIOD * percent / 100;
+	}
 }
 
 
