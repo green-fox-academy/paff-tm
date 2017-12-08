@@ -77,6 +77,7 @@
 #define		VENT_RPM_IN		D3
 
 #define 	TIM1_PERIOD		1000
+#define 	TIM3_PERIOD		6000
 
 
 /* Private macro -------------------------------------------------------------*/
@@ -88,10 +89,9 @@ TIM_OC_InitTypeDef sConfig;
 TIM_IC_InitTypeDef icConfig;
 unsigned int PWM_percent = 50;
 
-uint32_t tick_before = 0;
-uint32_t RPM_time_before = 0;
-uint32_t RPM_time_now = 0;
-uint32_t RPM = 0;
+volatile uint32_t tick_before = 0;
+volatile uint32_t RPM_IC_value_before = 0;
+volatile uint32_t RPM = 0;
 
 TIM_HandleTypeDef TimHandle;
 
@@ -187,7 +187,7 @@ int main(void) {
 
 	while (1)
 	{
-		printf("RPM: %u\n", RPM);
+		printf("RPM: %lu\n", RPM);
 		HAL_Delay(500);
 	}
 
@@ -349,15 +349,16 @@ void Init_TIM3()
 {
 	__HAL_RCC_TIM3_CLK_ENABLE();
   	TimHandle.Instance               = TIM3;
-  	TimHandle.Init.Period            = 3000 - 1;	//3000
-  	TimHandle.Init.Prescaler         = 45000;		//45000
+  	TimHandle.Init.Period            = TIM3_PERIOD - 1;	//3000
+  	TimHandle.Init.Prescaler         = 90000;			//45000
   	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
   	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
   	HAL_TIM_IC_Init(&TimHandle);
 
-  	icConfig.ICFilter 				= 1;
+  	icConfig.ICFilter 				= 0;
   	icConfig.ICPolarity 			= TIM_ICPOLARITY_RISING;
-  	icConfig.ICPrescaler 			= TIM_ICPSC_DIV1;
+  	icConfig.ICPrescaler 			= TIM_ICPSC_DIV2;
+  	icConfig.ICSelection			= TIM_ICSELECTION_DIRECTTI;
   	HAL_TIM_IC_ConfigChannel(&TimHandle, &icConfig, TIM_CHANNEL_1);
   	HAL_TIM_IC_Start_IT(&TimHandle, TIM_CHANNEL_1);
 }
@@ -423,7 +424,16 @@ void TIM3_IRQHandler()
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-	printf("HAL_TIM_IC_CaptureCallback\n");
+	uint32_t RPM_IC_capturedValue;
+	uint32_t RPM_IC_elapsedValue;
+
+	RPM_IC_capturedValue = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+	RPM_IC_elapsedValue = RPM_IC_capturedValue - RPM_IC_value_before;
+	//printf("Elapsed value: %lu\n", RPM_IC_capturedValue - RPM_IC_value_before);
+
+	RPM = (TIM3_PERIOD / (double)RPM_IC_elapsedValue) * 60;
+
+	RPM_IC_value_before = RPM_IC_capturedValue;
 }
 
 void Set_TIM1_PWM(uint32_t percent)
