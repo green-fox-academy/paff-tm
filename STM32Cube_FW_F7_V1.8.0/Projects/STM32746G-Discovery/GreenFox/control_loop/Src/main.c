@@ -77,7 +77,7 @@
 #define		VENT_RPM_IN		D3
 
 #define 	TIM1_PERIOD		1000
-#define 	TIM3_PERIOD		6000
+#define 	TIM3_PERIOD		3000
 
 
 /* Private macro -------------------------------------------------------------*/
@@ -334,7 +334,7 @@ void Init_TIM1()
 	__HAL_RCC_TIM1_CLK_ENABLE();
   	TimHandle.Instance               = TIM1;
   	TimHandle.Init.Period            = TIM1_PERIOD - 1;		//8000
-  	TimHandle.Init.Prescaler         = 6750;			//6750
+  	TimHandle.Init.Prescaler         = 6750 - 1;			//6750
   	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
   	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
   	HAL_TIM_PWM_Init(&TimHandle);
@@ -350,7 +350,7 @@ void Init_TIM3()
 	__HAL_RCC_TIM3_CLK_ENABLE();
   	TimHandle.Instance               = TIM3;
   	TimHandle.Init.Period            = TIM3_PERIOD - 1;	//3000
-  	TimHandle.Init.Prescaler         = 90000;			//45000
+  	TimHandle.Init.Prescaler         = 45000 - 1;		//45000
   	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
   	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
   	HAL_TIM_IC_Init(&TimHandle);
@@ -428,7 +428,10 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 	uint32_t RPM_IC_elapsedValue;
 
 	RPM_IC_capturedValue = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
-	RPM_IC_elapsedValue = RPM_IC_capturedValue - RPM_IC_value_before;
+	if (RPM_IC_capturedValue > RPM_IC_value_before)
+		RPM_IC_elapsedValue = RPM_IC_capturedValue - RPM_IC_value_before;
+	else
+		RPM_IC_elapsedValue = (TIM3_PERIOD - RPM_IC_value_before) + RPM_IC_capturedValue;
 	//printf("Elapsed value: %lu\n", RPM_IC_capturedValue - RPM_IC_value_before);
 
 	RPM = (TIM3_PERIOD / (double)RPM_IC_elapsedValue) * 60;
