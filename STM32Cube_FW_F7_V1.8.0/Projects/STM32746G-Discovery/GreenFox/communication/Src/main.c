@@ -61,7 +61,7 @@ UART_HandleTypeDef uart_handle;
 volatile uint32_t timIntPeriod;
 
 /* Private function prototypes -----------------------------------------------*/
-void My_USART_Init(UART_HandleTypeDef *huart);
+void My_USART_Init();
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -109,23 +109,22 @@ int main(void) {
 
 	/* Add your application code here
 	 */
+	My_USART_Init();
 	BSP_LED_Init(LED_GREEN);
-
-	uart_handle.Init.BaudRate = 115200;
-	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
-	uart_handle.Init.StopBits = UART_STOPBITS_1;
-	uart_handle.Init.Parity = UART_PARITY_NONE;
-	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	uart_handle.Init.Mode = UART_MODE_TX_RX;
-
-	My_USART_Init(&uart_handle);
-
 
 	printf("\n------------------WELCOME-------------------\r\n");
 	printf("*********in STATIC communication WS*********\r\n\n");
 
+	BSP_LED_On(LED_GREEN);
 
-	while (1) {
+	char result;
+	char send;
+	while (1)
+	{
+		HAL_UART_Receive(&uart_handle, (uint8_t *) &result, 1, HAL_MAX_DELAY);
+		send = result;
+		HAL_UART_Transmit(&uart_handle, (uint8_t *) &send , 1, 100);
+		//HAL_Delay(100);
 	}
 }
 
@@ -153,11 +152,41 @@ void My_USART_Init(UART_HandleTypeDef *huart)
 	gpio_init_structure.Alternate = GPIO_AF7_USART1;
 	HAL_GPIO_Init(USART_RX_PORT, &gpio_init_structure);
 
-	huart->Instance = USART1;
-	HAL_UART_Init(huart);
-
+	uart_handle.Init.BaudRate = 115200;
+	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+	uart_handle.Init.StopBits = UART_STOPBITS_1;
+	uart_handle.Init.Parity = UART_PARITY_NONE;
+	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	uart_handle.Init.Mode = UART_MODE_TX_RX;
+	uart_handle.Instance = USART1;
+	HAL_UART_Init(&uart_handle);
 }
 
+
+
+/*
+int _read(int file, char *result, size_t len) {
+    HAL_StatusTypeDef status;
+    int retcode = 0;
+
+    if (len != 0) {
+        status = HAL_UART_Receive( &uart_handle, (uint8_t *) result, len, HAL_MAX_DELAY);
+
+        if (status == HAL_OK) {
+            retcode = len;
+        } else {
+            retcode = -1;
+        }
+    }
+    return( retcode);
+}
+*/
+/*
+int _write(int file, char *outgoing, int len) {
+  HAL_UART_Transmit(&uart_handle, (uint8_t *) outgoing, len, 100);
+  return len;
+}
+*/
 /**
  * @brief  Retargets the C library printf function to the USART.
  * @param  None
