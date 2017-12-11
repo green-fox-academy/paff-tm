@@ -62,6 +62,8 @@ volatile uint32_t timIntPeriod;
 
 /* Private function prototypes -----------------------------------------------*/
 void My_USART_Init();
+void readline(char *line);
+void writeline(char *line);
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -117,16 +119,36 @@ int main(void) {
 
 	BSP_LED_On(LED_GREEN);
 
-	char result;
-	char send;
+	char result[100];
 	while (1)
 	{
-		HAL_UART_Receive(&uart_handle, (uint8_t *) &result, 1, HAL_MAX_DELAY);
-		send = result;
-		HAL_UART_Transmit(&uart_handle, (uint8_t *) &send , 1, 100);
-		//HAL_Delay(100);
+		readline(result);
+		writeline(result);
 	}
 }
+
+void readline(char *line)
+{
+	char result = '\0';
+	unsigned int length = 0;
+
+	while (result != '\n') {
+		HAL_UART_Receive(&uart_handle, (uint8_t *) &result, 1, HAL_MAX_DELAY);
+		line[length] = result;
+		++length;
+	}
+	line[length] = '\0';
+}
+
+void writeline(char *line)
+{
+	unsigned int i = 0;
+	while (line[i] != '\0') {
+		HAL_UART_Transmit(&uart_handle, (uint8_t *) &line[i], 1, 100);
+		++i;
+	}
+}
+
 
 void My_USART_Init(UART_HandleTypeDef *huart)
 {
