@@ -49,46 +49,11 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define D5_PIN			GPIO_PIN_0	//Button 2
-#define D7_PIN			GPIO_PIN_3	//Button 1
-
-#define	D3				GPIOB, GPIO_PIN_4, GPIO_AF2_TIM3	//PRM signal input from ventillator
-#define	D10				GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1	//Vent
-#define	D5				GPIOI, D5_PIN	//Button 2
-#define	D7				GPIOI, D7_PIN	//Button 1
-
-#define	VENT			D10
-#define	BUTTON_1		D7
-#define	BUTTON_1_PIN	D7_PIN
-#define	BUTTON_2		D5
-#define	BUTTON_2_PIN	D5_PIN
-#define	VENT_RPM_IN		D3
-
-#define TIM1_PERIOD		1000
-#define TIM3_PERIOD		3000
-
-#define RPM_MIN			500
-#define	RPM_MAX			9000
-#define	RPM_CNT_TH		75
-
-
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
-GPIO_InitTypeDef gpio_inittypedef;
-TIM_HandleTypeDef TimHandle;
-TIM_OC_InitTypeDef sConfig;
-TIM_IC_InitTypeDef icConfig;
 
-unsigned int PWM_percent = 50;
-
-volatile uint32_t tick_before = 0;			// for pushbutton frequency
-
-volatile uint32_t RPM_IC_value_before = 0;
-volatile unsigned int  RPM_IC_valid = 1;
-volatile uint32_t RPM = 0;					//actual RPM of ventillator
-
-
+volatile uint32_t timIntPeriod;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -104,20 +69,6 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
-void Init_UART();
-void Init_TIM1();
-void Init_TIM3();
-void Init_PIN_Vent(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
-void Init_PIN_PB(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x);
-void Init_PIN_RPM_in(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x, uint32_t _GPIO_AF);
-void EXTI0_IRQHandler();
-void EXTI3_IRQHandler();
-void TIM3_IRQHandler();
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim);
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-void Set_TIM1_PWM(uint32_t percent);
-void Set_RPM(uint32_t percent);
-
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -152,40 +103,24 @@ int main(void) {
 
 	/* Add your application code here
 	 */
-	tick_before = HAL_GetTick();
+	BSP_LED_Init(LED_GREEN);
 
-	Init_UART();
-	Init_TIM1();
-	Init_TIM3();
+	uart_handle.Init.BaudRate = 115200;
+	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+	uart_handle.Init.StopBits = UART_STOPBITS_1;
+	uart_handle.Init.Parity = UART_PARITY_NONE;
+	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	uart_handle.Init.Mode = UART_MODE_TX_RX;
 
-  	__HAL_RCC_GPIOI_CLK_ENABLE();
-	Init_PIN_PB(BUTTON_1);
-	HAL_NVIC_SetPriority(EXTI3_IRQn, 0x0E, 0x00);
-	HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+	BSP_COM_Init(COM1, &uart_handle);
 
-	Init_PIN_PB(BUTTON_2);
-	HAL_NVIC_SetPriority(EXTI0_IRQn, 0x0E, 0x00);
-	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-  	Init_PIN_Vent(VENT);
+	printf("\n------------------WELCOME-------------------\r\n");
+	printf("**********in STATIC communication WS**********\r\n\n");
 
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	Init_PIN_RPM_in(VENT_RPM_IN);
-	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0D, 0x00);
-	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
-	printf("\n-----------------WELCOME-----------------\r\n");
-	printf("*********in STATIC control loop WS*********\r\n\n");
-
-	Set_TIM1_PWM(PWM_percent);
-
-	while (1)
-	{
-		printf("RPM: %lu\n", RPM);
-		HAL_Delay(500);
+	while (1) {
 	}
-
 }
 
 /**
@@ -251,7 +186,7 @@ static void SystemClock_Config(void) {
 	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
 	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV8;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
 		Error_Handler();
 	}
@@ -311,147 +246,6 @@ static void CPU_CACHE_Enable(void) {
 
 	/* Enable D-Cache */
 	SCB_EnableDCache();
-}
-
-void Init_UART()
-{
-	uart_handle.Init.BaudRate = 115200;
-	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
-	uart_handle.Init.StopBits = UART_STOPBITS_1;
-	uart_handle.Init.Parity = UART_PARITY_NONE;
-	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	uart_handle.Init.Mode = UART_MODE_TX_RX;
-	BSP_COM_Init(COM1, &uart_handle);
-}
-
-void Init_TIM1()
-{
-	__HAL_RCC_TIM1_CLK_ENABLE();
-  	TimHandle.Instance               = TIM1;
-  	TimHandle.Init.Period            = TIM1_PERIOD - 1;		//8000
-  	TimHandle.Init.Prescaler         = 6750 - 1;			//6750
-  	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-  	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
-  	HAL_TIM_PWM_Init(&TimHandle);
-
-  	sConfig.OCMode       = TIM_OCMODE_PWM1;
-  	sConfig.Pulse		 = 0;
-  	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
-  	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
-}
-
-void Init_TIM3()
-{
-	__HAL_RCC_TIM3_CLK_ENABLE();
-  	TimHandle.Instance               = TIM3;
-  	TimHandle.Init.Period            = TIM3_PERIOD - 1;	//3000
-  	TimHandle.Init.Prescaler         = 45000 - 1;		//45000
-  	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-  	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
-  	HAL_TIM_IC_Init(&TimHandle);
-
-  	icConfig.ICFilter 				= 0;
-  	icConfig.ICPolarity 			= TIM_ICPOLARITY_RISING;
-  	icConfig.ICPrescaler 			= TIM_ICPSC_DIV2;
-  	icConfig.ICSelection			= TIM_ICSELECTION_DIRECTTI;
-  	HAL_TIM_IC_ConfigChannel(&TimHandle, &icConfig, TIM_CHANNEL_1);
-  	HAL_TIM_IC_Start_IT(&TimHandle, TIM_CHANNEL_1);
-}
-
-void Init_PIN_Vent(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x, uint32_t _GPIO_AF)
-{
-	gpio_inittypedef.Alternate =	_GPIO_AF;
-	gpio_inittypedef.Mode = 		GPIO_MODE_AF_PP;
-	gpio_inittypedef.Pin = 			_GPIO_PIN_x;
-	gpio_inittypedef.Pull = 		GPIO_NOPULL;
-	gpio_inittypedef.Speed = 		GPIO_SPEED_HIGH;
-	HAL_GPIO_Init(_GPIOx, &gpio_inittypedef);
-}
-
-void Init_PIN_PB(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x)
-{
-	gpio_inittypedef.Mode = 		GPIO_MODE_IT_RISING;
-	gpio_inittypedef.Pin = 			_GPIO_PIN_x;
-	gpio_inittypedef.Pull = 		GPIO_PULLDOWN;
-	gpio_inittypedef.Speed = 		GPIO_SPEED_HIGH;
-	HAL_GPIO_Init(_GPIOx, &gpio_inittypedef);
-}
-
-void Init_PIN_RPM_in(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x, uint32_t _GPIO_AF)
-{
-	gpio_inittypedef.Alternate =	_GPIO_AF;
-	gpio_inittypedef.Mode = 		GPIO_MODE_AF_PP;
-	gpio_inittypedef.Pin = 			_GPIO_PIN_x;
-	gpio_inittypedef.Pull = 		GPIO_NOPULL;
-	gpio_inittypedef.Speed = 		GPIO_SPEED_HIGH;
-	HAL_GPIO_Init(_GPIOx, &gpio_inittypedef);
-}
-
-void EXTI0_IRQHandler()
-{
-	HAL_GPIO_EXTI_IRQHandler(BUTTON_2_PIN);
-}
-
-void EXTI3_IRQHandler()
-{
-	HAL_GPIO_EXTI_IRQHandler(BUTTON_1_PIN);
-}
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if ((HAL_GetTick() - tick_before) > 150) {
-		unsigned int dif = 5;
-		if ((GPIO_Pin == BUTTON_1_PIN) && (PWM_percent <= 100 - dif)) {
-			PWM_percent += dif;
-		} else if ((GPIO_Pin == BUTTON_2_PIN) && (PWM_percent >= dif)) {
-			PWM_percent -= dif;
-		}
-		Set_TIM1_PWM(PWM_percent);
-		tick_before = HAL_GetTick();
-		printf("PWM percent: %u\n", PWM_percent);
-	}
-}
-
-void TIM3_IRQHandler()
-{
-	HAL_TIM_IRQHandler(&TimHandle);
-}
-
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-	uint32_t RPM_IC_capturedValue;
-	uint32_t RPM_IC_elapsedValue;
-
-	if (TIM1->CNT > RPM_CNT_TH && TIM1->CNT < TIM1->CCR1) {
-		RPM_IC_capturedValue = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
-		if (RPM_IC_valid == 0) {
-			RPM_IC_valid = 1;
-		} else {
-			if (RPM_IC_capturedValue > RPM_IC_value_before)
-				RPM_IC_elapsedValue = RPM_IC_capturedValue - RPM_IC_value_before;
-			else
-				RPM_IC_elapsedValue = (TIM3_PERIOD - RPM_IC_value_before) + RPM_IC_capturedValue;
-			printf("Elapsed value: %lu\n", RPM_IC_capturedValue - RPM_IC_value_before);
-
-			RPM = (TIM3_PERIOD / (double)RPM_IC_elapsedValue) * 60;
-		}
-		RPM_IC_value_before = RPM_IC_capturedValue;
-
-	} else {
-		RPM_IC_valid = 0;
-	}
-}
-
-void Set_TIM1_PWM(uint32_t percent)
-{
-	if (percent >= 0 && percent <= 100) {
-		TIM1->CCR1 = TIM1_PERIOD * percent / 100;
-	}
-}
-
-void Set_RPM(uint32_t percent)
-{
-
 }
 
 #ifdef  USE_FULL_ASSERT
