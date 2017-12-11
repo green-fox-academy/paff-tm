@@ -190,7 +190,7 @@ int main(void) {
 	//printf("required RPM, actual RPM, control PWM\n");
 	while (1)
 	{
-		printf("%lu, %lu, %lu\n", required_RPM, RPM, set_PWM);
+		printf("%lu; %lu; %lu\n", required_RPM, RPM, set_PWM);
 		P_Control(required_RPM);
 		HAL_Delay(500);
 	}
