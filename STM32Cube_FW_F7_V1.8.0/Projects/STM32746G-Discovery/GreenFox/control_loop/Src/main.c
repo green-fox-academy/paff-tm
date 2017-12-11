@@ -67,15 +67,15 @@
 #define TIM1_PERIOD		1000
 #define TIM3_PERIOD		3000
 
-#define PWM_MIN			30
+#define PWM_MIN			25
 #define	PWM_MAX			100
-#define RPM_MIN			5000
+#define RPM_MIN			4000
 #define	RPM_MAX			9000
 #define	RPM_CNT_TH		75
-#define REQ_RPM_INIT	4000
+#define RPM_REQ_INIT	RPM_MIN
 #define BUTT_DIFF		250
 
-#define P				0.014
+#define P				0.014	//0.014
 
 
 /* Private macro -------------------------------------------------------------*/
@@ -94,7 +94,7 @@ volatile uint32_t RPM_IC_value_before = 0;
 volatile unsigned int  RPM_IC_valid = 1;
 volatile uint32_t RPM = 0;					//actual RPM of ventillator
 uint32_t set_PWM = 0;						//set RPM value by the control
-uint32_t required_RPM = 0;		//required RPM by user;
+uint32_t required_RPM = RPM_REQ_INIT;		//required RPM by user;
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -187,9 +187,10 @@ int main(void) {
 
 	Set_TIM1_PWM(PWM_percent);
 
+	//printf("required RPM, actual RPM, control PWM\n");
 	while (1)
 	{
-		printf("user, actual RPM, control PWM: %lu, %lu, %lu\n", required_RPM, RPM, set_PWM);
+		printf("%lu, %lu, %lu\n", required_RPM, RPM, set_PWM);
 		P_Control(required_RPM);
 		HAL_Delay(500);
 	}
@@ -410,7 +411,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	if ((HAL_GetTick() - tick_before) > 150) {
 		if ((GPIO_Pin == BUTTON_1_PIN) && (required_RPM <= RPM_MAX - BUTT_DIFF)) {
 			required_RPM += BUTT_DIFF;
-		} else if ((GPIO_Pin == BUTTON_2_PIN) && (required_RPM >= RPM_MIN - BUTT_DIFF)) {
+		} else if ((GPIO_Pin == BUTTON_2_PIN) && (required_RPM >= RPM_MIN + BUTT_DIFF)) {
 			required_RPM -= BUTT_DIFF;
 		}
 		//Set_TIM1_PWM(PWM_percent);
