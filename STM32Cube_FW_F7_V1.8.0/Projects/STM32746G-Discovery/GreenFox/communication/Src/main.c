@@ -49,6 +49,11 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define USART_TX_PIN	GPIO_PIN_9
+#define USART_TX_PORT	GPIOA
+#define USART_RX_PIN	GPIO_PIN_7
+#define USART_RX_PORT	GPIOB
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
@@ -56,6 +61,7 @@ UART_HandleTypeDef uart_handle;
 volatile uint32_t timIntPeriod;
 
 /* Private function prototypes -----------------------------------------------*/
+void My_USART_Init(UART_HandleTypeDef *huart);
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -112,15 +118,44 @@ int main(void) {
 	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	uart_handle.Init.Mode = UART_MODE_TX_RX;
 
-	BSP_COM_Init(COM1, &uart_handle);
+	My_USART_Init(&uart_handle);
 
 
 	printf("\n------------------WELCOME-------------------\r\n");
-	printf("**********in STATIC communication WS**********\r\n\n");
+	printf("*********in STATIC communication WS*********\r\n\n");
 
 
 	while (1) {
 	}
+}
+
+void My_USART_Init(UART_HandleTypeDef *huart)
+{
+	GPIO_InitTypeDef gpio_init_structure;
+
+	//Tx GPIO port enable
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+
+	//Rx GPIO port enable
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+
+	//USART clock enable
+	__HAL_RCC_USART1_CLK_ENABLE();
+
+	gpio_init_structure.Pin = USART_TX_PIN;
+	gpio_init_structure.Mode = GPIO_MODE_AF_PP;
+	gpio_init_structure.Speed = GPIO_SPEED_FAST;
+	gpio_init_structure.Pull = GPIO_PULLUP;
+	gpio_init_structure.Alternate = GPIO_AF7_USART1;
+	HAL_GPIO_Init(USART_TX_PORT, &gpio_init_structure);
+
+	gpio_init_structure.Pin = USART_RX_PIN;
+	gpio_init_structure.Alternate = GPIO_AF7_USART1;
+	HAL_GPIO_Init(USART_RX_PORT, &gpio_init_structure);
+
+	huart->Instance = USART1;
+	HAL_UART_Init(huart);
+
 }
 
 /**
