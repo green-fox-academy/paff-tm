@@ -130,11 +130,9 @@ int main(void) {
 		} else if (strcmp(result, "off\n") == 0) {
 			BSP_LED_Off(LED_GREEN);
 		} else {
-			for (unsigned int i = 0; i < 3; ++i) {
-				BSP_LED_On(LED_GREEN);
-				HAL_Delay(200);
-				BSP_LED_Off(LED_GREEN);
-				HAL_Delay(200);
+			for (unsigned int i = 0; i < 6; ++i) {
+				BSP_LED_Toggle(LED_GREEN);
+				HAL_Delay(100);
 			}
 		}
 
