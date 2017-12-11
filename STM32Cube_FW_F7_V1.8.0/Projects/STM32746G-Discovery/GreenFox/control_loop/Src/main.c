@@ -67,9 +67,15 @@
 #define TIM1_PERIOD		1000
 #define TIM3_PERIOD		3000
 
-#define RPM_MIN			500
+#define PWM_MIN			30
+#define	PWM_MAX			100
+#define RPM_MIN			5000
 #define	RPM_MAX			9000
 #define	RPM_CNT_TH		75
+#define REQ_RPM_INIT	4000
+#define BUTT_DIFF		250
+
+#define P				0.014
 
 
 /* Private macro -------------------------------------------------------------*/
@@ -87,7 +93,8 @@ volatile uint32_t tick_before = 0;			// for pushbutton frequency
 volatile uint32_t RPM_IC_value_before = 0;
 volatile unsigned int  RPM_IC_valid = 1;
 volatile uint32_t RPM = 0;					//actual RPM of ventillator
-
+uint32_t set_PWM = 0;						//set RPM value by the control
+uint32_t required_RPM = 0;		//required RPM by user;
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -116,7 +123,7 @@ void TIM3_IRQHandler();
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 void Set_TIM1_PWM(uint32_t percent);
-void Set_RPM(uint32_t percent);
+void P_Control(uint32_t required_RPM);
 
 
 /* Private functions ---------------------------------------------------------*/
@@ -182,7 +189,8 @@ int main(void) {
 
 	while (1)
 	{
-		printf("RPM: %lu\n", RPM);
+		printf("user, actual RPM, control PWM: %lu, %lu, %lu\n", required_RPM, RPM, set_PWM);
+		P_Control(required_RPM);
 		HAL_Delay(500);
 	}
 
@@ -400,15 +408,14 @@ void EXTI3_IRQHandler()
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if ((HAL_GetTick() - tick_before) > 150) {
-		unsigned int dif = 5;
-		if ((GPIO_Pin == BUTTON_1_PIN) && (PWM_percent <= 100 - dif)) {
-			PWM_percent += dif;
-		} else if ((GPIO_Pin == BUTTON_2_PIN) && (PWM_percent >= dif)) {
-			PWM_percent -= dif;
+		if ((GPIO_Pin == BUTTON_1_PIN) && (required_RPM <= RPM_MAX - BUTT_DIFF)) {
+			required_RPM += BUTT_DIFF;
+		} else if ((GPIO_Pin == BUTTON_2_PIN) && (required_RPM >= RPM_MIN - BUTT_DIFF)) {
+			required_RPM -= BUTT_DIFF;
 		}
-		Set_TIM1_PWM(PWM_percent);
+		//Set_TIM1_PWM(PWM_percent);
 		tick_before = HAL_GetTick();
-		printf("PWM percent: %u\n", PWM_percent);
+		//printf("Required RPM: %u\n", required_RPM);
 	}
 }
 
@@ -431,7 +438,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 				RPM_IC_elapsedValue = RPM_IC_capturedValue - RPM_IC_value_before;
 			else
 				RPM_IC_elapsedValue = (TIM3_PERIOD - RPM_IC_value_before) + RPM_IC_capturedValue;
-			printf("Elapsed value: %lu\n", RPM_IC_capturedValue - RPM_IC_value_before);
+			//printf("Elapsed value: %lu\n", RPM_IC_capturedValue - RPM_IC_value_before);
 
 			RPM = (TIM3_PERIOD / (double)RPM_IC_elapsedValue) * 60;
 		}
@@ -449,9 +456,19 @@ void Set_TIM1_PWM(uint32_t percent)
 	}
 }
 
-void Set_RPM(uint32_t percent)
+void P_Control(uint32_t required_RPM)
 {
+	int err = required_RPM - RPM;
+	int ctrler_out = P * err;		//percent of PWM
 
+	set_PWM += ctrler_out;
+
+	if (set_PWM < PWM_MIN)
+		set_PWM = PWM_MIN;
+	else if (set_PWM > PWM_MAX)
+		set_PWM = PWM_MAX;
+
+	Set_TIM1_PWM(set_PWM);
 }
 
 #ifdef  USE_FULL_ASSERT
