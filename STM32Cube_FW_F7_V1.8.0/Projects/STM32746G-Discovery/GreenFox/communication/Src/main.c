@@ -117,26 +117,41 @@ int main(void) {
 	printf("\n------------------WELCOME-------------------\r\n");
 	printf("*********in STATIC communication WS*********\r\n\n");
 
-	BSP_LED_On(LED_GREEN);
+	BSP_LED_Off(LED_GREEN);
 
 	char result[100];
 	while (1)
 	{
 		readline(result);
 		writeline(result);
+
+		if (strcmp(result, "on\n") == 0) {
+			BSP_LED_On(LED_GREEN);
+		} else if (strcmp(result, "off\n") == 0) {
+			BSP_LED_Off(LED_GREEN);
+		} else {
+			for (unsigned int i = 0; i < 3; ++i) {
+				BSP_LED_On(LED_GREEN);
+				HAL_Delay(200);
+				BSP_LED_Off(LED_GREEN);
+				HAL_Delay(200);
+			}
+		}
+
+		result[0] = '\0';
 	}
 }
 
 void readline(char *line)
 {
-	char result = '\0';
 	unsigned int length = 0;
+	line[0] = '\0';
 
-	while (result != '\n') {
-		HAL_UART_Receive(&uart_handle, (uint8_t *) &result, 1, HAL_MAX_DELAY);
-		line[length] = result;
+	do {
+		HAL_UART_Receive(&uart_handle, (uint8_t *) &line[length], 1, HAL_MAX_DELAY);
 		++length;
-	}
+	} while (line[length-1] != '\n');
+
 	line[length] = '\0';
 }
 
