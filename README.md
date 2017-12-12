@@ -46,7 +46,13 @@
 - [Temp logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/Temp_logger)
 
 ## week-08 - [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0\Projects\STM32746G-Discovery\GreenFox)
-- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/day-5)
+- [week-08](https://github.com/greenfox-academy/paff-tm/tree/master/week-08)
+
+## week-09 - [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0\Projects\STM32746G-Discovery\GreenFox)
+- [demo](https://github.com/greenfox-academy/paff-tm/tree/master/week-09)
+
+## week-10 - [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0\Projects\STM32746G-Discovery\GreenFox)
+- [RPM logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-10/RPM_logger)
 
 
 
