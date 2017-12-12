@@ -78,7 +78,7 @@ I2C_HandleTypeDef I2C_Handle;
 void GPIO_I2C_Init(GPIO_TypeDef  *GPIOx, uint16_t GPIO_PIN_x);
 void I2C_Init();
 void UART_Init();
-int8_t getTempData();
+int getTempData(int8_t *temp);
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
@@ -129,9 +129,15 @@ int main(void) {
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("************in STATIC I2C WS*************\r\n\n");
 
+	int8_t temp = 0;
 	while (1)
 	{
-		printf("%i\n", getTempData());
+		if (getTempData(&temp) == 0) {
+			printf("%i\n", temp);
+		} else {
+			printf("communication error\n");
+		}
+
 		HAL_Delay(1000);
 	}
 
@@ -157,24 +163,29 @@ void I2C_Init()
 
 void UART_Init()
 {
-	uart_handle.Init.BaudRate = 115200;
+	uart_handle.Init.BaudRate 	= 115200;
 	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
-	uart_handle.Init.StopBits = UART_STOPBITS_1;
-	uart_handle.Init.Parity = UART_PARITY_NONE;
-	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	uart_handle.Init.Mode = UART_MODE_TX_RX;
+	uart_handle.Init.StopBits 	= UART_STOPBITS_1;
+	uart_handle.Init.Parity		= UART_PARITY_NONE;
+	uart_handle.Init.HwFlowCtl 	= UART_HWCONTROL_NONE;
+	uart_handle.Init.Mode 		= UART_MODE_TX_RX;
 	BSP_COM_Init(COM1, &uart_handle);
 }
 
-int8_t getTempData()
+int getTempData(int8_t *temp)
 {
 	uint8_t RxData = 0;
 	uint8_t TxData = 0x0;
 
-	HAL_I2C_Master_Transmit(&I2C_Handle, (uint16_t)TC74_DEV_ADDRESS, &TxData, 1, 10000);
-	HAL_I2C_Master_Receive(&I2C_Handle, (uint16_t)TC74_DEV_ADDRESS, &RxData, 1, 10000);
+	if (HAL_I2C_Master_Transmit(&I2C_Handle, (uint16_t)TC74_DEV_ADDRESS, &TxData, 1, 10000) != HAL_OK) {
+		return -1;
+	}
+	if (HAL_I2C_Master_Receive(&I2C_Handle, (uint16_t)TC74_DEV_ADDRESS, &RxData, 1, 10000) != HAL_OK) {
+		return -1;
+	}
 
-	return RxData;
+	*temp = RxData;
+	return 0;
 }
 /**
  * @brief  Retargets the C library printf function to the USART.
