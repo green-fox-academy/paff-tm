@@ -51,15 +51,16 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 
-#define I2C_SDA		D14
-#define I2C_SCLK	D15
+#define I2C_SDA				D14
+#define I2C_SCLK			D15
+#define TC74_DEV_ADDRESS	0b10010000
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
 UART_HandleTypeDef uart_handle;
 GPIO_InitTypeDef GPIO_InitHandle;
-I2C_HandleTypeDef I2C_InitHandle;
+I2C_HandleTypeDef I2C_Handle;
 //volatile TIM_HandleTypeDef TimHandle;
 //volatile TIM_HandleTypeDef TimHandle2;
 
@@ -77,6 +78,7 @@ I2C_HandleTypeDef I2C_InitHandle;
 void GPIO_I2C_Init(GPIO_TypeDef  *GPIOx, uint16_t GPIO_PIN_x);
 void I2C_Init();
 void UART_Init();
+int8_t getTempData();
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
@@ -129,8 +131,8 @@ int main(void) {
 
 	while (1)
 	{
-
-
+		printf("%i\n", getTempData());
+		HAL_Delay(1000);
 	}
 
 }
@@ -138,7 +140,7 @@ int main(void) {
 void GPIO_I2C_Init(GPIO_TypeDef  *GPIOx, uint16_t GPIO_PIN_x)
 {
 	GPIO_InitHandle.Alternate	= GPIO_AF4_I2C1;
-	GPIO_InitHandle.Mode		= GPIO_MODE_AF_PP;
+	GPIO_InitHandle.Mode		= GPIO_MODE_AF_OD;
 	GPIO_InitHandle.Pin			= GPIO_PIN_x;
 	GPIO_InitHandle.Pull		= GPIO_PULLUP;
 	GPIO_InitHandle.Speed		= GPIO_SPEED_HIGH;
@@ -147,11 +149,10 @@ void GPIO_I2C_Init(GPIO_TypeDef  *GPIOx, uint16_t GPIO_PIN_x)
 
 void I2C_Init()
 {
-	I2C_InitHandle.Instance				= I2C1;
-	//I2C_InitHandle.Mode			  	  = I2C_SCLK;
-	I2C_InitHandle.Init.Timing          = 0x40912732;
-	I2C_InitHandle.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
-	HAL_I2C_Init(&I2C_InitHandle);
+	I2C_Handle.Instance				= I2C1;
+	I2C_Handle.Init.Timing          = 0x40912732;
+	I2C_Handle.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
+	HAL_I2C_Init(&I2C_Handle);
 }
 
 void UART_Init()
@@ -165,6 +166,16 @@ void UART_Init()
 	BSP_COM_Init(COM1, &uart_handle);
 }
 
+int8_t getTempData()
+{
+	uint8_t RxData = 0;
+	uint8_t TxData = 0x0;
+
+	HAL_I2C_Master_Transmit(&I2C_Handle, (uint16_t)TC74_DEV_ADDRESS, &TxData, 1, 10000);
+	HAL_I2C_Master_Receive(&I2C_Handle, (uint16_t)TC74_DEV_ADDRESS, &RxData, 1, 10000);
+
+	return RxData;
+}
 /**
  * @brief  Retargets the C library printf function to the USART.
  * @param  None
