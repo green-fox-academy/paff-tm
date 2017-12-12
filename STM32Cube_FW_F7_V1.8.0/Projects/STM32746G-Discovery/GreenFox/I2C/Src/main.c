@@ -146,7 +146,7 @@ int main(void) {
 
 	HAL_NVIC_SetPriority(TIM8_UP_TIM13_IRQn, 0x0F, 0x00);
 	HAL_NVIC_EnableIRQ(TIM8_UP_TIM13_IRQn);
-	/*
+	*/
 
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("************in STATIC I2C WS*************\r\n\n");
