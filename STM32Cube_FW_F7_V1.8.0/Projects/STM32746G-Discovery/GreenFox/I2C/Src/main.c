@@ -38,6 +38,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <string.h>
+#include "define.h"
 
 /** @addtogroup STM32F7xx_HAL_Examples
  * @{
@@ -49,14 +50,16 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+
+#define I2C_SDA		D14
+#define I2C_SCLK	D15
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
 UART_HandleTypeDef uart_handle;
-GPIO_InitTypeDef led;
-//TIM_OC_InitTypeDef sConfig;
-//TIM_OC_InitTypeDef sConfig2;
-
+GPIO_InitTypeDef GPIO_InitHandle;
+I2C_HandleTypeDef I2C_InitHandle;
 //volatile TIM_HandleTypeDef TimHandle;
 //volatile TIM_HandleTypeDef TimHandle2;
 
@@ -71,6 +74,9 @@ GPIO_InitTypeDef led;
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif /* __GNUC__ */
 
+void GPIO_I2C_Init(GPIO_TypeDef  *GPIOx, uint16_t GPIO_PIN_x);
+void I2C_Init();
+void UART_Init();
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
@@ -109,44 +115,14 @@ int main(void) {
 
 	/* Add your application code here
 	 */
+	UART_Init();
 
-	uart_handle.Init.BaudRate = 115200;
-	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
-	uart_handle.Init.StopBits = UART_STOPBITS_1;
-	uart_handle.Init.Parity = UART_PARITY_NONE;
-	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	uart_handle.Init.Mode = UART_MODE_TX_RX;
-	BSP_COM_Init(COM1, &uart_handle);
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	GPIO_I2C_Init(D14);
+	GPIO_I2C_Init(D15);
 
-	/*
-	HAL_NVIC_SetPriority(USART1_IRQn, 0x0F, 0x00);
-	HAL_NVIC_EnableIRQ(USART1_IRQn);
-
-	__HAL_RCC_TIM1_CLK_ENABLE();
-  	TimHandle.Instance               = TIM1;
-  	TimHandle.Init.Period            = 1000;//8000
-  	TimHandle.Init.Prescaler         = 1;	//6750
-  	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-  	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
-  	HAL_TIM_PWM_Init(&TimHandle);
-
-  	sConfig.OCMode       = TIM_OCMODE_PWM1;
-  	sConfig.Pulse		 = 100;
-  	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
-  	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
-
-	__HAL_RCC_TIM8_CLK_ENABLE();
-	TimHandle2.Instance               = TIM8;
-	TimHandle2.Init.Period            = HAL_RCC_GetPCLK2Freq() / 13500 * 2;
-	TimHandle2.Init.Prescaler         = 13500;
-	TimHandle2.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-	TimHandle2.Init.CounterMode       = TIM_COUNTERMODE_UP;
-	HAL_TIM_Base_Init(&TimHandle2);
-	HAL_TIM_Base_Start_IT(&TimHandle2);
-
-	HAL_NVIC_SetPriority(TIM8_UP_TIM13_IRQn, 0x0F, 0x00);
-	HAL_NVIC_EnableIRQ(TIM8_UP_TIM13_IRQn);
-	*/
+	__HAL_RCC_I2C1_CLK_ENABLE();
+	I2C_Init();
 
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("************in STATIC I2C WS*************\r\n\n");
@@ -157,6 +133,36 @@ int main(void) {
 
 	}
 
+}
+
+void GPIO_I2C_Init(GPIO_TypeDef  *GPIOx, uint16_t GPIO_PIN_x)
+{
+	GPIO_InitHandle.Alternate	= GPIO_AF4_I2C1;
+	GPIO_InitHandle.Mode		= GPIO_MODE_AF_PP;
+	GPIO_InitHandle.Pin			= GPIO_PIN_x;
+	GPIO_InitHandle.Pull		= GPIO_PULLUP;
+	GPIO_InitHandle.Speed		= GPIO_SPEED_HIGH;
+	HAL_GPIO_Init(GPIOx, &GPIO_InitHandle);
+}
+
+void I2C_Init()
+{
+	I2C_InitHandle.Instance				= I2C1;
+	//I2C_InitHandle.Mode			  	  = I2C_SCLK;
+	I2C_InitHandle.Init.Timing          = 0x40912732;
+	I2C_InitHandle.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
+	HAL_I2C_Init(&I2C_InitHandle);
+}
+
+void UART_Init()
+{
+	uart_handle.Init.BaudRate = 115200;
+	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+	uart_handle.Init.StopBits = UART_STOPBITS_1;
+	uart_handle.Init.Parity = UART_PARITY_NONE;
+	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	uart_handle.Init.Mode = UART_MODE_TX_RX;
+	BSP_COM_Init(COM1, &uart_handle);
 }
 
 /**
