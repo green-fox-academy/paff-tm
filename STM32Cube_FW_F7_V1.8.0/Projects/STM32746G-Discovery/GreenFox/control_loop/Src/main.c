@@ -37,6 +37,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "define.h"
 #include <string.h>
 
 /** @addtogroup STM32F7xx_HAL_Examples
@@ -49,13 +50,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define D5_PIN			GPIO_PIN_0	//Button 2
-#define D7_PIN			GPIO_PIN_3	//Button 1
-
-#define	D3				GPIOB, GPIO_PIN_4, GPIO_AF2_TIM3	//PRM signal input from ventillator
-#define	D10				GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1	//Vent
-#define	D5				GPIOI, D5_PIN	//Button 2
-#define	D7				GPIOI, D7_PIN	//Button 1
+#define	D3				D3_PORT, D3_PIN, GPIO_AF2_TIM3	//PRM signal input from ventillator
+#define	D10				D10_PORT, D10_PIN, GPIO_AF1_TIM1	//Vent
 
 #define	VENT			D10
 #define	BUTTON_1		D7
@@ -67,15 +63,19 @@
 #define TIM1_PERIOD		1000
 #define TIM3_PERIOD		3000
 
-#define PWM_MIN			25
+#define PWM_MIN			0		//30
 #define	PWM_MAX			100
-#define RPM_MIN			4000
+#define RPM_MIN			0		//4000
 #define	RPM_MAX			9000
 #define	RPM_CNT_TH		75
 #define RPM_REQ_INIT	RPM_MIN
 #define BUTT_DIFF		250
 
-#define P				0.014	//0.014
+#define I2C_SDA				D14
+#define I2C_SCLK			D15
+#define TC74_DEV_ADDRESS	0b10010000
+
+#define P				0.005	//0.014
 
 
 /* Private macro -------------------------------------------------------------*/
@@ -85,6 +85,7 @@ GPIO_InitTypeDef gpio_inittypedef;
 TIM_HandleTypeDef TimHandle;
 TIM_OC_InitTypeDef sConfig;
 TIM_IC_InitTypeDef icConfig;
+I2C_HandleTypeDef I2C_Handle;
 
 unsigned int PWM_percent = 50;
 
@@ -93,8 +94,9 @@ volatile uint32_t tick_before = 0;			// for pushbutton frequency
 volatile uint32_t RPM_IC_value_before = 0;
 volatile unsigned int  RPM_IC_valid = 1;
 volatile uint32_t RPM = 0;					//actual RPM of ventillator
-uint32_t set_PWM = 0;						//set RPM value by the control
+double set_PWM = 0;							//set PWM % value by the control
 uint32_t required_RPM = RPM_REQ_INIT;		//required RPM by user;
+int8_t temp = 0;							//actual temperature
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -117,12 +119,15 @@ void Init_TIM3();
 void Init_PIN_Vent(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x, uint32_t _GPIO_AF);
 void Init_PIN_PB(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_Pin_x);
 void Init_PIN_RPM_in(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x, uint32_t _GPIO_AF);
+void GPIO_I2C_Init(GPIO_TypeDef  *GPIOx, uint16_t GPIO_PIN_x);
+void I2C_Init();
+int getTempData(int8_t *temp);
 void EXTI0_IRQHandler();
 void EXTI3_IRQHandler();
 void TIM3_IRQHandler();
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-void Set_TIM1_PWM(uint32_t percent);
+void Set_TIM1_PWM(double percent);
 void P_Control(uint32_t required_RPM);
 
 
@@ -165,6 +170,13 @@ int main(void) {
 	Init_TIM1();
 	Init_TIM3();
 
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	GPIO_I2C_Init(D14);
+	GPIO_I2C_Init(D15);
+
+	__HAL_RCC_I2C1_CLK_ENABLE();
+	I2C_Init();
+
   	__HAL_RCC_GPIOI_CLK_ENABLE();
 	Init_PIN_PB(BUTTON_1);
 	HAL_NVIC_SetPriority(EXTI3_IRQn, 0x0E, 0x00);
@@ -177,7 +189,7 @@ int main(void) {
 	__HAL_RCC_GPIOA_CLK_ENABLE();
   	Init_PIN_Vent(VENT);
 
-	__HAL_RCC_GPIOB_CLK_ENABLE();
+	//__HAL_RCC_GPIOB_CLK_ENABLE();
 	Init_PIN_RPM_in(VENT_RPM_IN);
 	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0D, 0x00);
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
@@ -187,12 +199,15 @@ int main(void) {
 
 	Set_TIM1_PWM(PWM_percent);
 
-	//printf("required RPM, actual RPM, control PWM\n");
+	printf("required RPM, actual RPM, control PWM, temp\n");
 	while (1)
 	{
-		printf("%lu; %lu; %lu\n", required_RPM, RPM, set_PWM);
+		if (getTempData(&temp) != 0) {
+			printf("temperature sensor communication error\n");
+		}
+		printf("%lu; %lu; %i; %i\n", required_RPM, RPM, (int)set_PWM, temp);
 		P_Control(required_RPM);
-		HAL_Delay(500);
+		HAL_Delay(100);
 	}
 
 }
@@ -396,6 +411,40 @@ void Init_PIN_RPM_in(GPIO_TypeDef  *_GPIOx, uint32_t _GPIO_PIN_x, uint32_t _GPIO
 	HAL_GPIO_Init(_GPIOx, &gpio_inittypedef);
 }
 
+void GPIO_I2C_Init(GPIO_TypeDef  *GPIOx, uint16_t GPIO_PIN_x)
+{
+	gpio_inittypedef.Alternate	= GPIO_AF4_I2C1;
+	gpio_inittypedef.Mode		= GPIO_MODE_AF_OD;
+	gpio_inittypedef.Pin			= GPIO_PIN_x;
+	gpio_inittypedef.Pull		= GPIO_PULLUP;
+	gpio_inittypedef.Speed		= GPIO_SPEED_HIGH;
+	HAL_GPIO_Init(GPIOx, &gpio_inittypedef);
+}
+
+void I2C_Init()
+{
+	I2C_Handle.Instance				= I2C1;
+	I2C_Handle.Init.Timing          = 0x40912732;
+	I2C_Handle.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
+	HAL_I2C_Init(&I2C_Handle);
+}
+
+int getTempData(int8_t *temp)
+{
+	uint8_t RxData = 0;
+	uint8_t TxData = 0x0;
+
+	if (HAL_I2C_Master_Transmit(&I2C_Handle, (uint16_t)TC74_DEV_ADDRESS, &TxData, 1, 10000) != HAL_OK) {
+		return -1;
+	}
+	if (HAL_I2C_Master_Receive(&I2C_Handle, (uint16_t)TC74_DEV_ADDRESS, &RxData, 1, 10000) != HAL_OK) {
+		return -1;
+	}
+
+	*temp = RxData;
+	return 0;
+}
+
 void EXTI0_IRQHandler()
 {
 	HAL_GPIO_EXTI_IRQHandler(BUTTON_2_PIN);
@@ -450,10 +499,10 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 	}
 }
 
-void Set_TIM1_PWM(uint32_t percent)
+void Set_TIM1_PWM(double percent)
 {
 	if (percent >= 0 && percent <= 100) {
-		TIM1->CCR1 = TIM1_PERIOD * percent / 100;
+		TIM1->CCR1 = TIM1_PERIOD * (uint32_t)percent / 100;
 	}
 }
 
@@ -461,13 +510,17 @@ void P_Control(uint32_t required_RPM)
 {
 	int err = required_RPM - RPM;
 	int ctrler_out = P * err;		//percent of PWM
+	int temp_set_PWM = set_PWM;
 
-	set_PWM += ctrler_out;
+	temp_set_PWM = set_PWM + ctrler_out;
 
-	if (set_PWM < PWM_MIN)
+	if (temp_set_PWM < PWM_MIN) {
 		set_PWM = PWM_MIN;
-	else if (set_PWM > PWM_MAX)
+	} else if (temp_set_PWM > PWM_MAX) {
 		set_PWM = PWM_MAX;
+	} else {
+		set_PWM += ctrler_out;
+	}
 
 	Set_TIM1_PWM(set_PWM);
 }
