@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <iostream>
 
 #include "Character.h"
 
@@ -28,8 +27,6 @@ int Character::attacking(Character *attacked_character)
 {
     int actual_attack = _attack * (rand() % 2 + 1);
     _health -= attacked_character->attacked(actual_attack);
-
-    cout << "actual attack value is " << actual_attack << endl;
 
     return actual_attack;
 }

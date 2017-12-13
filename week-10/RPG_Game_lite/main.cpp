@@ -8,7 +8,7 @@
 using namespace std;
 
 void printResult(int i);
-void printRoundResult(int i, Character *attacker, Character *defender);
+void printRoundResult(int i, Character *attacker, Character *defender, int attack_value);
 void switchPlayers(Character **attacker, Character **defender);
 void printBanner();
 
@@ -42,6 +42,7 @@ int main() {
 
     int i = 0;
     string input;
+    int attack_value;
     Character *attacker = player;
     Character *defender = monster;
 
@@ -49,8 +50,8 @@ int main() {
 
     do {
         ++i;
-        attacker->attacking(defender);
-        printRoundResult(i, attacker, defender);
+        attack_value = attacker->attacking(defender);
+        printRoundResult(i, attacker, defender, attack_value);
         getline(cin, input);
         switchPlayers(&attacker, &defender);
     } while(input != CMD_EXIT && player->isAlive() && monster->isAlive());
@@ -76,10 +77,10 @@ void printResult(int i)
         cout << "\t" << monster->getName() << endl;
 }
 
-void printRoundResult(int i, Character *attacker, Character *defender)
+void printRoundResult(int i, Character *attacker, Character *defender, int attack_value)
 {
     cout << i << ". round:" << endl;
-    cout << "\t" << attacker->getName() << " has attacked " << defender->getName() << "." << endl;
+    cout << "\t" << attacker->getName() << " has attacked " << defender->getName() << " with the attack value of " << attack_value << "." << endl;
     cout << "\t" << player->getName() << "'s health is:\t" << player->getHealth() << "\%" << endl;
     cout << "\t" << monster->getName() << "'s health is:\t" << monster->getHealth() << "\%" << endl;
 }
