@@ -2,7 +2,6 @@
 #include <string>
 #include <time.h>
 #include <stdlib.h>
-#include <vector>
 
 #include "Character.h"
 
@@ -52,7 +51,7 @@ int main() {
         ++i;
         attacker->attacking(defender);
         printRoundResult(i, attacker, defender);
-        cin >> input;
+        getline(cin, input);
         switchPlayers(&attacker, &defender);
     } while(input != CMD_EXIT && player->isAlive() && monster->isAlive());
 
