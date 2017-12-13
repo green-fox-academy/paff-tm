@@ -11,6 +11,7 @@ using namespace std;
 void printResult(int i);
 void printRoundResult(int i, Character *attacker, Character *defender);
 void switchPlayers(Character **attacker, Character **defender);
+void printBanner();
 
 Character *player = new Character(PLAYER, "Lali");
 Character *monster = new Character(MONSTER, "Gizmo");
@@ -45,6 +46,8 @@ int main() {
     Character *attacker = player;
     Character *defender = monster;
 
+    printBanner();
+
     do {
         ++i;
         attacker->attacking(defender);
@@ -53,7 +56,11 @@ int main() {
         switchPlayers(&attacker, &defender);
     } while(input != CMD_EXIT && player->isAlive() && monster->isAlive());
 
-    printResult(i);
+    if (input == CMD_EXIT) {
+        cout << "Bye!" << endl;
+    } else {
+        printResult(i);
+    }
 
     delete player;
     delete monster;
@@ -85,4 +92,17 @@ void switchPlayers(Character **attacker, Character **defender)
     temp = *attacker;
     *attacker = *defender;
     *defender = temp;
+}
+
+void printBanner()
+{
+    cout << "   *                                          )              " << endl;
+    cout << " (  )                       )              ( /(      (   (   " << endl;
+    cout << " )\\))(                   ( /(   (   (      )\\()) (   )\\  )\\  " << endl;
+    cout << "((_)()\\   (    (     (   )\\()) ))\\  )(   |((_)\\  )\\ ((_)((_) " << endl;
+    cout << "(_()((_)  )\\   )\\ )  )\\ (_))/ /((_)(()\\  |_ ((_)((_) _   _   " << endl;
+    cout << "|  \\/  | ((_) _(_/( ((_)| |_ (_))   ((_) | |/ /  (_)| | | |  " << endl;
+    cout << "| |\\/| |/ _ \\| ' \\))(_-<|  _|/ -_) | '_|   ' <   | || | | |  " << endl;
+    cout << "|_|  |_|\\___/|_||_| /__/ \\__|\\___| |_|    _|\\_\\  |_||_| |_|  " << endl;
+    cout << endl;
 }
