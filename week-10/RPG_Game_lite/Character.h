@@ -9,9 +9,13 @@ using namespace std;
 class Character
 {
     public:
-        Character(t_characterType type, string name, int health, int attack, int defense);
+        Character(t_characterType type, string name);
         ~Character();
-        void attacking();
+        int attacking(Character *attacked_character);
+        int attacked(int attack);
+        string getName();
+        int getHealth();
+        bool isAlive();
 
     protected:
         string _name;
