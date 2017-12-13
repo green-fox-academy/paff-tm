@@ -16,6 +16,7 @@ class Character
         string getName();
         int getHealth();
         bool isAlive();
+        void reset();
 
     protected:
         string _name;

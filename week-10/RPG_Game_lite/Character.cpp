@@ -8,14 +8,7 @@ Character::Character(t_characterType type, string name)
 {
     _type = type;
     _name = name;
-    _health = HEALTH;
-    if (type == PLAYER) {
-        _attack = PLAYER_ATTACK;
-        _defense = PLAYER_DEFENSE;
-    } else if (type == MONSTER) {
-         _attack = MONSTER_ATTACK;
-        _defense = MONSTER_DEFENSE;
-    }
+    reset();
 }
 
 Character::~Character()
@@ -56,4 +49,16 @@ bool Character::isAlive()
 string Character::getName()
 {
     return _name;
+}
+
+void Character::reset()
+{
+    _health = HEALTH;
+    if (_type == PLAYER) {
+        _attack = PLAYER_ATTACK;
+        _defense = PLAYER_DEFENSE;
+    } else if (_type == MONSTER) {
+         _attack = MONSTER_ATTACK;
+        _defense = MONSTER_DEFENSE;
+    }
 }

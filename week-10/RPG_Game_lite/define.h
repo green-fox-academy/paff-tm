@@ -2,7 +2,8 @@
 #define DEFINE_H_INCLUDED
 
 #define CMD_EXIT    "e"
-#define CMD_NEXT    "\n"
+#define CMD_YES     "y"
+#define CMD_NO      "n"
 
 #define HEALTH              100
 #define PLAYER_ATTACK       20

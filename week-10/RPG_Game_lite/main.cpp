@@ -40,27 +40,36 @@ int main() {
 
     srand(time(0));
 
-    int i = 0;
+    int i;
     string input;
-    int attack_value;
-    Character *attacker = player;
-    Character *defender = monster;
-
     printBanner();
 
     do {
-        ++i;
-        attack_value = attacker->attacking(defender);
-        printRoundResult(i, attacker, defender, attack_value);
-        getline(cin, input);
-        switchPlayers(&attacker, &defender);
-    } while(input != CMD_EXIT && player->isAlive() && monster->isAlive());
+        player->reset();
+        monster->reset();
+        Character *attacker = player;
+        Character *defender = monster;
+        //Game core
+        i = 0;
+        do {
+            ++i;
+            printRoundResult(i, attacker, defender, attacker->attacking(defender));
+            getline(cin, input);
+            switchPlayers(&attacker, &defender);
+        } while(input != CMD_EXIT && player->isAlive() && monster->isAlive());
 
-    if (input == CMD_EXIT) {
-        cout << "Bye!" << endl;
-    } else {
-        printResult(i);
-    }
+        if (input != CMD_EXIT) {
+            printResult(i);
+            //New game?
+            do {
+                cout << "Do you want a new game? (y/n): ";
+                getline(cin, input);
+            } while (input != CMD_YES && input != CMD_NO);
+        } else {
+            cout << "Bye!" << endl;
+            break;
+        }
+    } while (input == CMD_YES);
 
     delete player;
     delete monster;
