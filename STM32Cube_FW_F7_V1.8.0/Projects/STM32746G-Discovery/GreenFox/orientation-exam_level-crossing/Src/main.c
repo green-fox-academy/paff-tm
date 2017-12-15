@@ -38,7 +38,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <string.h>
-#include "define.h"
+//#include "define.h"
 
 /** @addtogroup STM32F7xx_HAL_Examples
  * @{
@@ -185,13 +185,6 @@ void TIM3_Config()
 	TIM3_Handle.Init.Prescaler		= 13500;
   	HAL_TIM_Base_Init(&TIM3_Handle);
   	HAL_TIM_Base_Start_IT(&TIM3_Handle);
-
-  	/*
-  	sConfig.OCMode       = TIM_OCMODE_ACTIVE;
-  	sConfig.Pulse		 = 2000;
-  	HAL_TIM_OC_ConfigChannel(&TIM3_Handle, &sConfig, TIM_CHANNEL_1);
-  	HAL_TIM_OC_Start_IT(&TIM3_Handle, TIM_CHANNEL_1);
-	*/
 
 	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0F, 0x0);
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
