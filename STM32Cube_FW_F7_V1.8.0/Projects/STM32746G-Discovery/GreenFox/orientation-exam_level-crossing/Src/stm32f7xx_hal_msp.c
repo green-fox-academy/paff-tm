@@ -49,7 +49,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
 #include "main.h"
-//#include "define.h"
 
 /** @addtogroup STM32F7xx_HAL_Driver
   * @{
@@ -69,25 +68,7 @@
 //volatile TIM_HandleTypeDef TimHandle2;
 
 /* Private function prototypes -----------------------------------------------*/
-void EXTI15_10_IRQHandler();
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-
-
 /* Private functions ---------------------------------------------------------*/
-
-void EXTI15_10_IRQHandler()
-{
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
-}
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if (TIM1->CCR1 < 1000-100)
-		TIM1->CCR1 += 100;
-	else
-		TIM1->CCR1 = 1000;
-}
-
 
 
 /** @defgroup HAL_MSP_Private_Functions
