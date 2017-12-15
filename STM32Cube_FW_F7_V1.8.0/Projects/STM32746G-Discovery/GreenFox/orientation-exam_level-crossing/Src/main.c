@@ -57,17 +57,17 @@ typedef enum {
 }StateType;
 
 /* Private define ------------------------------------------------------------*/
-#define TIM1_OPEN_COUNTER 		16000 - 1	// 0,5 Hz
-#define TIM1_OPEN_PERIOD		8000 - 1	// 50%
+#define TIM3_OPEN_COUNTER 		16000 - 1	// 0,5 Hz
+#define TIM3_OPEN_PERIOD		8000 - 1	// 50%
 
-#define TIM1_SECURING_COUNTER 	8000 - 1	// 1 hz
-#define TIM1_SECURING_PERIOD 	4000 - 1	// 50%
+#define TIM3_SECURING_COUNTER 	8000 - 1	// 1 hz
+#define TIM3_SECURING_PERIOD 	4000 - 1	// 50%
 
-#define TIM1_SECURED_COUNTER 	8000 - 1
-#define TIM1_SECURED_PERIOD 	0			// 0%
+#define TIM3_SECURED_COUNTER 	8000 - 1
+#define TIM3_SECURED_PERIOD 	0			// 0%
 
-#define TIM1_OPENING_COUNTER	TIM1_SECURING_COUNTER
-#define TIM1_OPENING_PERIOD		TIM1_SECURING_PERIOD
+#define TIM3_OPENING_COUNTER	TIM3_SECURING_COUNTER
+#define TIM3_OPENING_PERIOD		TIM3_SECURING_PERIOD
 
 #define TIM2_SECURING_COUNTER 	40000 - 1	// 5 sec
 #define TIM2_OPENING_COUNTER 	48000 - 1	// 6 sec
@@ -77,6 +77,7 @@ typedef enum {
 UART_HandleTypeDef uart_handle;
 TIM_HandleTypeDef TIM1_Handle;
 TIM_HandleTypeDef TIM2_Handle;
+TIM_HandleTypeDef TIM3_Handle;
 
 TIM_OC_InitTypeDef sConfig;
 
@@ -96,15 +97,15 @@ void UART_Init();
 void BarrierClose();
 void BarrierOpen();
 
-void TIM1_Config();				//LED blinking
-void TIM1_UP_TIM10_IRQHandler();
+void TIM3_Config();					//LED blinking
+void TIM3_IRQHandler();
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim);
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
-void TIM2_Config();				//time measure
+void TIM2_Config();					//time measure
 void TIM2_IRQHandler();
 
-void EXTI15_10_IRQHandler();	//BushButton
+void EXTI15_10_IRQHandler();		//BushButton
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
 static void System_Init(void);
@@ -121,23 +122,26 @@ static void CPU_CACHE_Enable(void);
  * @retval None
  */
 int main(void) {
-	System_Init();
-
 	/* Add your application code here
 	 */
+	System_Init();
+
 	UART_Init();
+	//TIM1_Config();
+	TIM2_Config();
+	TIM3_Config();
 
 	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_EXTI);
 	HAL_NVIC_SetPriority(KEY_BUTTON_EXTI_IRQn, 0x0E, 0x00);
 	HAL_NVIC_EnableIRQ(KEY_BUTTON_EXTI_IRQn);
 
 	BSP_LED_Init(LED_GREEN);
-	TIM1_Config();
 
-	TIM2_Config();
 
 	printf("\n----------------------WELCOME--------------------\r\n");
 	printf("**********in STATIC level-crossing EXAM**********\r\n\n");
+
+	printf("Open\n");
 
 	while (1)
 	{
@@ -161,7 +165,6 @@ void UART_Init()
 void BarrierClose()
 {
 	if (state == STATE_OPEN) {
-		//printf("Securing...\n");
 		TIM2_Handle.Init.Period = TIM2_SECURING_COUNTER;
 	  	HAL_TIM_Base_Init(&TIM2_Handle);
 		HAL_TIM_Base_Start_IT(&TIM2_Handle);
@@ -171,81 +174,80 @@ void BarrierClose()
 void BarrierOpen()
 {
 	if (state == STATE_SECURED) {
-		//printf("Opening...\n");
 		TIM2_Handle.Init.Period = TIM2_OPENING_COUNTER;
 	  	HAL_TIM_Base_Init(&TIM2_Handle);
 		HAL_TIM_Base_Start_IT(&TIM2_Handle);
 	}
 }
 
-void TIM1_Config()
+void TIM3_Config()
 {
-	__HAL_RCC_TIM1_CLK_ENABLE();
+	__HAL_RCC_TIM3_CLK_ENABLE();
 
-	TIM1_Handle.Instance 			= TIM1;
-	TIM1_Handle.Channel				= TIM_CHANNEL_1;
-	TIM1_Handle.Init.CounterMode	= TIM_COUNTERMODE_UP;
-	TIM1_Handle.Init.ClockDivision  = TIM_CLOCKDIVISION_DIV1;
-	TIM1_Handle.Init.Period			= 4000;
-	TIM1_Handle.Init.Prescaler		= 13500;
-  	HAL_TIM_PWM_Init(&TIM1_Handle);
+	TIM3_Handle.Instance 			= TIM3;
+	TIM3_Handle.Channel				= TIM_CHANNEL_1;
+	TIM3_Handle.Init.CounterMode	= TIM_COUNTERMODE_UP;
+	TIM3_Handle.Init.ClockDivision  = TIM_CLOCKDIVISION_DIV1;
+	TIM3_Handle.Init.Period			= 4000;
+	TIM3_Handle.Init.Prescaler		= 13500;
+  	HAL_TIM_OC_Init(&TIM3_Handle);
 
-  	sConfig.OCMode       = TIM_OCMODE_PWM1;
+  	sConfig.OCMode       = TIM_OCMODE_ACTIVE;
   	sConfig.Pulse		 = 2000;
-  	HAL_TIM_PWM_ConfigChannel(&TIM1_Handle, &sConfig, TIM_CHANNEL_1);
-  	HAL_TIM_PWM_Start_IT(&TIM1_Handle, TIM_CHANNEL_1);
+  	HAL_TIM_OC_ConfigChannel(&TIM3_Handle, &sConfig, TIM_CHANNEL_1);
+  	HAL_TIM_OC_Start_IT(&TIM3_Handle, TIM_CHANNEL_1);
 
-	HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, 0x0F, 0x0);
-	HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0F, 0x0);
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 }
 
-void TIM1_UP_TIM10_IRQHandler()
+void TIM3_IRQHandler()
 {
-	HAL_TIM_IRQHandler(&TIM1_Handle);
-	printf("TIM1\n");
+	HAL_TIM_IRQHandler(&TIM3_Handle);
 }
 
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if (htim->Instance == TIM1) {
+	if (htim->Instance == TIM3) {
 		BSP_LED_Off(LED_GREEN);
 	}
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if (htim->Instance == TIM1) {
+	printf("period elapsed\n");
+	if (htim->Instance == TIM3) {
 		BSP_LED_On(LED_GREEN);
 	} else if (htim->Instance == TIM2) {
 		switch (state) {
 		case STATE_SECURING:
 			HAL_TIM_Base_Stop_IT(&TIM2_Handle);
-			TIM1->CNT = TIM1_SECURED_COUNTER;
-			TIM1->CCR1 = TIM1_SECURED_PERIOD;
+			TIM3->CNT = TIM3_SECURED_COUNTER;
+			TIM3->CCR1 = TIM3_SECURED_PERIOD;
 			state = STATE_SECURED;
 			printf("Secured\n");
 			break;
 
 		case STATE_SECURED:
 			HAL_TIM_Base_Start_IT(&TIM2_Handle);
-			TIM1->CNT = TIM1_OPENING_COUNTER;
-			TIM1->CCR1 = TIM1_OPENING_PERIOD;
+			TIM3->CNT = TIM3_OPENING_COUNTER;
+			TIM3->CCR1 = TIM3_OPENING_PERIOD;
 			state = STATE_OPENING;
 			printf("Opening\n");
 			break;
 
 		case STATE_OPENING:
 			HAL_TIM_Base_Stop_IT(&TIM2_Handle);
-			TIM1->CNT = TIM1_OPEN_COUNTER;
-			TIM1->CCR1 = TIM1_OPEN_PERIOD;
+			TIM3->CNT = TIM3_OPEN_COUNTER;
+			TIM3->CCR1 = TIM3_OPEN_PERIOD;
 			state = STATE_OPEN;
 			printf("Open\n");
 			break;
 
 		case STATE_OPEN:
 			HAL_TIM_Base_Start_IT(&TIM2_Handle);
-			TIM1->CNT = TIM1_SECURING_COUNTER;
-			TIM1->CCR1 = TIM1_SECURING_PERIOD;
+			TIM3->CNT = TIM3_SECURING_COUNTER;
+			TIM3->CCR1 = TIM3_SECURING_PERIOD;
 			state = STATE_SECURING;
 			printf("Securing\n");
 			break;
