@@ -57,17 +57,9 @@ typedef enum {
 }StateType;
 
 /* Private define ------------------------------------------------------------*/
-#define TIM3_OPEN_COUNTER 		16000 - 1	// 0,5 Hz
-#define TIM3_OPEN_PERIOD		8000 - 1	// 50%
-
-#define TIM3_SECURING_COUNTER 	8000 - 1	// 1 hz
-#define TIM3_SECURING_PERIOD 	4000 - 1	// 50%
-
-#define TIM3_SECURED_COUNTER 	8000 - 1
-#define TIM3_SECURED_PERIOD 	0			// 0%
-
+#define TIM3_OPEN_COUNTER 		8000 - 1	// 0,5 Hz 	50%
+#define TIM3_SECURING_COUNTER 	4000 - 1	// 1 hz		50%
 #define TIM3_OPENING_COUNTER	TIM3_SECURING_COUNTER
-#define TIM3_OPENING_PERIOD		TIM3_SECURING_PERIOD
 
 #define TIM2_SECURING_COUNTER 	40000 - 1	// 5 sec
 #define TIM2_OPENING_COUNTER 	48000 - 1	// 6 sec
@@ -82,6 +74,8 @@ TIM_HandleTypeDef TIM3_Handle;
 TIM_OC_InitTypeDef sConfig;
 
 StateType state = STATE_OPEN;
+int led_status = 1;
+int led_on = 1;
 
 /* Private function prototypes -----------------------------------------------*/
 #ifdef __GNUC__
@@ -99,7 +93,6 @@ void BarrierOpen();
 
 void TIM3_Config();					//LED blinking
 void TIM3_IRQHandler();
-void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim);
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
 void TIM2_Config();					//time measure
@@ -188,14 +181,17 @@ void TIM3_Config()
 	TIM3_Handle.Channel				= TIM_CHANNEL_1;
 	TIM3_Handle.Init.CounterMode	= TIM_COUNTERMODE_UP;
 	TIM3_Handle.Init.ClockDivision  = TIM_CLOCKDIVISION_DIV1;
-	TIM3_Handle.Init.Period			= 4000;
+	TIM3_Handle.Init.Period			= TIM3_OPEN_COUNTER;
 	TIM3_Handle.Init.Prescaler		= 13500;
-  	HAL_TIM_OC_Init(&TIM3_Handle);
+  	HAL_TIM_Base_Init(&TIM3_Handle);
+  	HAL_TIM_Base_Start_IT(&TIM3_Handle);
 
+  	/*
   	sConfig.OCMode       = TIM_OCMODE_ACTIVE;
   	sConfig.Pulse		 = 2000;
   	HAL_TIM_OC_ConfigChannel(&TIM3_Handle, &sConfig, TIM_CHANNEL_1);
   	HAL_TIM_OC_Start_IT(&TIM3_Handle, TIM_CHANNEL_1);
+	*/
 
 	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0F, 0x0);
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
@@ -206,48 +202,54 @@ void TIM3_IRQHandler()
 	HAL_TIM_IRQHandler(&TIM3_Handle);
 }
 
-void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	if (htim->Instance == TIM3) {
-		BSP_LED_Off(LED_GREEN);
-	}
-}
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	printf("period elapsed\n");
 	if (htim->Instance == TIM3) {
-		BSP_LED_On(LED_GREEN);
+		if (led_on == 1) {
+			if (led_status == 1) {
+				BSP_LED_Off(LED_GREEN);
+				led_status = 0;
+			} else {
+				BSP_LED_On(LED_GREEN);
+				led_status = 1;
+			}
+		} else {
+			BSP_LED_Off(LED_GREEN);
+		}
+
 	} else if (htim->Instance == TIM2) {
 		switch (state) {
 		case STATE_SECURING:
-			HAL_TIM_Base_Stop_IT(&TIM2_Handle);
-			TIM3->CNT = TIM3_SECURED_COUNTER;
-			TIM3->CCR1 = TIM3_SECURED_PERIOD;
+			//HAL_TIM_Base_Stop_IT(&TIM3_Handle);
+			led_on = 0;
 			state = STATE_SECURED;
 			printf("Secured\n");
 			break;
 
 		case STATE_SECURED:
-			HAL_TIM_Base_Start_IT(&TIM2_Handle);
-			TIM3->CNT = TIM3_OPENING_COUNTER;
-			TIM3->CCR1 = TIM3_OPENING_PERIOD;
+			//HAL_TIM_Base_Start_IT(&TIM2_Handle);
+			led_on = 1;
+			TIM3_Handle.Init.Period =  TIM3_OPENING_COUNTER;
+		  	HAL_TIM_Base_Init(&TIM3_Handle);
+			HAL_TIM_Base_Start_IT(&TIM3_Handle);
 			state = STATE_OPENING;
 			printf("Opening\n");
 			break;
 
 		case STATE_OPENING:
 			HAL_TIM_Base_Stop_IT(&TIM2_Handle);
-			TIM3->CNT = TIM3_OPEN_COUNTER;
-			TIM3->CCR1 = TIM3_OPEN_PERIOD;
+			TIM3_Handle.Init.Period =  TIM3_OPEN_COUNTER;
+		  	HAL_TIM_Base_Init(&TIM3_Handle);
+			HAL_TIM_Base_Start_IT(&TIM3_Handle);
 			state = STATE_OPEN;
 			printf("Open\n");
 			break;
 
 		case STATE_OPEN:
 			HAL_TIM_Base_Start_IT(&TIM2_Handle);
-			TIM3->CNT = TIM3_SECURING_COUNTER;
-			TIM3->CCR1 = TIM3_SECURING_PERIOD;
+			TIM3_Handle.Init.Period = TIM3_SECURING_COUNTER;
+		  	HAL_TIM_Base_Init(&TIM3_Handle);
+			HAL_TIM_Base_Start_IT(&TIM3_Handle);
 			state = STATE_SECURING;
 			printf("Securing\n");
 			break;
