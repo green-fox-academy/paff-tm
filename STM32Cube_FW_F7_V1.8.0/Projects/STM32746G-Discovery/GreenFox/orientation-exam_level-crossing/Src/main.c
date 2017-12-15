@@ -50,17 +50,20 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define TIM1_OPEN_COUNTER 		16000 - 1
-#define TIM1_OPEN_PERIOD		8000 - 1
+#define TIM1_OPEN_COUNTER 		16000 - 1	// 0,5 Hz
+#define TIM1_OPEN_PERIOD		8000 - 1	// 50%
 
-#define TIM1_SECURING_COUNTER 	8000 - 1
-#define TIM1_SECURING_PERIOD 	4000 - 1
+#define TIM1_SECURING_COUNTER 	8000 - 1	// 1 hz
+#define TIM1_SECURING_PERIOD 	4000 - 1	// 50%
 
 #define TIM1_SECURED_COUNTER 	8000 - 1
-#define TIM1_SECURED_PERIOD 	0
+#define TIM1_SECURED_PERIOD 	0			// 0%
 
 #define TIM1_OPENING_COUNTER	TIM1_SECURING_COUNTER
 #define TIM1_OPENING_PERIOD		TIM1_SECURING_PERIOD
+
+#define TIM2_SECURING_COUNTER 	40000 - 1	// 5 sec
+#define TIM2_OPENING_COUNTER 	48000 - 1	// 6 sec
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -158,8 +161,9 @@ void UART_Init()
 void BarrierClose()
 {
 	if (state == STATE_OPEN) {
-		printf("Securing...\n");
-		TIM2_Handle.Init.Period	= 40000;	//5 sec
+		//printf("Securing...\n");
+		TIM2_Handle.Init.Period = TIM2_SECURING_COUNTER;
+	  	HAL_TIM_Base_Init(&TIM2_Handle);
 		HAL_TIM_Base_Start_IT(&TIM2_Handle);
 	}
 }
@@ -167,8 +171,9 @@ void BarrierClose()
 void BarrierOpen()
 {
 	if (state == STATE_SECURED) {
-		printf("Opening...\n");
-		TIM2_Handle.Init.Period	= 48000;	//6 sec
+		//printf("Opening...\n");
+		TIM2_Handle.Init.Period = TIM2_OPENING_COUNTER;
+	  	HAL_TIM_Base_Init(&TIM2_Handle);
 		HAL_TIM_Base_Start_IT(&TIM2_Handle);
 	}
 }
@@ -210,7 +215,6 @@ void TIM2_Config()
 	TIM2_Handle.Init.ClockDivision  = TIM_CLOCKDIVISION_DIV1;
 	TIM2_Handle.Init.Period			= 8000;
 	TIM2_Handle.Init.Prescaler		= 13500;
-  	HAL_TIM_Base_Init(&TIM2_Handle);
 
 	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0F, 0x0);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
