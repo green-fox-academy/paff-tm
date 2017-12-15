@@ -224,7 +224,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		  	HAL_TIM_Base_Init(&TIM3_Handle);
 			HAL_TIM_Base_Start_IT(&TIM3_Handle);
 			state = STATE_OPENING;
-			printf("Opening\n");
+			printf("Opening...\n");
 			break;
 
 		case STATE_OPENING:
@@ -242,7 +242,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		  	HAL_TIM_Base_Init(&TIM3_Handle);
 			HAL_TIM_Base_Start_IT(&TIM3_Handle);
 			state = STATE_SECURING;
-			printf("Securing\n");
+			printf("Securing...\n");
 			break;
 		}
 	}
