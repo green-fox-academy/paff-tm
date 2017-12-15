@@ -220,14 +220,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	} else if (htim->Instance == TIM2) {
 		switch (state) {
 		case STATE_SECURING:
-			//HAL_TIM_Base_Stop_IT(&TIM3_Handle);
+			HAL_TIM_Base_Stop_IT(&TIM2_Handle);
 			led_on = 0;
 			state = STATE_SECURED;
 			printf("Secured\n");
 			break;
 
 		case STATE_SECURED:
-			//HAL_TIM_Base_Start_IT(&TIM2_Handle);
 			led_on = 1;
 			TIM3_Handle.Init.Period =  TIM3_OPENING_COUNTER;
 		  	HAL_TIM_Base_Init(&TIM3_Handle);
