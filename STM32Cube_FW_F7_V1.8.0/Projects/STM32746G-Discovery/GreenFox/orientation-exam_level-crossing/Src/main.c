@@ -49,6 +49,13 @@
  */
 
 /* Private typedef -----------------------------------------------------------*/
+typedef enum {
+	STATE_OPEN,
+	STATE_SECURING,
+	STATE_SECURED,
+	STATE_OPENING
+}StateType;
+
 /* Private define ------------------------------------------------------------*/
 #define TIM1_OPEN_COUNTER 		16000 - 1	// 0,5 Hz
 #define TIM1_OPEN_PERIOD		8000 - 1	// 50%
@@ -67,13 +74,6 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-typedef enum {
-	STATE_OPEN,
-	STATE_SECURING,
-	STATE_SECURED,
-	STATE_OPENING
-}StateType;
-
 UART_HandleTypeDef uart_handle;
 TIM_HandleTypeDef TIM1_Handle;
 TIM_HandleTypeDef TIM2_Handle;
@@ -96,15 +96,15 @@ void UART_Init();
 void BarrierClose();
 void BarrierOpen();
 
-void TIM1_Config();		//LED blinking
+void TIM1_Config();				//LED blinking
 void TIM1_UP_TIM10_IRQHandler();
-
-void TIM2_Config();		//time measure
-void TIM2_IRQHandler();
-
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim);
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
-void EXTI15_10_IRQHandler();
+
+void TIM2_Config();				//time measure
+void TIM2_IRQHandler();
+
+void EXTI15_10_IRQHandler();	//BushButton
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
 static void System_Init(void);
@@ -205,26 +205,6 @@ void TIM1_UP_TIM10_IRQHandler()
 	printf("TIM1\n");
 }
 
-void TIM2_Config()
-{
-	__HAL_RCC_TIM2_CLK_ENABLE();
-
-	TIM2_Handle.Instance 			= TIM2;
-	TIM2_Handle.Channel				= TIM_CHANNEL_1;
-	TIM2_Handle.Init.CounterMode	= TIM_COUNTERMODE_UP;
-	TIM2_Handle.Init.ClockDivision  = TIM_CLOCKDIVISION_DIV1;
-	TIM2_Handle.Init.Period			= 8000;
-	TIM2_Handle.Init.Prescaler		= 13500;
-
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0F, 0x0);
-	HAL_NVIC_EnableIRQ(TIM2_IRQn);
-}
-
-void TIM2_IRQHandler()
-{
-	HAL_TIM_IRQHandler(&TIM2_Handle);
-}
-
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM1) {
@@ -273,6 +253,25 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 }
 
+void TIM2_Config()
+{
+	__HAL_RCC_TIM2_CLK_ENABLE();
+
+	TIM2_Handle.Instance 			= TIM2;
+	TIM2_Handle.Channel				= TIM_CHANNEL_1;
+	TIM2_Handle.Init.CounterMode	= TIM_COUNTERMODE_UP;
+	TIM2_Handle.Init.ClockDivision  = TIM_CLOCKDIVISION_DIV1;
+	TIM2_Handle.Init.Period			= 8000;
+	TIM2_Handle.Init.Prescaler		= 13500;
+
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0F, 0x0);
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+}
+
+void TIM2_IRQHandler()
+{
+	HAL_TIM_IRQHandler(&TIM2_Handle);
+}
 
 void EXTI15_10_IRQHandler()
 {
