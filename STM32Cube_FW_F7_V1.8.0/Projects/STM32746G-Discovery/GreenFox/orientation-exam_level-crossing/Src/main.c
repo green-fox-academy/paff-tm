@@ -220,6 +220,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		case STATE_SECURED:
 			led_on = 1;
+			led_status = 1;
 			TIM3_Handle.Init.Period =  TIM3_OPENING_COUNTER;
 		  	HAL_TIM_Base_Init(&TIM3_Handle);
 			HAL_TIM_Base_Start_IT(&TIM3_Handle);
