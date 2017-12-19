@@ -200,14 +200,37 @@ int main(void) {
 	Set_TIM1_PWM(PWM_percent);
 
 	printf("required RPM, actual RPM, control PWM, temp\n");
+	int temp1 = 0;
+	int temp2 = 10;
+	int temp3 = 20;
+	int temp4 = 30;
+
 	while (1)
 	{
 		if (getTempData(&temp) != 0) {
-			printf("temperature sensor communication error\n");
+			//printf("temperature sensor communication error\n");
 		}
-		printf("%lu; %lu; %i; %i\n", required_RPM, RPM, (int)set_PWM, temp);
+		/* testing part start */
+		//printf("%lu; %lu; %i; %i\n", required_RPM, RPM, (int)set_PWM, temp);
+
+		temp1++;
+		temp2++;
+		temp3 += 2;
+		temp4 -= 1;
+		if (temp1 == 50)
+			temp1 = 0;
+		if (temp2 == 100)
+			temp2 = 10;
+		if (temp3 > 50)
+			temp3 = 20;
+		if (temp4 == 1)
+			temp4 = 30;
+
+		printf("%i; %i; %i; %i\n", temp1, temp2, temp3, temp4);
+		/*testing part end*/
+
 		P_Control(required_RPM);
-		HAL_Delay(100);
+		HAL_Delay(500);
 	}
 
 }
