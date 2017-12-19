@@ -55,7 +55,7 @@
 - [RPM logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-10/RPM_logger)
 - [RPG Game Lite](https://github.com/greenfox-academy/paff-tm/tree/master/week-10/RPG_Game_lite)
 
-## week-11 - [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
+## week-11 - LabView
 - [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-1)
 - [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-2)
 
