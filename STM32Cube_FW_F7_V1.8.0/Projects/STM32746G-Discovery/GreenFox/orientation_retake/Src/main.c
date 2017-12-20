@@ -55,17 +55,15 @@ typedef enum {
 	ST_END,
 } State;
 
+typedef struct {
+	char character;
+	char morse[10];
+} Letter;
+
+/* Private define ------------------------------------------------------------*/
 #define SIGN_SHORT	's'
 #define SIGN_LONG	'l'
 
-#define LETTER_C	"lsls"
-#define LETTER_I	"ss"
-#define LETTER_A	"sl"
-#define LETTER_S	"sss"
-#define LETTER_O	"lll"
-
-
-/* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
@@ -76,8 +74,14 @@ uint32_t starttime = 0;
 State state = ST_WAIT;
 char letter;
 char morse[10] = {'\0'};
-int length_of_morse = 0;
 uint8_t pressed = 0;
+Letter letters[5] = {
+		{'c', "lsls"},
+		{'i', "ss"},
+		{'a', "sl"},
+		{'s', "sss"},
+		{'o', "lll"}
+};
 
 /* Private function prototypes -----------------------------------------------*/
 void add_sign(char sign);
@@ -138,14 +142,11 @@ static void CPU_CACHE_Enable(void);
   /* Configure the System clock to have a frequency of 216 MHz */
   SystemClock_Config();
 
-
   /* Add your application code here*/
   UART_Init();
   GPIO_Init();
 
   TIM2_Config();
-
-  morse[0] = '\0';
 
   /* Infinite loop */
   while (1)
@@ -165,35 +166,29 @@ static void CPU_CACHE_Enable(void);
 		  state = ST_WAIT;
 		  break;
 	  case ST_WAIT:
-
+		  HAL_Delay(1);
 		  break;
 	  }
-	  HAL_Delay(1);
   }
 }
 
 void add_sign(char sign)
 {
-	morse[strlen(morse) + 1] = '\0';
-	morse[strlen(morse)] = sign;
-	printf("%s\n", strlen(morse), morse);
+	if (strlen(morse) < 10) {
+		morse[strlen(morse) + 1] = '\0';
+		morse[strlen(morse)] = sign;
+	}
+	printf("    %s\n", morse);
 }
 
 void print_letter()
 {
-	if (strcmp(morse, LETTER_C) == 0) {
-		letter = 'c';
-	} else if (strcmp(morse, LETTER_I) == 0) {
-		letter = 'i';
-	} else if (strcmp(morse, LETTER_A) == 0) {
-		letter = 'a';
-	} else if (strcmp(morse, LETTER_S) == 0) {
-		letter = 's';
-	} else if (strcmp(morse, LETTER_O) == 0) {
-		letter = 'o';
+	for (unsigned int i = 0; i < sizeof(letters)/sizeof(letters[0]); ++i) {
+		if (strcmp(morse, letters[i].morse) == 0) {
+			printf("%c\n", letters[i].character);
+			break;
+		}
 	}
-
-	printf("%c\n", letter);
 }
 
 void EXTI15_10_IRQHandler()
@@ -258,6 +253,8 @@ void TIM2_Config()
 
 	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0E, 0x0);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+	TIM2->SR &= ~1;
 }
 
 void GPIO_Init()
