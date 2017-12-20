@@ -9,9 +9,12 @@ class Processor
         Processor();
         ~Processor();
 
-    protected:
+        PWM *getPWMParams(unsigned int _duty, unsigned int _frequency = 250);
+        string toString();
 
     private:
+
+        PWM *pwm;
 };
 
 #endif // PROCESSOR_H
