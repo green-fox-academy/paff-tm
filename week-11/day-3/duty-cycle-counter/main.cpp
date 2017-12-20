@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
 #include "PWM.h"
 #include "processor.h"
 
@@ -35,6 +37,7 @@ using namespace std;
 
 int main()
 {
+    srand(time(0));
     vector<Processor*> CPUs;
 
     for (unsigned int i = 0; i < 5; ++i) {

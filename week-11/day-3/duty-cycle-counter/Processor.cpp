@@ -1,13 +1,15 @@
+#include <stdlib.h>
 #include "Processor.h"
 
-#define CLOCK_CYCLES_PER_SECOND  72000000
+#define CLOCK_CYCLES_PER_SECOND  216000000
 #define MAX_RELOAD               0xFFFF
 
 using namespace std;
 
 Processor::Processor()
 {
-    pwm = getPWMParams(50);
+    unsigned int rnd = rand() % 100 + 1;
+    pwm = getPWMParams(rnd);
 }
 
 Processor::~Processor()
