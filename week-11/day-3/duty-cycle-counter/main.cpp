@@ -42,6 +42,10 @@ int main()
     }
 
     for (unsigned int i = 0; i < 5; ++i) {
+        cout << CPUs.at(i)->toString() << endl;;
+    }
+
+    for (unsigned int i = 0; i < 5; ++i) {
         delete CPUs.at(i);
     }
     return 0;

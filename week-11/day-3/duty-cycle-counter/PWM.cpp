@@ -57,6 +57,6 @@ void PWM::setDuty(unsigned int _value)
 string PWM::toString()
 {
     ostringstream output;
-    output << "The PWM has a period of " << period_cycles << " with the duty cycle of " << duty << "." << endl << "The prescaler is " << prescaler << "and the overflow is " << overflow << "." << endl;
+    output << "The PWM has a period of " << period_cycles << " with the duty cycle of " << duty << "." << endl << "The prescaler is " << prescaler << " and the overflow is " << overflow << "." << endl;
     return output.str();
 }
