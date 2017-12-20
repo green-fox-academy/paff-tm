@@ -1,6 +1,7 @@
 #include <iostream>
+#include <vector>
 #include "PWM.h"
-#include "process.h"
+#include "processor.h"
 
 /*
  * Task Summary:
@@ -34,6 +35,14 @@ using namespace std;
 
 int main()
 {
+    vector<Processor*> CPUs;
 
+    for (unsigned int i = 0; i < 5; ++i) {
+        CPUs.push_back(new Processor());
+    }
+
+    for (unsigned int i = 0; i < 5; ++i) {
+        delete CPUs.at(i);
+    }
     return 0;
 }

@@ -9,7 +9,7 @@ Processor::Processor()
 
 Processor::~Processor()
 {
-    //dtor
+    delete pwm;
 }
 
 PWM *Processor::getPWMParams(unsigned int _duty, unsigned int _frequency)
