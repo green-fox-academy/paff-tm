@@ -3,6 +3,8 @@
 
 #include <string>
 
+using namespace std;
+
 class PWM
 {
     public:
@@ -17,9 +19,7 @@ class PWM
         void setOverflow(unsigned int _value);
         void setDuty(unsigned int _value);
 
-        string getString();
-
-    protected:
+        string toString();
 
     private:
         unsigned int period_cycles;
