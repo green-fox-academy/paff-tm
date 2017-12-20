@@ -48,11 +48,49 @@
  */
 
 /* Private typedef -----------------------------------------------------------*/
-UART_HandleTypeDef uart_handle;
+typedef enum {
+	ST_WAIT,
+	ST_SHORT,
+	ST_LONG,
+	ST_END,
+} State;
+
+#define SIGN_SHORT	's'
+#define SIGN_LONG	'l'
+
+#define LETTER_C	"lsls"
+#define LETTER_I	"ss"
+#define LETTER_A	"sl"
+#define LETTER_S	"sss"
+#define LETTER_O	"lll"
+
+
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+UART_HandleTypeDef uart_handle;
+GPIO_InitTypeDef GPIO_Handle;
+TIM_HandleTypeDef TIM2_Handle;
+
+uint32_t starttime = 0;
+State state = ST_WAIT;
+char letter;
+char morse[10] = {'\0'};
+int length_of_morse = 0;
+uint8_t pressed = 0;
+
 /* Private function prototypes -----------------------------------------------*/
+void add_sign(char sign);
+void print_letter();
+
+void UART_Init();
+void TIM2_Config();
+void GPIO_Init();
+
+void EXTI15_10_IRQHandler();
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+void TIM2_IRQHandler();
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -102,12 +140,137 @@ static void CPU_CACHE_Enable(void);
 
 
   /* Add your application code here*/
+  UART_Init();
+  GPIO_Init();
+
+  TIM2_Config();
+
+  morse[0] = '\0';
 
   /* Infinite loop */
   while (1)
   {
+	  switch (state) {
+	  case ST_SHORT:
+		  add_sign(SIGN_SHORT);
+		  state = ST_WAIT;
+		  break;
+	  case ST_LONG:
+		  add_sign(SIGN_LONG);
+		  state = ST_WAIT;
+		  break;
+	  case ST_END:
+		  print_letter();
+		  morse[0] = '\0';
+		  state = ST_WAIT;
+		  break;
+	  case ST_WAIT:
+
+		  break;
+	  }
+	  HAL_Delay(1);
   }
 }
+
+void add_sign(char sign)
+{
+	morse[strlen(morse) + 1] = '\0';
+	morse[strlen(morse)] = sign;
+	printf("%s\n", strlen(morse), morse);
+}
+
+void print_letter()
+{
+	if (strcmp(morse, LETTER_C) == 0) {
+		letter = 'c';
+	} else if (strcmp(morse, LETTER_I) == 0) {
+		letter = 'i';
+	} else if (strcmp(morse, LETTER_A) == 0) {
+		letter = 'a';
+	} else if (strcmp(morse, LETTER_S) == 0) {
+		letter = 's';
+	} else if (strcmp(morse, LETTER_O) == 0) {
+		letter = 'o';
+	}
+
+	printf("%c\n", letter);
+}
+
+void EXTI15_10_IRQHandler()
+{
+	HAL_GPIO_EXTI_IRQHandler(KEY_BUTTON_PIN);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	uint32_t elapsedtime = 0;
+	if (pressed == 0) {
+		starttime = HAL_GetTick();
+		HAL_TIM_Base_Stop_IT(&TIM2_Handle);
+		pressed = 1;
+	} else {
+		elapsedtime = HAL_GetTick() - starttime;
+		if (elapsedtime > 25 && elapsedtime < 250) {
+			state = ST_SHORT;
+		} else if (elapsedtime >= 250 && elapsedtime < 1000) {
+			state = ST_LONG;
+		}
+		HAL_TIM_Base_Start_IT(&TIM2_Handle);
+		pressed = 0;
+	}
+
+}
+
+
+void TIM2_IRQHandler()
+{
+	HAL_TIM_IRQHandler(&TIM2_Handle);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	HAL_TIM_Base_Stop_IT(&TIM2_Handle);
+	state = ST_END;
+}
+
+void UART_Init()
+{
+	uart_handle.Init.BaudRate 	= 115200;
+	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+	uart_handle.Init.StopBits 	= UART_STOPBITS_1;
+	uart_handle.Init.Parity		= UART_PARITY_NONE;
+	uart_handle.Init.HwFlowCtl 	= UART_HWCONTROL_NONE;
+	uart_handle.Init.Mode 		= UART_MODE_TX_RX;
+	BSP_COM_Init(COM1, &uart_handle);
+}
+
+void TIM2_Config()
+{
+	__HAL_RCC_TIM2_CLK_ENABLE();
+
+	TIM2_Handle.Instance 			= TIM2;
+	TIM2_Handle.Channel				= TIM_CHANNEL_1;
+	TIM2_Handle.Init.CounterMode	= TIM_COUNTERMODE_UP;
+	TIM2_Handle.Init.ClockDivision  = TIM_CLOCKDIVISION_DIV1;
+	TIM2_Handle.Init.Period			= 8000;
+	TIM2_Handle.Init.Prescaler		= 13500;
+	HAL_TIM_Base_Init(&TIM2_Handle);
+
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0E, 0x0);
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+}
+
+void GPIO_Init()
+{
+	GPIO_Handle.Pin = KEY_BUTTON_PIN;
+	GPIO_Handle.Pull = GPIO_NOPULL;
+	GPIO_Handle.Speed = GPIO_SPEED_FAST;
+	GPIO_Handle.Mode = GPIO_MODE_IT_RISING_FALLING;
+	HAL_GPIO_Init(KEY_BUTTON_GPIO_PORT, &GPIO_Handle);
+	HAL_NVIC_SetPriority(KEY_BUTTON_EXTI_IRQn, 0x0D, 0x00);
+	HAL_NVIC_EnableIRQ(KEY_BUTTON_EXTI_IRQn);
+}
+
 /**
  * @brief  Retargets the C library printf function to the USART.
  * @param  None
