@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "Processor.h"
 
-#define CLOCK_CYCLES_PER_SECOND  216000000
+#define CLOCK_CYCLES_PER_SECOND  108000000      //216.000.000 / 2
 #define MAX_RELOAD               0xFFFF
 
 using namespace std;
