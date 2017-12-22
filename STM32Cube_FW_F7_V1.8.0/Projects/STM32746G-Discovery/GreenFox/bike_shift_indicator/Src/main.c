@@ -127,7 +127,7 @@ int main(void)
   printf("Welcome in the bicycle shift indicator project!\n\n");
 
   //HAL_GPIO_WritePin(LED0, GPIO_PIN_SET);
-  InitLEDs(4, leds);
+  InitLEDs(5, leds);
   ShowLEDs(leds);
 
   /* Infinite loop */
@@ -244,10 +244,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM2) {
 		++pwm_cnt;
-		if (pwm_cnt > 100) {	// 4 sec
+		if (pwm_cnt > 100) {
 			pwm_cnt = 0;
 			++periodElapsed_Counter;
-			if (periodElapsed_Counter > 400) {
+			if (periodElapsed_Counter > 200) {
 				periodElapsed_Counter = 0;
 				HAL_TIM_Base_Stop_IT(&TIM2_Handle);
 				ResetLEDs();
