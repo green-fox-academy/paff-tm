@@ -5,6 +5,7 @@
 
 ## Orientation (week 5-11)
 ### [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
+- [Reaction Game](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox/reaction_game)
 
 ### Practice 
 - [RPM logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-10/RPM_logger)
