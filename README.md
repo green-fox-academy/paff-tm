@@ -1,66 +1,50 @@
 # paff-tm's repository
 
-## week-01
-- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-2)
-- [day-3](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-3) 
-- [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-4)
-- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-5)
-
-## week-02
-- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-1)
-- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-2)
-- day-3 - practice day
-- [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-4)
-- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-5)
-
-## week-03
-- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/day-1)
-- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/day-2)
+##Basics
+#C
 - [CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/CLI_calc)
 - [Multi-Operator CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/Multi-Operator_CLI_calc)
+- [ToDo App](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/ToDo_App)
 
-## week-04
-- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/day-1)
-- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/day-2)
-- [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/day-4)
-- [ToDo App](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/ToDo_App)
-
-## week-05
-- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-05/day-1)
-- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-05/day-2)
-- day-3 - holiday
-- [day-4](https://github.com/greenfox-academy/paff-tm/tree/master/week-05/day-4)
-
-## week-06 - C++
-- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-1)
-- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-2) - OOP basics
-- [day-3](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-3)
+#C++
 - [ToDo App C++](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/ToDo-cpp)
-- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-5)
+- [Temp logger - C++](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/Temp_logger)
 
-## week-07 - C++
-- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-1) - try-catch
-- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-2) - Function Override
-- [day-3](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-3)
-- [day-5](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-5)
-- [Temp logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/Temp_logger)
+#Demos
+- [week-01](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-5/w1demo.pptx)
+- [week-02](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-5/w2demo.pptx)
+- [week-03](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/day-5/w3demo.pptx)
+- [week-04](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/day-4/w4demo.pptx)
 
-## week-08 - [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
-- [week-08](https://github.com/greenfox-academy/paff-tm/tree/master/week-08)
+#Lightning Talk
+- [Water Cleaning](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/lt_water.pptx)
 
-## week-09 - [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
-- [demo](https://github.com/greenfox-academy/paff-tm/tree/master/week-09)
+#Exam
+- [Foundation Exam](https://github.com/greenfox-academy/static-foundation-exam-1st)
 
-## week-10 - [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
+
+##Orientation 
+#[STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
+
+#Practice 
 - [RPM logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-10/RPM_logger)
 - [RPG Game Lite](https://github.com/greenfox-academy/paff-tm/tree/master/week-10/RPG_Game_lite)
 
-## week-11 - LabView
-- [day-1](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-1)
-- [day-2](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-2)
+# [LabView](https://github.com/greenfox-academy/paff-tm/tree/master/week-11)
+- [RPM logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-02/uart.vi)
+- [Temp logger server and client](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-04)
 
+#Demos
+- [week-06](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-5/w6demo.pptx)
+- [week-07](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-5/w7demo.pptx)
+- [week-08](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/w8demo.pptx)
+- [week-09](https://github.com/greenfox-academy/paff-tm/tree/master/week-09/w9demo.pptx)
 
+#Lightning Talk
+- [WiFi](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/lt_Wifi.pptx)
 
+#Exam
+- [Foundation Exam](https://github.com/greenfox-academy/static-orientation-exam-1st)
 
 
 
