@@ -4,7 +4,7 @@
 ### C
 - [CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/CLI_calc)
 - [Multi-Operator CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/Multi-Operator_CLI_calc)
-- [ToDo App](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/ToDo_App)
+- [ToDo App](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/ToDo_App)
 
 ### C++
 - [ToDo App C++](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/ToDo-cpp)
@@ -20,7 +20,7 @@
 - [Water Cleaning](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/lt_water.pptx)
 
 ### Exam
-- [Foundation Exam](https://github.com/greenfox-academy/static-foundation-exam-1st)
+- [Foundation Exam](https://github.com/paff-tm/static-foundation-exam-1st)
 
 
 ## Orientation 
@@ -44,7 +44,7 @@
 - [WiFi](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/lt_Wifi.pptx)
 
 ### Exam
-- [Foundation Exam](https://github.com/greenfox-academy/static-orientation-exam-1st)
+- [Foundation Exam](https://github.com/paff-tm/static-orientation-exam-1st)
 
 
 
