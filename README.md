@@ -33,7 +33,7 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 - [WiFi](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/lt_Wifi.pptx)
 
 ### Exam 
-- [Foundation Exam](https://github.com/paff-tm/static-orientation-exam-1st) :white_check_mark:
+- [Orientation Exam](https://github.com/paff-tm/static-orientation-exam-1st) :white_check_mark:
 
 
 
