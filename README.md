@@ -7,6 +7,8 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 ### [Serving car](https://github.com/greenfox-academy/teaching-materials/tree/e4e9a897b6b6871516ff69530e8e277708422fff/team-project/hardware-static/serving-car)
 
 ## :key: Orientation (week 5-11)
+> *Learning the core concepts in programming, and then expanding deeper into the facilities and opportunities afforded in microcontroller programming.*
+
 ### [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
 - [Reaction Game](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox/reaction_game)
 - [Morse decoder](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox/orientation_retake) - For practice
@@ -28,11 +30,13 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 ### Lightning Talk
 - [WiFi](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/lt_Wifi.pptx)
 
-### Exam
-- [Foundation Exam](https://github.com/paff-tm/static-orientation-exam-1st)
+### Exam 
+- [Foundation Exam](https://github.com/paff-tm/static-orientation-exam-1st) :white_check_mark:
 
 
 ## :bulb: Basics (week 1-4)
+> *Introducing the foundations of software development.*
+
 ### C
 - [CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/CLI_calc)
 - [Multi-Operator CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/Multi-Operator_CLI_calc) - Not fully operating
@@ -52,4 +56,4 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 - [Water Cleaning](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/lt_water.pptx)
 
 ### Exam
-- [Foundation Exam](https://github.com/paff-tm/static-foundation-exam-1st)
+- [Foundation Exam](https://github.com/paff-tm/static-foundation-exam-1st) :white_check_mark:
