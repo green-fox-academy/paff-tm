@@ -6,6 +6,8 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 ## :construction: Project weeks (week 12-17)
 ### [Serving car](https://github.com/greenfox-academy/teaching-materials/tree/e4e9a897b6b6871516ff69530e8e277708422fff/team-project/hardware-static/serving-car)
 
+
+
 ## :key: Orientation (week 5-11)
 > *Learning the core concepts in programming, and then expanding deeper into the facilities and opportunities afforded in microcontroller programming.*
 
@@ -32,6 +34,7 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 
 ### Exam 
 - [Foundation Exam](https://github.com/paff-tm/static-orientation-exam-1st) :white_check_mark:
+
 
 
 ## :bulb: Basics (week 1-4)
