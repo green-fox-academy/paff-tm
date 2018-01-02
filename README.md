@@ -1,9 +1,9 @@
 # paff-tm's repository
 
-## Project weeks (week 11-17)
-### 
+## Project weeks (week 12-17)
+### [Serving car](https://github.com/greenfox-academy/teaching-materials/tree/e4e9a897b6b6871516ff69530e8e277708422fff/team-project/hardware-static/serving-car)
 
-## Orientation (week 5-10)
+## Orientation (week 5-11)
 ### [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
 
 ### Practice 
