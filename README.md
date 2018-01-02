@@ -1,7 +1,7 @@
-## __Welcome at my practice repository!__
+## :speech_balloon: Welcome at my practice repository!
 
-Here you can find the main milestones of my studies in `C`, `C++` and `hardware programming` on [STM32F746G Discovery](http://www.st.com/en/evaluation-tools/32f746gdiscovery.html) board at Greenfox Academy
-as a member of the Static class at Pallida Cohort. If you have any questions please contact me througt Greenfox Academy.
+> *Here you can find the main milestones of my studies in `C`, `C++` and `hardware programming` on [STM32F746G Discovery](http://www.st.com/en/evaluation-tools/32f746gdiscovery.html) board at Greenfox Academy
+as a member of the Static class at Pallida Cohort. If you have any questions please contact me througt Greenfox Academy.*
 
 ## Project weeks (week 12-17)
 ### [Serving car](https://github.com/greenfox-academy/teaching-materials/tree/e4e9a897b6b6871516ff69530e8e277708422fff/team-project/hardware-static/serving-car)
