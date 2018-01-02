@@ -3,10 +3,10 @@
 > *Here you can find the main milestones of my studies in `C`, `C++` and `hardware programming` on [STM32F746G Discovery](http://www.st.com/en/evaluation-tools/32f746gdiscovery.html) board at Greenfox Academy
 as a member of the Static class at Pallida Cohort. If you have any questions please contact me througt Greenfox Academy.*
 
-## Project weeks (week 12-17)
+## :construction: Project weeks (week 12-17)
 ### [Serving car](https://github.com/greenfox-academy/teaching-materials/tree/e4e9a897b6b6871516ff69530e8e277708422fff/team-project/hardware-static/serving-car)
 
-## Orientation (week 5-11)
+## :key: Orientation (week 5-11)
 ### [STM32 board](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox)
 - [Reaction Game](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox/reaction_game)
 - [Morse decoder](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox/orientation_retake) - For practice
@@ -32,7 +32,7 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 - [Foundation Exam](https://github.com/paff-tm/static-orientation-exam-1st)
 
 
-## Basics (week 1-4)
+## :bulb: Basics (week 1-4)
 ### C
 - [CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/CLI_calc)
 - [Multi-Operator CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/Multi-Operator_CLI_calc) - Not fully operating
