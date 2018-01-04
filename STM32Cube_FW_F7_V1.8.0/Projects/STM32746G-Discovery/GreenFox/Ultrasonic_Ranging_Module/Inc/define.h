@@ -21,6 +21,7 @@
 #define D15_PIN			GPIO_PIN_8
 #define D15_PORT		GPIOB
 
+// test line 2
 #define	D3				D3_PORT, D3_PIN
 #define	D5				D5_PORT, D5_PIN
 #define	D9				D9_PORT, D9_PIN
