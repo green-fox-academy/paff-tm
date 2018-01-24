@@ -20,8 +20,8 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 - [RPG Game Lite](https://github.com/greenfox-academy/paff-tm/tree/master/week-10/RPG_Game_lite)
 
 ### [LabView](https://github.com/greenfox-academy/paff-tm/tree/master/week-11)
-- [RPM logger](https://github.com/greenfox-academy/paff-tm/blob/master/week-11/day-02/uart.vi) - Display the received data (4 actual parameters) through UART, on graph
-- [Temp logger server and client](https://github.com/greenfox-academy/paff-tm/blob/master/week-11/day-04) - Simulate a temperature logger server and client
+- [RPM logger](https://github.com/greenfox-academy/paff-tm/blob/master/week-11/day-2/uart.vi) - Display the received data (4 actual parameters) through UART, on graph
+- [Temp logger server and client](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-04) - Simulate a temperature logger server and client
 
 ### Demos
 - [week-06](https://github.com/greenfox-academy/paff-tm/blob/master/week-06/day-5/w6demo.pptx)
