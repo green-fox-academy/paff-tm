@@ -20,17 +20,17 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 - [RPG Game Lite](https://github.com/greenfox-academy/paff-tm/tree/master/week-10/RPG_Game_lite)
 
 ### [LabView](https://github.com/greenfox-academy/paff-tm/tree/master/week-11)
-- [RPM logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-02/uart.vi) - Display the received data (4 actual parameters) through UART, on graph
-- [Temp logger server and client](https://github.com/greenfox-academy/paff-tm/tree/master/week-11/day-04) - Simulate a temperature logger server and client
+- [RPM logger](https://github.com/greenfox-academy/paff-tm/blob/master/week-11/day-02/uart.vi) - Display the received data (4 actual parameters) through UART, on graph
+- [Temp logger server and client](https://github.com/greenfox-academy/paff-tm/blob/master/week-11/day-04) - Simulate a temperature logger server and client
 
 ### Demos
-- [week-06](https://github.com/greenfox-academy/paff-tm/tree/master/week-06/day-5/w6demo.pptx)
-- [week-07](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/day-5/w7demo.pptx)
-- [week-08](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/w8demo.pptx)
-- [week-09](https://github.com/greenfox-academy/paff-tm/tree/master/week-09/w9demo.pptx)
+- [week-06](https://github.com/greenfox-academy/paff-tm/blob/master/week-06/day-5/w6demo.pptx)
+- [week-07](https://github.com/greenfox-academy/paff-tm/blob/master/week-07/day-5/w7demo.pptx)
+- [week-08](https://github.com/greenfox-academy/paff-tm/blob/master/week-08/w8demo.pptx)
+- [week-09](https://github.com/greenfox-academy/paff-tm/blob/master/week-09/w9demo.pptx)
 
 ### Lightning Talk
-- [WiFi](https://github.com/greenfox-academy/paff-tm/tree/master/week-08/lt_Wifi.pptx)
+- [WiFi](https://github.com/greenfox-academy/paff-tm/blob/master/week-08/lt_Wifi.pptx)
 
 ### Exam 
 - [Orientation Exam](https://github.com/paff-tm/static-orientation-exam-1st) :white_check_mark:
@@ -50,13 +50,13 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 - [Temp logger](https://github.com/greenfox-academy/paff-tm/tree/master/week-07/Temp_logger)
 
 ### Demos
-- [week-01](https://github.com/greenfox-academy/paff-tm/tree/master/week-01/day-5/w1demo.pptx)
-- [week-02](https://github.com/greenfox-academy/paff-tm/tree/master/week-02/day-5/w2demo.pptx)
-- [week-03](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/day-5/w3demo.pptx)
-- [week-04](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/day-4/w4demo.pptx)
+- [week-01](https://github.com/greenfox-academy/paff-tm/blob/master/week-01/day-5/w1demo.pptx)
+- [week-02](https://github.com/greenfox-academy/paff-tm/blob/master/week-02/day-5/w2demo.pptx)
+- [week-03](https://github.com/greenfox-academy/paff-tm/blob/master/week-03/day-5/w3demo.pptx)
+- [week-04](https://github.com/greenfox-academy/paff-tm/blob/master/week-04/day-4/w4demo.pptx)
 
 ### Lightning Talk
-- [Water Cleaning](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/lt_water.pptx)
+- [Water Cleaning](https://github.com/greenfox-academy/paff-tm/blob/master/week-04/lt_water.pptx)
 
 ### Exam
 - [Foundation Exam](https://github.com/paff-tm/static-foundation-exam-1st) :white_check_mark:
