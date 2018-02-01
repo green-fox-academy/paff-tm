@@ -9,7 +9,7 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 My impact on my project team:
 - [Kryptonite](https://github.com/greenfox-academy/kryptonite)
 
-Code that contains multiple uC peripherals:
+Code that contains multiple µC peripherals:
 - [Control loop project](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox/control_loop)
 
 Code that contains custom struct definitions and command parsing:
