@@ -12,8 +12,8 @@ Code that contains multiple uC peripherals:
 - [Control loop project](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox/control_loop)
 
 Code that contains custom struct definitions and command parsing:
-- [CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/CLI_calc)
 - [ToDo App](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/ToDo_App)
+- [CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/CLI_calc)
 
 
 
