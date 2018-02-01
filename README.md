@@ -3,6 +3,20 @@
 > *Here you can find the main milestones of my studies in `C`, `C++` and `hardware programming` on [STM32F746G Discovery](http://www.st.com/en/evaluation-tools/32f746gdiscovery.html) board at Greenfox Academy
 as a member of the Static class at Pallida Cohort. If you have any questions please contact me througt Greenfox Academy.*
 
+## Technical Preparation for Final Exam
+> *Code examples from the course for the final exam.*
+My impact on my project team:
+- [Kryptonite](https://github.com/greenfox-academy/kryptonite)
+
+Code that contains multiple uC peripherals:
+- [Control loop project](https://github.com/greenfox-academy/paff-tm/tree/master/STM32Cube_FW_F7_V1.8.0/Projects/STM32746G-Discovery/GreenFox/control_loop)
+
+Code that contains custom struct definitions and command parsing:
+- [CLI Calculator](https://github.com/greenfox-academy/paff-tm/tree/master/week-03/CLI_calc)
+- [ToDo App](https://github.com/greenfox-academy/paff-tm/tree/master/week-04/ToDo_App)
+
+
+
 ## :construction: Project weeks (week 12-17)
 ### [Serving car](https://github.com/greenfox-academy/teaching-materials/tree/e4e9a897b6b6871516ff69530e8e277708422fff/team-project/hardware-static/serving-car)
 
