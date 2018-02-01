@@ -5,6 +5,7 @@ as a member of the Static class at Pallida Cohort. If you have any questions ple
 
 ## :mortar_board: Technical Preparation for Final Exam
 > *Code examples from the course for the final exam.*
+
 My impact on my project team:
 - [Kryptonite](https://github.com/greenfox-academy/kryptonite)
 
